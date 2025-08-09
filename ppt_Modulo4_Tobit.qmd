@@ -1,0 +1,878 @@
+---
+title: "Diplomado Econometría Modulo IV:<br> Modelo Tobit"
+subtitle: "Universidad Nacional Autónoma de México (UNAM)<br>Facultad de Economía"
+author: "Mtro. Diego Sánchez Rojas"
+editor: visual
+format:
+  revealjs:
+    center-subtitle-slide: false
+    slide-number: c/t
+    self-contained: true
+    slide-level: 4
+    incremental: true
+---
+
+
+#### Sección 1: Modelo Tobit: Modelo de regresión censurada {.smaller}
+
+-   Desarrollados por **James Tobin** (1958)
+
+-   También conocidos como **modelos de regresión censurada** ya que se enfoca en análisis de variables dependientes censuradas
+
+- ¿Qué son las **variables censuradas**?
+
+Son aquellas variables en las que ciertos valores están más allá de cierto límite, pero no sabemos exactamente cuál es.
+
+**Analogía:** Un termómetro que solo mide de 0°C a 50°C
+
+-   Si hace -5°C → el termómetro marca 0°C
+
+-   Si hace 60°C → el termómetro marca 50°C
+
+-   **No sabemos el valor real, solo que está fuera del rango** 
+
+
+#### Sección 1: Modelo Tobit: Tipos de variables censuradas {.smaller}
+ 
+- Censura por la Izquierda (*Lower Censoring*) o Censura por la Derecha (*Upper Censoring*)
+
+**Ejemplos:** 
+
+Reporte de ingresos en algunas encuestas
+
+-   "¿Cuál es su ingreso mensual?" con opción máxima $100,000 o más
+
+-  No sabemos si gana $120,000$ o $200,000$
+
+-  Censura por la derecha
+
+**Ambos extremos**
+
+- Ejemplo del termómetro
+
+
+#### Sección 1: Modelo Tobit: Aplicaciones en economía {.smaller}
+
+Uno de los problemas económicos típicos:
+
+**Gasto en Bienes de Lujo**
+
+**Situación real:**
+
+-   Algunas personas **no compran** (gasto = $0)
+
+-   Otras personas **sí compran** (gasto > $0)
+
+¿Por qué gasto = $0?
+
+1.  **No quieren comprar** (utilidad baja)
+
+2. **No pueden comprar** (restricción presupuestaria)
+
+3. **Preferirían no comprar** a esos precios
+
+**El cero no significa "ausencia de preferencia"**
+
+#### Sección 1: Modelo Tobit: Aplicaciones en economía {.smaller}
+
+ Variable latente $y^*$ (no observada)
+
+-   Distribución normal
+
+-   Puede ser negativa
+
+> *"Deseo" o "propensión" a consumir, gastar, trabajar, etc.*
+
+
+Variable observada $y$
+
+- Es la que aparece en los datos.
+- Se genera a partir de $y^*$, pero está **censurada** en 0:
+
+$$
+y =
+\begin{cases}
+0 & \text{si } y^* \leq 0 \\
+y^* & \text{si } y^* > 0
+\end{cases}
+$$
+
+- Todos los valores negativos de $y^*$  se registran como 0.
+
+#### Sección 1: Modelo Tobit: Aplicaciones en economía {.smaller}
+
+- Muchos ceros → **masa de probabilidad en cero**
+- Valores positivos → siguen una **distribución continua** (similar a una normal truncada)
+
+**Resultado:** Distribución con masa de probabilidad en cero + distribución continua para valores positivos 
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 7
+#| label: plot_0
+
+set.seed(123)
+n <- 1000
+x <- rnorm(n)
+y_star <- 1 + 2 * x + rnorm(n)
+y <- ifelse(y_star > 0, y_star, 0)
+
+hist(y,
+     breaks = 40,
+     col = "skyblue",
+     main = "Distribución de la variable observada y",
+     xlab = "y",
+     ylab = "Frecuencia")
+lines(density(y[y > 0]), col = "darkblue", lwd = 2)
+```
+
+
+#### Sección 1: Modelo Tobit: Aplicaciones en economía {.smaller}
+
+Ejemplos de variables censuradas en economía:
+
+- **Gastos en categorías específicas:** Tabaco (muchos no fuman) , Alcohol (muchos no beben), Educación privada, etc.
+
+
+- **Variables laborales:** Horas extra trabajadas , contribuciones voluntarias, seguro de vida ,etc.
+
+
+
+#### Sección 1: Modelo Tobit: Especificación del modelo {.smaller}
+
+El modelo **Tobit** expresa la respuesta observada en terminos de la variable latente ($y^*$):
+
+$$y^* = \beta_0 + \mathbf{x} \beta + \varepsilon,\quad \varepsilon \mid \mathbf{x} \sim \mathcal{N}(0, \sigma^2)$$
+
+- $y^*$: propensión latente a gastar, donar, trabajar, etc.
+- $\mathbf{x}$: variables explicativas
+- $\beta$: coeficientes a estimar
+- $\varepsilon$ : error normal
+
+
+#### Sección 1: Modelo Tobit: Especificación del modelo {.smaller}
+
+- Variable observada $y$
+
+La variable que sí observamos está **censurada** en cero:
+
+$$y = \max(0, y^*)
+\quad \text{o bien} \quad
+y =
+\begin{cases}
+0 & \text{si } y^* \leq 0 \\
+y^* & \text{si } y^* > 0
+\end{cases}$$
+
+
+
+#### Sección 1: Modelo Tobit: Especificación del modelo {.smaller}
+
+
+ Para la variable latente $y^*$ se cumplen los **supuestos clásicos** del modelo lineal:
+ 
+  - Linealidad
+  - Normalidad
+  - Homocedasticidad
+  
+Por tanto, esto permite modelar:
+
+  - La probabilidad de $y = 0$
+  - La distribución continua de $y$ dado $y > 0$
+
+
+#### Sección 1: Modelo Tobit: Estimación  {.smaller}
+
+- El modelo Tobit se estima mediante **máxima verosimilitud**.
+
+- Para ello, necesitamos conocer la probabilidad de observar cada valor de $y_i$, dados los $x_i$.
+- Existen **dos tipos de observaciones**:
+  - Censuradas en cero
+  - Positivas (no censuradas)
+
+#### Sección 1: Modelo Tobit: Estimación  {.smaller}
+
+Si $y_i = 0$:
+
+- La probabilidad de observar un cero es:
+   
+$$P(y_i = 0 \mid x_i) = P(y^*_i < 0 \mid x_i)
+= P(\epsilon < -x_i \beta) = \Phi\left( -\frac{x_i \beta}{\sigma} \right) = 1- \Phi\left( \frac{x_i \beta}{\sigma} \right) $$
+
+- Las funciones $\phi(z)$ y $\Phi(z)$ se definen para:
+  
+  $z \sim \mathcal{N}(0,1)$
+
+- Para poder usar estas funciones, **debemos estandarizar** la variable:
+
+$z = \frac{y - x\beta}{\sigma}$
+   
+
+#### Sección 1: Modelo Tobit: Estimación  {.smaller}
+
+Observaciones con $y_i > 0$ :
+
+- Aquí se observa directamente el valor de $y^*_i$, sin censura.
+
+$$f(y_i \mid x_i) = \frac{1}{\sigma} \phi\left( \frac{y_i - x_i \beta}{\sigma} \right)$$
+
+
+#### Sección 1: Modelo Tobit: Estimación  {.smaller}
+
+
+- El **Paso 1. será obtener la verosimilutd** de la función de densidad para un conjunto de datos dados donde la variable $y_i$ esté censurada: 
+
+$$\ell (\beta , \sigma) =
+\begin{cases}
+\frac{1}{\sigma} \cdot \phi\left( \frac{y_i - x_i \beta}{\sigma} \right), & \text{si } y_i > 0 \\
+\Phi\left( -\frac{x_i \beta}{\sigma} \right), & \text{si } y_i = 0
+\end{cases} $$
+
+Donde: 
+
+- $\phi(.)$: función de densidad de la normal estándar
+- $\Phi(.)$: función de distribución acumulada de la normal estándar
+
+#### Sección 1: Modelo Tobit: Estimación  {.smaller}
+
+¿Por qué se utilizan la función de densidad $\phi$ cuando $y_i > 0$ ?
+
+- Se está observando un valor continuo específico y queremos calcular la probabilidad de observar exactamente ese valor en una variable continua
+
+
+¿Por qué se utilizan la función de distribución acumulada $\Phi$ cuando $y_i \leq 0$ ?
+
+- Cuando observamos un 0, en realidad no estamos viendo el valor verdadero sino que sabemos que fue censurado: $y^*<0$
+
+- Se busca estimar la  **probabilidad total** de que el valor no observado esté en la región censurada.
+
+$$\mathbb{P}(y_i^* \leq 0 \mid x_i) = \Phi\left( -\frac{x_i \beta}{\sigma} \right)$$
+
+
+#### Sección 1: Modelo Tobit: Estimación  {.smaller}
+
+- Para el **Paso 2.** obtenemos obtenemos la función $\log\ell(\beta, \sigma)$:
+
+$$\log \ell(\beta, \sigma) =
+\sum_{y_i = 0} \log \left[ \Phi\left( -\frac{x_i \beta}{\sigma} \right) \right] +
+\sum_{y_i > 0} \log \left[ \frac{1}{\sigma} \phi\left( \frac{y_i - x_i \beta}{\sigma} \right) \right]$$
+
+
+#### Sección 1: Modelo Tobit: Estimación  {.smaller}
+
+
+- Para el **Paso 3.** realizamos el proceso de maximización $\log\ell(\beta, \sigma)$ respecto a $\beta$ y $\sigma$
+
+
+$$\underset{\boldsymbol{\beta}, \sigma > 0}{\text{max}} \ \log \ell(\boldsymbol{\beta}, \sigma)$$
+
+
+- Se utilizan el algoritmo numérico (como Newton-Raphson o BFGS) para **maximizar**.
+
+
+
+#### Sección 1: Modelo Tobit: Ejemplo aplicado {.smaller}
+
+
+- Regresemos al ejemplo donde utilizamos datos de *Wooldridge Source: T.A. Mroz (1987), “The Sensitivity of an Empirical Model of Married Women’s Hours of Work to Economic and Statistical Assumptions”*
+
+-  se buscaba estimar la probabilidd de decisión de las mujeres de trabajar fuera del hogar: 
+
+$$inlf_i = \beta_0 + \beta_1 \cdot age_i + \beta_2 \cdot educ_i + \beta_3 \cdot exper_i + \beta_4 \cdot nwifeinc_i + \beta_5 \cdot kidslt6_i + \beta_6 \cdot kidsge6_i + u_i$$
+
+$$~~~~~ (M.2)$$
+
+
+#### Sección 1: Modelo Tobit: Ejemplo aplicado {.smaller}
+
+Para este caso utilizaremos una variable que dependiente que esta censurada:
+
+- **horas de trabajo anuales (hours)**
+
+$$hours_i = \beta_0 + \beta_1 \cdot age_i + \beta_2 \cdot educ_i + \beta_3 \cdot exper_i + \beta_4 \cdot exper_i^2 + \beta_5 \cdot nwifeinc_i + \beta_6 \cdot kidslt6_i + \beta_7 \cdot kidsge6_i + u_i$$
+$$~~~~~ (M.3)$$
+
+#### Sección 1: Modelo Tobit: Ejemplo aplicado {.smaller}
+
+- En R el conjunto de datos `MROZ.RAW` lo podemos encontrar en la librería **wooldridge** 
+
+- https://justinmshea.github.io/wooldridge/reference/mroz.html
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: data
+
+#Librerias
+if (!require(pacman, quietly = TRUE)) {install.packages('pacman')}
+library(pacman)
+p_load( 'wooldridge','tidyverse','modelsummary','skimr', 'dplyr', 'gtsummary')
+
+#Cargamos datos 
+data("mroz")
+#Descripción
+skim(mroz)
+```
+
+
+
+
+
+
+
+#### Sección 1: Modelo Tobit: Ejemplo aplicado {.smaller}
+
+- ¿Cómo se dsitribuyen las horas laborales en la muestra?
+
+1. De las 753 mujeres, 325 presentan 0 horas trabajadas.
+2. Para las que si tienen horas el rango va de 12 a 4,950 horas anuales de trabajo.
+
+En este caso, la variable horas anuales de trabajo es un buen candidato para modelos mediante un Tobit
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 7
+#| label: plot_1
+#| 
+df_mroz <- mroz  
+ggplot(df_mroz, aes(x = hours)) +
+  geom_histogram(alpha = 0.6) +
+  labs(
+    title = "Distribución de las horas anuales de trabajo",
+    x = "Horas",
+    y = "Frecuencia") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+
+
+
+#### Sección 1: Modelo Tobit: Ejemplo aplicado {.smaller}
+
+¿Podríamos realizar la estimación por OLS?
+
+
+- Sí, pero estaríamos ignorando la censura $y = \max(0, y^*)$  y tratamos $y$ como una variable continua lo cual tendría multiples consecuencias negativas:
+
+1. Estimaciones **sesgadas** de $\beta$ 
+2. Predicciones pueden ser **negativas**
+3. **Heterocedasticidad** no tratada
+4. Subestimación de efectos reales
+
+
+#### Sección 1: Modelo Tobit: Estimación en R {.smaller}
+
+
+Para realizar la estimación de modelo Tobit en R utilizamos la paquetería:
+
+- **censReg**
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: tobit1
+
+p_load("modelsummary")
+
+# Instalar si no se tiene la paquetería
+#install.packages("censReg")
+
+#Cargamos
+library(censReg)
+
+#Planteamiento de la estimación con Censreg 
+modelo_tobit <-  censReg(hours ~ age + educ + exper + I(exper^2) + nwifeinc + kidslt6 + kidsge6, #especificación
+                         left = 0, #Censura por la izquierda en este caso
+                         data = mroz) #data set
+summary(modelo_tobit)
+
+
+
+
+```
+
+
+#### Sección 1: Modelo Tobit: Estimación en R {.smaller}
+
+
+
+En el modelo Tobit, se modela una **variable latente**  $y^* = X\beta + \varepsilon$
+
+El término $\varepsilon \sim N(0, \sigma^2)$ representa el error por lo tanto se estima 
+el logarítmo de la desviación estándar del error.
+
+
+- Si $log(\sigma)$ es significativo podemo decir que $\epsilon$ no es cero y existe variación no explicada por los regresores.
+
+- En otras palabras: Incluso después de controlar por edad, educación, experiencia, hijos, etc., sigue habiendo diferencias importantes en el trabajo de horas anuales.
+
+- Esto valida que existe una parte aleatoria importante en el comportamiento de la variable latente ($y^*$), y por tanto justifica el uso del modelo Tobit (en lugar de tratar el problema como si todo el consumo fuera observado como en OLS).
+
+
+#### Sección 1: Modelo Tobit: Estimación en R {.smaller}
+
+- Estimación por OLS 
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: tobit_ols
+
+
+modelo_Olst <-  lm(hours ~ age + educ + exper + I(exper^2) + nwifeinc + kidslt6 + kidsge6, 
+                   data = mroz) #data set
+
+summary(modelo_Olst)
+```
+
+
+#### Sección 1: Modelo Tobit: Estimación en R {.smaller}
+
+
+```{r}
+
+#| warning: false
+#| echo: false
+#| label: tobittab
+
+modelo_Olst <-  lm(hours ~ age + educ + exper + I(exper^2) + nwifeinc + kidslt6 + kidsge6, #especificación
+                   data = mroz) #data set
+
+modelsummary(
+  list("OLS" = modelo_Olst, "Tobit" = modelo_tobit),
+  stars = TRUE,
+  statistic = "std.error",  # o "conf.int", "statistic"
+  gof_omit = "IC|Log.Lik|F|R2"  # Opcional: para ocultar algunas estadísticas
+)
+
+
+```
+
+
+
+#### Sección 1: Modelo Tobit: Interpretación de resultados {.smaller}
+
+| Variable        | Interpretación                                                                                                                                                                             |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **(Intercept)** | Una mujer sin educación, sin experiencia, sin hijos, con ingreso del esposo igual a 0, trabajaría **965 horas al año** en promedio. (*significativo*).                                     |
+| **age**         | Cada año adicional de edad se asocia con una **reducción de 54.4 horas anuales** trabajadas. (**significativo**).                                                                      |
+| **educ**        | Cada año adicional de educación incrementa el trabajo anual en **80.6 horas**, en promedio. (**significativo**).                                                                       |
+| **exper**       | La experiencia laboral aumenta las horas trabajadas en **131.6 horas por año**, pero...                                                                                                    |
+| **I(exper²)**   | ...con **rendimientos decrecientes**: cada año adicional de experiencia reduce ese incremento en **1.86 horas**. (**significativo**).                                                  |
+| **nwifeinc**    | Cada mil dólares adicionales del ingreso del esposo **reduce el trabajo anual de la mujer en 8.8 horas**. (*Significativo*).                                                               |
+| **kidslt6**     | Tener al menos un hijo menor de 6 años **reduce el trabajo anual en 894 horas**. (**significativo**).                                                                                  |
+| **kidsge6**     | Tener hijos mayores de 6 años **no tiene un efecto estadísticamente significativo** en el trabajo anual.                                                                                   |
+| **logSigma**    | El valor significativo indica que **hay una importante variación no observada** en las horas potenciales de trabajo → esto **justifica el uso del modelo Tobit**. (**significativo**). |
+
+
+
+#### Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) {.smaller}
+
+- Uno de los problemas que a los que nos enfrentamos cuando utilizamos datos observados es  **la selección de las observaciones no siempre es aleatoria**.
+
+- Es decir, es el resultado de un proceso de decisión (como participar o no en el mercado laboral).
+
+- A diferencia de la exclusión deliberada en el diseño de encuestas (como en diseños experimentales):
+  - Truncamiento incidental  
+  - Atrasos (attrition) en estudios longitudinales  
+  - Falta de respuesta no aleatoria  
+  
+- Casos comunes:  
+  - Mujeres que no trabajan → sus ingresos laborales no se observan  
+  - Participación en programas sociales  
+  - Decisión de migrar o no, estudiar o no, etc.
+  
+  
+  
+  
+#### Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) {.smaller}
+
+- Queremos estimar una modelo de regresión:  
+  $$y_i = x_i\beta + \varepsilon_i$$
+- Pero **solo observamos** $y_i$ si se cumple una condición:  
+
+  $$D_i = 1 $$
+Por ejemplo: si la mujer trabaja, si el hogar se inscribe en el programa social, si la persona acepta declarar su ingreso
+
+- No todos los encuestados reportan ingreso, y los que lo hacen podrían tener características distintas.
+- Solo observamos el impacto en quienes se autoseleccionaron, lo que puede sesgar las conclusiones.
+- Solo observamos las horas trabajadas si la mujer participa en el mercado laboral y esa elección puede ser por una serie de motivaciones.
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) {.smaller}
+
+¿Qué implica esto?
+
+
+  $$\mathbb{E}[y_i | x_i, D_i = 1] \neq x_i\beta$$
+
+1. Hay correlación entre el error $\varepsilon_i$ y el proceso de selección.
+
+2. Si ignoramos la selección, el modelo de regresión lineal se basa en una muestra **no aleatoria**, lo que **viola los supuestos clásicos**.
+
+- En particular la :  
+
+  $$ \mathbb{E}[\varepsilon_i | x_i, D_i = 1] \neq 0 $$
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) {.smaller}
+
+- ¿Cómo podemos solucionarlo?
+
+  
+- Utilizamos el modelo de corrección de sesgo de selección de **Heckman (1979)**, conocido como **Heckit**.
+  
+- Este modelo permite estimar los efectos de las variables explicativas en una muestra **no aleatoria**, corrigiendo por la selección.
+
+- Se basa en un modelo de dos etapas:
+
+  1. **Etapa de selección** (modelo Probit): Estima la probabilidad de observar $y_i$, es decir, de que $D_i = 1$.
+  
+  2. **Etapa de resultado**: Estima el modelo de interés  incorporando una corrección basada en la **esperanza condicional del error**.
+
+  
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) {.smaller}
+
+
+1. **Etapa de selección (modelo Probit)**
+
+> Estimamos la **probabilidad de participación** en el mercado laboral  
+(por ejemplo, si la mujer trabaja)
+
+
+$$D_i^* = z_i \gamma + u_i, \quad u_i \sim N(0,1)$$
+$$D_i = 
+\begin{cases}
+1 & \text{si } D_i^* > 0 \quad \text{(trabaja)} \\
+0 & \text{si } D_i^* \leq 0 \quad \text{(no trabaja)}
+\end{cases}$$
+
+
+- Una **variable latente** que representa la **propensión no observada** a participar en el mercado laboral.
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) {.smaller}
+
+- ¿Qué variables entran en el vector de regresores $z_i$ ?
+
+Edad, educación , estado civil, número de hijos  y otras características individuales
+
+
+
+- Se estima mediante un **modelo Probit**, y se obtiene el **inverso de la razón de Mills**:
+
+$$\lambda(z_i \hat{\gamma}) = \frac{\phi(z_i \hat{c})}{\Phi(z_i \hat{\gamma})}$$
+
+
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) {.smaller}
+
+
+¿ Qué es el **inverso de la razón de Mills**?
+
+$$\lambda(z_i \hat{\gamma}) = \frac{\phi(z_i \hat{\gamma})}{\Phi(z_i \hat{\gamma})}$$
+
+
+- Función que mide el **sesgo** que ocurre cuando solo observamos una parte de la población.
+
+Donde:  
+- $\phi$: densidad normal estándar → qué tan probable es observar un valor exacto.
+
+- $\Phi$: distribución acumulada normal → qué tan probable es que un valor sea menor que un umbral.
+
+- $z_i \hat{\gamma}$ puntaje del modelo Probit que predice la selección (por ejemplo, la probabilidad de trabajar)
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Estimación {.smaller}
+
+¿Por qué aparece?
+
+- Cuando solo observamos ciertos individuos (por ejemplo, quienes trabajan), el modelo de regresión se basa en una **muestra no aleatoria**.
+
+- Esto **viola los supuestos clásicos** del modelo lineal (independencia entre el error y los regresores).
+
+
+**¿Cómo realiza la correción?**
+
+- Captura la **correlación entre el error del modelo y el proceso de selección**.
+
+- Por lo tanto el inverso de Mills Se incluye como **variable adicional** en la segunda etapa del modelo Heckman:
+  
+$$y_i = x_i \beta + \rho \sigma_u \lambda_i + \varepsilon_i$$
+
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Estimación {.smaller}
+
+**Intuición**
+
+- Cuando usamos la ENOE para estimar el "ingreso laboral promedio en México", solo observamos los salarios de quienes están trabajando. Pero esto excluye sistemáticamente a un grupo importante: las personas que no trabajan.
+
+
+- ¿Por qué es problemático?
+
+Las personas que no trabajan pueden estar fuera del mercado laboral por razones que están correlacionadas con su salario potencial.
+
+Grupos excluidos de la muestra:
+
+    -Personas con muy baja productividad/habilidades → salario potencial bajo
+    -Personas con altos costos de oportunidad (ej: cuidado del hogar) → salario potencial variable
+    -Personas desalentadas que dejaron de buscar trabajo → posiblemente salario potencial bajo
+    -Personas con discapacidades → salario potencial potencialmente afectado
+
+
+- El inverso de Mills realiza la correción de el sesgo de selección
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Estimación {.smaller}
+
+ 
+2. **Etapa del modelo de resultado (regresión con corrección de sesgo o Heckit)**
+
+
+Una vez calculado el inverso de Mills $\hat{\lambda}_i$ en la **Etapa 1** estimamos:
+
+$$y_i = x_i\beta + \rho \sigma_u \hat{\lambda}_i + \varepsilon_i, \quad \text{solo si } D_i = 1$$
+
+- $x_i$: regresores observables
+- $\hat{\lambda}_i$: inverso de la razón de Mills (obtenido del Probit)
+- $\rho \sigma_u$: coeficiente de corrección (captura la dependencia entre el error y la selección)
+- $y_i$: resultado observado (ej. horas trabajadas)
+
+
+No es un modelo simple de regresión. Se está corrigiendo por el hecho de que los errores ( $\varepsilon_i$ y $u_i$)  están correlacionados.
+
+Regresión lineal (OLS) con $\hat{\lambda}_i$ como variable adicional O bien, estimación conjunta por máxima verosimilitud.
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Estimación {.smaller}
+
+- ¿Qué representa $\rho \sigma_u$?
+
+1. $\rho= Corr(u_i,\epsilon_i)$ mide la correlación entre el error de seleción ($u_i$) y el error del modelo de resultado ($\epsilon_i$) 
+
+2. $\sigma_u$: desviación estándar del error del modelo de resultado  
+
+Por lo tanto el término del modelo de resultado $\rho \sigma_u \hat\lambda_i$, es la esperanza condicional del error dado $D_i=1$
+
+$$\mathbb{E}[\varepsilon_i \mid D_i = 1] = \rho \sigma_u \lambda_i$$
+
+
+- $\lambda_i$: inverso de la razón de Mills  
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Estimación {.smaller}
+
+**Interpretación del coeficiente**
+
+- Si $\rho \sigma_u \neq 0$, hay **sesgo de selección**.
+
+- Si el coeficiente de $\hat{\lambda}_i$ es significativo → **la corrección es necesaria**.
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Estimación {.smaller}
+
+Por lo tanto podemos plantear las siguientes pruebas de hipótesis: 
+
+- Queremos saber si hay **sesgo de selección** y si necesitamos utilizar el coeficiente de correción de sesgo $\lambda_i$:
+
+$$H_0: \gamma_1 = 0 \quad \text{(no hay sesgo)} \\
+H_1: \gamma_1 \neq 0 \quad \text{(hay sesgo)}$$
+
+
+
+Si se hace en la segunda etapa del modelo Heckman: 
+
+$$H_0:  \rho \sigma_u = 0 \quad \text{(no hay sesgo)} \\
+H_1: \rho \sigma_u \neq 0 \quad \text{(hay sesgo)}$$
+
+- Utilizamos prueba $t$  para comprobar la significancia de  $\hat\delta_2= \rho  \sigma_u$
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Ejemplo aplicado {.smaller}
+
+Estimar una **función de oferta salarial** para mujeres trabajadoras  con status civil de casadas 
+
+- 753 mujeres en total y solo 428 tienen datos de salario observados
+- Posible **sesgo de selección** en la muestra de trabajadoras
+
+
+- Utilizaremos el conjunto de datos `MROZ.RAW` lo podemos encontrar en la librería **wooldridge** 
+
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: dataheckman
+
+#Librerias
+if (!require(pacman, quietly = TRUE)) {install.packages('pacman')}
+library(pacman)
+p_load( 'wooldridge','tidyverse','modelsummary','skimr', 'dplyr', 'gtsummary')
+
+#Cargamos datos 
+data("mroz")
+
+```
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Ejemplo aplicado {.smaller}
+
+
+1. **Etapa de modelo de selección (ecuación de participación en el mercado laboral)**
+
+$$D_i^* = z_i \gamma + u_i\quad \text{con } z_i = \text{otras ingreso, edad, hijos, etc.}$$
+
+
+
+$$D_i = 1 \text{ si } D_i^* > 0 \quad \text{(participa en el mercado laboral)}$$
+
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Ejemplo aplicado {.smaller}
+
+
+2. **Etapa de modelo de resultado (salario ofrecido)**
+
+
+$$\log(\text{wage}_i) = x_i \beta + \rho \sigma_u \lambda(z_i \hat{\gamma}) + \varepsilon_i$$
+- En este caso los regresores serán:
+
+$$x_i = \text{educ}, \text{exper}, \text{exper}^2$$
+- $\lambda(z_i \hat{\gamma})$: razón inverso de Mills
+
+- Se estima solo para \( D_i = 1 \)
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Ejemplo aplicado {.smaller}
+
+**Consideraciones**
+
+1. Para identificar el modelo Heckit:
+
+- Se excluyen de la ecuación de salario:  
+
+      - `nwifeinc`, `age`, `kidslt6`, `kidsge6`
+
+- Esto permite estimar el modelo sin multicolinealidad severa.
+
+2. Si todas las variables del modelo de selección también están en la ecuación de salario (modelo de resultado):
+
+  - El estimador Heckit se vuelve **impreciso**
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Ejemplo aplicado {.smaller}
+
+
+Para realizar la estimación de un modelo Heckit en R se utiliza:
+
+- **"sampleSelection"**
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: heckit1
+
+#Instalación
+#install.packages("sampleSelection")
+
+#Carga
+p_load(sampleSelection)
+
+```
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Ejemplo aplicado {.smaller}
+
+
+- La estimación del modelo Heckit se realiza con la función *selection()*
+
+- En este caso excluimos de la ecuación  de resultado: 
+
+    - `nwifeinc`, `age`, `kidslt6`, `kidsge6`
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: heckit2
+
+# Modelo de Heckman con restricciones de exclusión
+model_heckman_ex <- selection(
+              selection = inlf ~ age + kidslt6 + kidsge6 + nwifeinc + educ + exper + I(exper^2),
+              outcome   = log(wage) ~ educ + exper + I(exper^2),
+              data = mroz,
+              method = "2step"
+              )
+
+summary(model_heckman_ex)
+
+
+
+```
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Ejemplo aplicado {.smaller}
+
+**Interpretación**
+
+1. En la etapa 1 observamos que:
+
+
+- Indica que las variables explican $z_i$ bien el proceso de selección.
+
+- Sin significancia, no se tendría una buena base para corregir el sesgo de selección.
+
+
+2. En la etapa 2 observamos que:
+
+- Ratio de Mills inverso: no significativo (p = 0.809)
+
+- Sin embargo, sin embargo podría justificar  la corrección con Heckman debido a la posibilidad de sesgo
+
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Ejemplo aplicado {.smaller}
+
+- **OLS vs Heckit** 
+
+
+| Variable      | OLS Coef. (Error) | Heckit Coef. (Error) |
+| ------------- | ----------------- | -------------------- |
+| **educ**      | 0.108 (.014)      | 0.109 (.016)         |
+| **exper**     | 0.042 (.012)      | 0.044 (.016)         |
+| **exper²**    | 0.00081 (.00039)  | 0.00086 (.00044)     |
+| **constante** | 0.522 (.199)      | 0.578 (.307)         |
+| **λ (Mills)** | —                 | 0.032 (.134)         |
+| **Obs.**      | 428               | 428                  |
+| **R²**        | 0.157             | 0.157                |
+
+
+- Coeficientes similares: Los coeficientes en ambos modelos son muy parecidos.
+
+- Ratio de Mills: No significativo → indica que el sesgo de selección no es fuerte.
+
+- ¿Justifica el uso del modelo Heckman?
+
+Sí, si existe una razón teórica para sospechar sesgo de selección pero empíricamente el término de selección es irrelevante.
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Conclusión {.smaller}
+
+**Conclusión: ¿Cuándo usar el Modelo de Heckman?**
+
+- El modelo de Heckman permite corregir sesgo por selección muestral no aleatoria
+
+Es útil cuando:
+
+1. Observamos una submuestra no aleatoria del total
+
+2. Existe un proceso de decisión que determina si se observa o no la variable dependiente
+
+
+
+- El **modelo de Heckman** ha sido útil para estudiar fenómenos donde la observación de la variable de interés depende de una decisión previa: **Participación laboral femenina, Acceso al crédito agrícola, Migración interna o internacional**
+
+#### Sección 1: Modelo de Corrección de Sesgo de Selección(Heckman o Heckit) Referencias {.smaller}
+
+- Heckman, J. J. (1976). The Common Structure of Statistical Models of Truncation, Sample Selection and Limited Dependent Variables.
+Econometrica, 47(1), 153–161.
+- Heckman, J. J. (1979). Sample Selection Bias as a Specification Error. Econometrica, 47(1), 153–161.
+
+- Wooldridge, J. M. (2010).Econometric Analysis of Cross Section and Panel Data (2nd ed.). MIT Press.
+
+

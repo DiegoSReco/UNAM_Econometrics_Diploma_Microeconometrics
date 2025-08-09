@@ -1,0 +1,340 @@
+---
+title: "Diplomado Econometría Modulo IV:<br> Microeconometría"
+subtitle: "Universidad Nacional Autónoma de México (UNAM)<br>Facultad de Economía"
+author: "Mtro. Diego Sánchez Rojas"
+editor: visual
+format:
+  revealjs:
+    pdf-export: true
+    center-subtitle-slide: false
+    slide-number: c/t
+    self-contained: true
+    slide-level: 4
+    incremental: true
+---
+
+#### Sección 1: Microeconometría (Evaluación del curso)
+
+-   Evaluación del Curso
+
+| Componente                  | Descripción                                                         | Porcentaje |
+|-----------------------------|---------------------------------------------------------------------|------------|
+| Práctica Aplicada 1         | Análisis con frameworks de microeconometría y métodos econométricos | 30%        |
+| Práctica Teórica Aplicada 2 | Análisis con frameworks de microeconometría y métodos econométricos | 30%        |
+| Quiz                        | Evaluaciones breves de conceptos clave                              | 30%        |
+| Participación               | Intervenciones, asistencia y compromiso                             | 10%        |
+| **Total**                   |                                                                     | **100%**   |
+
+#### Sección 1: Microeconometría (Bibliografía)
+
+**Principal**
+
+-   Wooldridge, J. M. (2010). Econometric Analysis of Cross Section and Panel Data (2nd ed.). MIT Press.
+
+-   Angrist, J. D., & Pischke, J. S. (2008). Mostly Harmless Econometrics: An Empiricist's Companion. Princeton University Press.
+
+**Complementaria**
+
+-   Cameron, A. C., & Trivedi, P. K. (2005). Microeconometrics: Methods and Applications. Cambridge University Press.
+
+-   Wooldridge, J. M. (2019). Introductory Econometrics: A Modern Approach (7th ed.). Cengage Learning.
+
+#### Sección 1: Microeconometría {.smaller}
+
+1.  ¿Qué es la microeconometría?
+
+-   Subrama de la econometría que utiliza **datos** de unidades o agentes económicos como individuos, familias, empresas o territorios (municipios, estados o regiones) y métodos de regresión sofisticados para analizar el comportamiento (relaciones, interacciones) de ciertas variables de interés (Cameron y Trivedi, 2005; Wooldridge 2002, Hausman, 2001; Owen 2019).
+
+-   En enfoques recientes el objetivo principal de la microeconometría es comprender **relaciones causales**: determinar si un cambio en una variable causa un cambio en otra, en lugar de simplemente observar una asociación.
+
+-   Disciplina que combina frameworks casuales y técnicas estadísticas,en donde cada análisis empírico se convierte en un ejercicio de identificación de efectos causales bajo **supuestos explícitos** y **estrategias de identificación**.
+
+#### Sección 1: Microeconometría (¿Qué preguntas responde la microeconometría?) {.smaller}
+
+-   ¿Cuál es efecto de un aumento en el salario mínimo en el nivel de empleo (o en los precios)? (o probabilidad de estar ocupado)
+-   ¿Qué impacto tiene la prohibición del outsourcing en la razón del producto marginal del trabajo con respecto al salario ?
+-   ¿Cuál es el efecto de reducir el tamaño de clase en el aprovechamiento escolar?
+-   ¿Cuál es el efecto de los programas de becas sobre la deserción?
+-   ¿Cuál es el efecto de la actividad física constante sobre la productividad laboral?
+-   ¿Cuál es el efecto de la inversión pública en el crecimiento económico local?
+-   ¿Cómo afecta una disminución en el IVA al consumo de diferentes grupos socioeconómicos?
+-   ¿Mejora la satisfacción del cliente de un banco un nuevo diseño en la aplicación?
+-   ¿Qué efecto tiene la ampliación de línea de crédito en el consumo?
+
+#### Sección 1: Microeconometría (Inferencia Causal: Framework Resultado potencial) {.smaller}
+
+-   Pregunta base: ¿Cuál es el efecto causal de un tratamiento/intervención ($T$) en la variable objetivo $Y$?
+
+-   Ejemplo: ¿Cuál es el efecto de doblar el salario mínimo sobre la tasa de desempleo?
+
+**Definiendo el problema**
+
+-   Unidad de análisis: Municipios ($i$)
+-   Tratamiento ($T$): Ley de salario mínimo (más alto en otra región) ($T_i = 1$) vs bajo ($T_i = 0$)
+-   Outcome ($Y$): Tasa de desempleo 0 Nivel de empleo
+
+$$
+\text{resultado potencial} = \begin{cases}
+Y_{1i}, & \text{if } T_i = 1 \\
+Y_{0i}, & \text{if } T_i = 0
+\end{cases}
+$$
+
+$Y_{1i}$: tasa de desempleo en municipios con salario mínimo más alto
+
+$Y_{0i}$: tasa de desempleo en municipios con salario mínimo más bajo
+
+(Rubin, 1974, 1977; Holland, 1986)
+
+#### Sección 1: Microeconometría (Inferencia Causal: Problema fundamental) {.smaller}
+
+El efecto causal para el municipio $i$ :
+
+$$
+\tau_{i} = Y_{1i} - Y_{0i}
+$$
+
+-   **No es posible calcularlo**
+
+-   No es posible tener un **contrafactual**: No podemos obervar $i$ en $t$ con salario mínimo alto como y con salario mínimo bajo simultáneamente.
+
+-   Nos enfrentamos al **problema fundamental de inferencia causal** .
+
+#### Sección 1: Microeconometría (Inferencia Causal: Problema fundamental) {.smaller}
+
+-   ¿Qué comparaciones sí podemos realizar?
+
+-   El promedio de los municipios con un salario mínimo más alto y más bajo. (**Cross-sectional**)
+
+$$
+\underbrace{E[Y_i \mid T_i = 1] - E[Y_i \mid T_i = 0]}_{\text{Differencia promedio observada}}
+$$
+
+-¿Esta diferencia promedio observada refleja el **efecto casual**?
+
+La diferencia observada en el resultado promedio entre un grupo tratado y uno no tratado, no necesariamente refleja un **efecto causal** debido a que los grupos pueden diferir por razones distintas al tratamiento (como nivel socioeconómico, educación, inversión, etc.).
+
+#### Sección 1: Microeconometría (Inferencia Causal: Problema fundamental) {.smaller}
+
+-   ¿Qué relación tiene la DPO con el efecto causal que estamos buscando?
+
+-   Desglosemos la DPO:
+
+$$
+E[Y_i \mid T_i = 1] - E[Y_i \mid T_i = 0] = 
+\underbrace{E[Y_{1i} \mid T_i = 1] - E[Y_{0i} \mid T_i = 1]}_{\text{Efecto causal promedio en tratados (ATT)}}
++ $$ $$
+\underbrace{E[Y_{0i} \mid T_i = 1] - E[Y_{0i} \mid T_i = 0]}_{\text{Sesgo de selección}}
+$$
+
+#### Sección 1: Microeconometría (Inferencia Causal: ATT y sesgo de selección ) {.smaller}
+
+1.  **Efecto causal promedio en tratados (ATT)**
+
+-   Captura el efecto causal: ¿Cuánto cambian en promedio los resultados para quienes recibieron el tratamiento, comparando el resultado observado $E[Y_{1i}|T_i=1]$ con el que habrían tenido sin tratamiento $E[Y_{0i}|T_i=1]$ (Contrafactual) ?
+
+2.  **Sesgo de selección**
+
+-   Mide si los tratados y no tratados habrían tenido resultados diferentes incluso sin tratamiento. Es decir, si los tratados ya eran diferentes desde antes.
+
+-   Surge cuando las unidades ($i$) que reciben un tratamiento son sistemáticamente diferentes de aquellas que no lo reciben, por razones que también afectan el resultado.
+
+#### Sección 1: Microeconometría (Inferencia Causal: Sesgo de selección) {.smaller}
+
+-   *"El objetivo en la mayoría de la investigación económica empírica es superar(minimizar) el sesgo de selección y, por tanto, decir algo relacionado al efecto casual de una variable* $T_i$" - Joshua Angrist
+
+-   ¿Cómo podemos solucionar el problema de **sesgo de selección**?
+
+-   🎲 Aleatorización:
+
+    -   La **asignación aleatoria** del tratamiento es el método más sólido para eliminar el sesgo de selección.
+
+    -   Cuando los individuos se asignan al grupo tratado ($T_i = 1$) o control ($T_i = 0$) **de forma completamente aleatoria**, las características observables e inobservables quedan, en promedio, balanceadas entre los dos grupos.
+
+#### Sección 1: Microeconometría (Inferencia Causal: Sesgo de selección) {.smaller}
+
+Bajo aleatorización, se cumple que:
+
+$$
+E[Y_{0i} \mid T_i = 1] = E[Y_{0i} \mid T_i = 0]
+$$
+
+Es decir, **los resultados potenciales sin tratamiento (**$Y_0$) son iguales en promedio entre tratados y no tratados dada la independecia de $Y_{0i}$ y $T_i$.
+
+Esto elimina el sesgo de selección:
+
+$$
+\underbrace{E[Y_{0i} \mid T_i = 1] - E[Y_{0i} \mid T_i = 0]}_{= 0}
+$$
+
+#### Sección 1: Microeconometría (Inferencia Causal: Sesgo de selección) {.smaller}
+
+Por lo tanto:
+
+$$
+E[Y_i \mid T_i = 1] - E[Y_i \mid T_i = 0]
+= E[Y_{1i} \mid T_i = 1] - E[Y_{0i} \mid T_i = 1]
+$$ - La **diferencia promedio observada** es una estimación no sesgada del **efecto causal promedio en los tratados(ATT)**
+
+#### Sección 1: Microeconometría (Inferencia Causal: Aleatorización) {.smaller}
+
+¿En donde encontramos la aleatorización?
+
+-   **Experimentos controlados aleatorios (RCTs, por sus siglas en inglés)**. Los cuales eran considerados como el **gold standard 🥇** para estimar efectos causales.
+
+Ejemplos:
+
+-   **Medicina**: Ensayos clínicos para probar la eficacia de vacunas o tratamientos.
+-   **Educación**: Evaluaciones de programas como tutorías, becas o incentivos escolares.
+-   **Política pública**: Programas de transferencias monetarias condicionadas, subsidios, o formación laboral.
+-   **Economía del desarrollo**: Intervenciones en comunidades asignadas al azar (ej. microcréditos, acceso a agua).
+
+#### Sección 1: Microeconometría (Inferencia Causal: Aleatorización) {.smaller}
+
+**Desventajas de la aleatorización**
+
+1.  **Costos altos**
+
+-   Realizar un experimento requiere tiempo, personal, diseño, monitoreo y seguimiento.
+
+2.  **Problemas éticos**
+
+-   No siempre es ético asignar un tratamiento al azar (por ejemplo, negar una vacuna potencialmente efectiva a un grupo de personas).
+
+3.  **Problemas de implementación**
+
+-   En la práctica, algunas personas no siguen su asignación (non-compliance).
+
+4.  **Validez externa limitada**
+
+-   Los resultados son válidos para la población del experimento, pero **no siempre se generalizan** a otras poblaciones o contextos.
+
+#### Sección 1: Microeconometría (Inferencia Causal: Alternativas al gold standard) {.smaller}
+
+-   Cuando la aleatorización no es posible, recurrimos a **métodos cuasiexperimentales** y **herramientas econométricas** para intentar identificar efectos causales a partir de **datos observacionales**.
+
+-   Actualmente, se incluye el uso de **diagramas causales o DAGs** para construir frameworks causales robustos que guíen el uso adecuado de técnicas econométricas, los cuales ayudan a definir qué variables deben incluirse y cómo interactuan (Adams 2021).
+
+#### Sección 1: Microeconometría (Regresión lineal y casualidad ) {.smaller}
+
+Partimos de un análisis de regresión y datos observacionales:
+
+$$Y_i = E[Y \mid T_i, \mathbf{x}_i] + \varepsilon_i$$ Donde
+
+-   $E[Y \mid T_i, \mathbf{x}_i]$: valor esperado del resultado dado el tratamiento y las covariables.
+
+-   $\varepsilon_i$: perturbación aleatoria.
+
+No toma una interpretación causal de forma directa.
+
+#### Sección 1: Microeconometría (Independencia condicional) {.smaller}
+
+**Condición para Interpretación Causal**
+
+**Supuesto de Independencia Condicional (S.1)**:
+
+$${Y_{0i}, Y_{1i}} \perp T_i | \mathbf{x}_i$$
+
+-   Dados controles $\mathbf{x}_i$, la asignación al tratamiento es independiente de los resultados potenciales.
+
+-   **Selección sobre observables** (*selection-on-observables*), porque:
+
+-   Las covariables que deben mantenerse fijas se asumen como **conocidas y observadas**
+
+> **Intuición**: Una vez que controlamos por $\mathbf{x}_i$, recibir tratamiento es "como si fuera" aleatorio.
+
+#### Sección 1: Microeconometría (Forma funcional ) {.smaller}
+
+Al asumir una forma funcional paramétrica lineal:
+
+$$Y_i = \alpha + \beta T_i +  \mathbf{x}_i'\gamma + \varepsilon_i$$
+
+Donde:
+
+-   $\beta_1$ representa el **efecto causal del tratamiento**, bajo el supuesto de independencia condicional.
+-   $\mathbf{x}_i$ variables de control
+-   $u_i$ es el error idiosincrático,
+
+#### Sección 1: Microeconometría (Supuesto 2) {.smaller}
+
+En su forma funcional el modelo de regresión lineal multiple hereda de S.1 y por lo tanto la
+
+$$
+\text{Cov}([T, \mathbf{x}], \varepsilon) = 0 \quad \Leftrightarrow E[\varepsilon \mid T,\mathbf{x}] = 0
+$$
+
+-   El error no está correlacionado con el tratamiento ni con las covariables.
+
+-   Este es el supuesto crucial para la **consistencia** de los estimadores OLS.
+
+#### Sección 1: Microeconometría (Supuesto 3: Normalidad condicioanl) {.smaller}
+
+-   Los errores son **normalmente distribuidos**, con **media cero** y **varianza constante**, **condicional** a los valores de tratamiento $T_i$ y variables de control $\mathbf{x_i}$.
+
+$$
+\varepsilon_i \mid T_i, \mathbf{x}_i \sim \mathcal{N}(0, \sigma^2)
+$$
+
+-   **Homocedasticidad**: varianza constante del error $\sigma^2$
+
+-   Es clave para la **validez de inferencias estadísticas**
+
+#### Sección 1: Microeconometría ( Objetivo)
+
+El objetivo es obtener una **estimación insesgada y consistente** del efecto causal del tratamiento $T_i$ sobre el resultado $Y_i$, controlando por $\mathbf{x}_i$:
+
+$$
+Y = X\beta + \varepsilon
+$$
+
+-   Donde $X$ incluye una constante, la variable de tratamiento $T_i$, y otras covariables observadas.
+
+#### Sección 1: Microeconometría ( Objetivo)
+
+-   Por medio del estimador OLS se define como: $$
+    \hat{\beta}_{OLS} = (X'X)^{-1}X'Y
+    $$
+
+-   Nuestro interés se centra en el componente $\hat{\beta}_{T_i}$, que representa el **efecto promedio del tratamiento bajo los supuestos del modelo**.
+
+#### Sección 1: Microeconometría (Propiedades)
+
+-   Bajo los supuestos independencia condicional (S.1) y correlación 0 de variables y perturbación (S.2) (independencia condicional, homocedasticidad), este estimador es **consistente**(muestras grandes) , **insesgado** (muestras finitas) y **eficiente**.
+
+-   La interpretación causal de $\hat{\beta}_{T_i}$ requiere asumir que:
+
+    -   No hay variables omitidas relevantes
+    -   No hay confounders observada después de condicionar en $x_i$
+
+(Angrist y Pischke, 2009; Owen, 2019; Adams, 2021)
+
+#### Sección 1: Microeconometría (Problema de Endogeneidad)
+
+-   ¿Qué pasa si se viola este supuesto?
+
+Cuando:
+
+$$
+\text{Cov}(T, \varepsilon) \ne 0
+$$
+
+-   Nos enfrentamos al problema de *endogeneidad*
+
+#### Sección 1: Microeconometría (Problema de Endogeneidad) {.smaller}
+
+-¿Por qué ocurre la endogeneidad?
+
+1.  **Variables omitidas relevantes**
+
+    -   **Ejemplo:** Estimar el efecto de un **curso de capacitación laboral** sobre el **salario**
+    -   Habilidad innata o motivación que afecta tanto la participación en el curso como el salario.
+
+2.  **Causalidad inversa (simultaneidad)**
+
+    -   Analizar el impacto del **salario mínimo** sobre la **cantidad de empleo**.
+    -   La política de salario mínimo puede depender del estado del mercado laboral.
+
+3.  **Error de medición** en el tratamiento o en una covariable
+
+    -   **Ejemplo:** Evaluar el efecto de un **programa de capacitación** cuando la participación está mal registrada.
+    -   Error en la variable genera correlación con el término de error sesgando la estimación.

@@ -1,0 +1,1282 @@
+---
+title: "Diplomado Econometría Modulo IV:<br> Modelos de Respuesta Binaria"
+subtitle: "Universidad Nacional Autónoma de México (UNAM)<br>Facultad de Economía"
+author: "Mtro. Diego Sánchez Rojas"
+editor: visual
+format:
+  revealjs:
+    center-subtitle-slide: false
+    slide-number: c/t
+    self-contained: true
+    slide-level: 4
+    incremental: true
+---
+
+#### Sección 1: Modelos de respuesta binaria (Contenido)
+
+**I. Modelo de probabilidad lineal**
+
+**II. Modelos Probit y Logit**
+
+#### Sección 1: Modelos de respuesta binaria {.smaller}
+
+-   Los modelos de respuesta binaria son fundamentales cuando la variable de interés es dicotómica (0 o 1).
+
+-   Economía Laboral:
+
+    -   Participar en la fuerza laboral (1) vs no participar (0)
+    -   Formal (1) vs Informal (0)
+    -   Sindicalizarse (1) vs no sindicalizarse (0)
+
+-   Economía de la salud:
+
+    -   Actividad física (1) vs no actividad física (0)
+    -   Seguro médico público (1) vs privado (0)
+
+-   Industria financiera
+
+    -   Aprobar un crédito (1) vs no aprobar (0)
+
+#### Sección 1: Modelos de respuesta binaria {.smaller}
+
+Formalmente $y$ será un variable aletoria que tomará dos únicos valores :
+
+$$
+\text{y} = \begin{cases}
+0 ~if~ no \\
+1 ~if~ yes
+\end{cases}
+$$
+
+-   El objetivo es modelar la **probabilidad de respuesta**:
+
+$$p(x) = P(y = 1 \mid x)$$ - Es decir, queremos predecir la **probabilidad de que ocurra un evento**, dadas ciertas características $x$
+
+(Wooldridge, 2009)
+
+#### Sección 1: Modelos de respuesta binaria {.smaller}
+
+La probabilidad de respuesta es la **probabilidad condicional** de que la variable binaria tome el valor 1, dadas los regresores $x_1, x_2, ..., x_k$
+
+$$p(x) = P(y = 1 \mid x_1, x_2, ..., x_k)$$
+
+-   Representa cómo cambian las **probabilidades esperadas de éxito** a medida que cambian los valores de las variables explicativas
+
+Podemos estimarlo como un modelo de regresión lineal donde:
+
+$$p(y=1|x) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_k x_k$$ (m.1)
+
+-   m.1 será la especificación del Modelo de Probabilidad Lineal (MPL o $LPM$)
+
+(Wooldridge, 2009)
+
+#### Sección 1: Modelos de respuesta binaria {.smaller}
+
+Sea $p(x) = P(y = 1 \mid x)$ y asumiendo que $x_1$ no tiene relación con otra variable explicativa, el parámetro $\beta_j$ representa:
+
+$$
+\beta_1 = \frac{\partial P(y = 1 \mid x)}{\partial x_1}
+$$
+
+-   $\beta_1$ será el cambio en la probabilidad de éxito dado el cambio en una unidad de $x_1$, manteniendo las demás constantes.
+
+-   Si $x_1$ es una variable **binaria**, $\beta_1$ será **diferencia en la probabilidad** de éxito cuando:
+
+    $x_j = 1 \quad \text{vs} \quad x_j = 0$
+
+(Wooldridge, 2009)
+
+#### Sección 1: Modelos de respuesta binaria (Transformaciones funcionales) {.smaller}
+
+**Transformaciones funcionales**
+
+Podemos incluir funciones como $x_j^2$, $\log(x_j)$, etc lo cual **no cambia la interpretación general**:
+
+-   Los $\beta_j$ miden el efecto de un cambio en $x_j$ (o en su transformación) **sobre la probabilidad condicional**.
+
+-   La clave es que cada $\beta_j$ mide el efecto parcial sobre la **probabilidad predicha**, no sobre el valor esperado como en regresiones clásicas.
+
+Por lo tanto, en el **MPL un cambio unitario en** $x_j$ implica un cambio en la $P(y = 1 \mid x)$ en la misma cantidad sin importar la transformación de $x_j$
+
+(Wooldridge, 2009)
+
+#### Sección 1: Modelos de respuesta binaria (Desventajas) {.smaller}
+
+-   El MPL no realizará una descripción correcta de la probabilidad de respuesta a menos que el rango de los valores de $\mathbf{x}$ estén muy restringidos.
+
+-   La probabilidad predicha se modela como una **función lineal**:
+
+$$
+ \hat P(y = 1 \mid \mathbf{x}) = \hat\beta_0 + \hat\beta_1 x_1 + \dots + \hat\beta_k x_k
+$$
+
+-   Pero una **función lineal no está acotada**: puede tomar cualquier valor real
+
+-   Como resultado, es común que el modelo haga predicciones de valores fuera del intervalo $[0, 1)$
+
+$$\frac{\partial P(y = 1 \mid \mathbf{x})}{\partial x_j} = \beta_j$$
+
+-   Cada unidad adicional de $x_j$ **siempre cambia la probabilidad en la misma cantidad**, sin importar el valor de $x_j$
+
+#### Sección 1: Modelos de respuesta binaria (Funcionalidad) {.smaller}
+
+¿En qué contexto es funcional?
+
+-   Efecto marginal lineal: La probabilidad no puede estar relacionada de forma lineal con las variables independientes para todos los valores posibles
+
+-   MPL no representa exactamente cómo cambia la probabilidad de que ocurra un evento (por ejemplo, conseguir trabajo, aprobar un crédito), ya que la función que lo describe no puede ser lineal en todo el dominio de las variables independientes.
+
+-   Puede ser útil como una aproximación razonable en el rango de valores donde se encuentran la mayoría de las observaciones. (**Aproximación local**)
+
+-   En la práctica aplicada, cuando los valores de los variables explicativas están moderadamente distribuidos (por ejemplo, entre 5 y 15 años de educación, o entre 20 y 60 años de edad), la relación lineal puede aproximar bien la verdadera probabilidad.
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo básico) {.smaller}
+
+Tenemos $n = 10$ observaciones con:
+
+-   $y_i$: variable binaria (0 ó 1)
+
+-   $x_i$: variable continua
+
+$$
+\begin{array}{c|cccccccccc}
+i & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\hline
+y_i & 0 & 0 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 1 \\
+x_i & 2 & 3 & 5 & 4 & 7 & 8 & 9 & 6 & 10 & 11 \\
+\end{array}
+$$
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo básico) {.smaller}
+
+Planteamos el MPL de probabilidad lineal a estimar: $$P(y_i = 1|x_i) = \beta_0 + \beta_1 x_i + \varepsilon_i$$
+
+En el MPL se utiliza OLS para estimar $\beta_0$ y $\beta_1$ por tanto:
+
+$$
+\hat{\beta}_{OLS} = (X'X)^{-1}X'Y
+$$
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo básico) {.smaller}
+
+**Matriz de diseño** $\mathbf{X}$ y el vector de la variable $Y$:
+
+$$\mathbf{X} = \begin{pmatrix}
+1 & 2 \\
+1 & 3 \\
+1 & 5 \\
+1 & 4 \\
+1 & 7 \\
+1 & 8 \\
+1 & 9 \\
+1 & 6 \\
+1 & 10 \\
+1 & 11
+\end{pmatrix}_{10 \times 2} \quad
+\mathbf{Y} = \begin{pmatrix}
+0 \\
+0 \\
+1 \\
+0 \\
+1 \\
+1 \\
+1 \\
+0 \\
+1 \\
+1
+\end{pmatrix}_{10 \times 1}$$
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo básico) {.smaller}
+
+Obtenemos $\mathbf{X}'\mathbf{X}$:
+
+$$
+\mathbf{X}'\mathbf{X} = \begin{pmatrix}
+\sum_{i=1}^{10} 1 & \sum_{i=1}^{10} x_i \\
+\sum_{i=1}^{10} x_i & \sum_{i=1}^{10} x_i^2
+\end{pmatrix} = \begin{pmatrix}
+10 & 65 \\
+65 & 505
+\end{pmatrix}
+$$
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo básico) {.smaller}
+
+-   Calculamos la inversa $(\mathbf{X}'\mathbf{X})^{-1}$:
+
+$$
+(\mathbf{X}^\top \mathbf{X})^{-1} = \frac{1}{825}
+\begin{bmatrix}
+505 & -65 \\
+-65 & 10
+\end{bmatrix}
+$$
+
+-   y $\mathbf{X}'\mathbf{y}$ :
+
+$$
+\mathbf{X}'\mathbf{y} = \begin{pmatrix}
+\sum_{i=1}^{10} y_i \\
+\sum_{i=1}^{10} x_i y_i
+\end{pmatrix} = \begin{pmatrix}
+6 \\
+50
+\end{pmatrix}
+$$
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo básico) {.smaller}
+
+Obtenemos $\boldsymbol{\hat{\beta}}$: $$
+\hat{\boldsymbol\beta} = \frac{1}{825}
+\begin{bmatrix}
+505 & -65 \\
+-65 & 10
+\end{bmatrix}
+\begin{bmatrix}
+6 \\
+50
+\end{bmatrix}
+= \frac{1}{825}
+\begin{bmatrix}
+-220 \\
+110
+\end{bmatrix}
+= \begin{bmatrix}
+-0.2667 \\
+0.1333
+\end{bmatrix}
+$$
+
+-   Modelo estimado:
+
+$\hat{P}(y_i = 1|x_i) = -0.2667 + 0.1333 x_i$
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo básico (Comprobación en R)) {.smaller}
+
+-   En R podremos realizar de forma "manual" o utilizando la funcion lm():
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: toyexamp
+
+# Variables
+x <- c(2, 3, 5, 4, 7, 8, 9, 6, 10, 11)
+y <- c(0, 0, 1, 0, 1, 1, 1, 0, 1, 1)
+
+# Cálculo matricial
+X <- cbind(1, x)
+beta_hat <- solve(t(X) %*% X) %*% t(X) %*% y
+print(beta_hat)
+
+# Modelo lineal utilizando formula lm
+modelo_lpm <- lm(y ~ x)
+print( modelo_lpm)
+```
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo básico) {.smaller}
+
+-   **Predicciones del MPL**
+
+| $x_i$ | $\hat{y}_i = -0.2667 + 0.1333 \cdot x_i$ | Valor   |
+|-------|------------------------------------------|---------|
+| 2     | $-0.2667 + 0.1333 \cdot 2 = -0.0001$     | ❌ \< 0 |
+| 3     | $0.1333$                                 | ✅      |
+| 4     | $0.2666$                                 | ✅      |
+| 5     | $0.3999$                                 | ✅      |
+| 6     | $0.5332$                                 | ✅      |
+| 7     | $0.6665$                                 | ✅      |
+| 8     | $0.7998$                                 | ✅      |
+| 9     | $0.9331$                                 | ✅      |
+| 10    | $1.0663$                                 | ❌ \> 1 |
+| 11    | $1.1996$                                 | ❌ \> 1 |
+
+-   Limitación del MPL
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo) {.smaller}
+
+Ejemplo de Wooldridge,2009:
+
+-   Utilizamos datos de *Wooldridge Source: T.A. Mroz (1987), “The Sensitivity of an Empirical Model of Married Women’s Hours of Work to Economic and Statistical Assumptions”*
+
+-   Modelo de probabilidad lineal sobre la decisión de las mujeres de trabajar fuera del hogar:
+
+$$inlf_i = \beta_0 + \beta_1 \cdot age_i + \beta_2 \cdot educ_i + \beta_3 \cdot exper_i + \beta_4 \cdot nwifeinc_i + \beta_5 \cdot kidslt6_i + \beta_6 \cdot kidsge6_i + u_i  $$ $$~~~~~ (M.2)$$
+
+#### Sección 1: Modelos de respuesta binaria (Descripción de variables) {.smaller}
+
+Donde:
+
+-   $inlf_i$: 1 si la mujer trabajó fuera del hogar (horas \> 0), 0 si no
+-   $age$: Edad de la mujer (en años)
+-   $exper$ y $exper^2$: Años de experiencia laboral potencial
+-   $educ$ Años de educación completados
+-   $nwifeinc_i$: Ingreso no generado por la esposa (en miles de dólares anuales)
+-   $kidslt6_i$: número de hijos menores de 6 años\
+-   $kidsge6_i$: número de hijos entre 6 y 18 años
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo en R) {.smaller}
+
+-   En R el conjunto de datos `MROZ.RAW` lo podemos encontrar en la librería **wooldridge**
+
+-   https://justinmshea.github.io/wooldridge/reference/mroz.html
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: data
+
+#Librerias
+if (!require(pacman, quietly = TRUE)) {install.packages('pacman')}
+library(pacman)
+p_load( 'wooldridge','tidyverse','modelsummary','skimr', 'dplyr', 'gtsummary')
+
+#Cargamos datos 
+data("mroz")
+#Descripción
+skim(mroz)
+
+```
+
+#### Sección 1: Modelos de respuesta binaria (Visualización Y) {.smaller}
+
+::: columns
+::: {.column width="60%"}
+-   La muestra es de 753 observaciones
+-   Variable objetivo: ¿Cuántas mujeres están ocupadas?
+
+```{r}
+#| echo: true
+#| eval: false
+#| label: descriptivos
+
+
+df_mroz <- mroz  |> 
+            mutate(inlf_1= factor(inlf, labels = c("No trabaja", "Trabaja"))) 
+  
+ggplot(df_mroz, aes(x = factor(inlf_1), fill = factor(inlf_1))) +
+  geom_bar(alpha = 0.8) +
+ geom_text(stat = 'count', 
+            aes(label = paste0(after_stat(count), "\n(", 
+                              round(after_stat(count)/sum(after_stat(count))*100, 1), "%)")), 
+            vjust = 1.5, size = 4) +
+
+  labs(
+    title = "Estado laboral de las mujeres en la muestra",
+    x = "Estado laboral", 
+    y = "Número de mujeres",
+    caption = "inlf_1: 1 = trabaja fuera del hogar, 0 = no trabaja"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")  
+
+
+```
+:::
+
+::: {.column width="40%"}
+```{r}
+#| warning: false
+#| echo: false
+#| label: descriptivos_y1
+#| fig-width: 16
+#| fig-height: 14
+
+df_mroz <- mroz  |> 
+            mutate(inlf_1= factor(inlf, labels = c("No trabaja", "Trabaja"))) 
+  
+ggplot(df_mroz, aes(x = factor(inlf_1), fill = factor(inlf_1))) +
+  geom_bar(alpha = 0.8) +
+ geom_text(stat = 'count', 
+            aes(label = paste0(after_stat(count), "\n(", 
+                              round(after_stat(count)/sum(after_stat(count))*100, 1), "%)")), 
+            vjust = 1.5, size = 7) +
+
+  labs(
+    title = "Estado laboral de las mujeres en la muestra",
+    x = "Estado laboral", 
+    y = "Número de mujeres",
+    caption = "inlf_1: 1 = trabaja fuera del hogar, 0 = no trabaja"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(size = 24)) 
+
+
+```
+:::
+:::
+
+#### Sección 1: Modelos de respuesta binaria (Visualización de Xs) {.smaller}
+
+::: columns
+::: {.column width="40%"}
+-   ¿Cómo se distribuyen los regresores por los valores de la variable objetivo?
+
+```{r}
+#| echo: true
+#| eval: false
+#| label: descrip_x
+
+df_boxplots <- df_mroz |>  
+               select(inlf_1, nwifeinc, age, educ, exper, kidslt6, kidsge6) |> 
+               pivot_longer(cols = -inlf_1, names_to = "variable", values_to = "valor") |> 
+               mutate(inlf_1 = factor(inlf_1, labels = c("No trabaja", "Trabaja")))
+
+#Plot
+ggplot(df_boxplots,
+       aes(x = inlf_1, y = valor, fill = inlf_1)) +
+  geom_boxplot(alpha = 0.7) +
+  facet_wrap(~variable, scales = "free_y", ncol = 3) +
+  labs(title = "Distribución de variables por estado laboral",
+       x = "Estado laboral",
+       y = "Valor") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| label: descrip_x2
+#| fig-width: 12
+#| fig-height: 12
+
+df_boxplots <- df_mroz |>  
+               select(inlf_1, nwifeinc, age, educ, exper, kidslt6, kidsge6) |> 
+               pivot_longer(cols = -inlf_1, names_to = "variable", values_to = "valor") |> 
+               mutate(inlf_1 = factor(inlf_1, labels = c("No trabaja", "Trabaja")))
+
+#Plot
+ggplot(df_boxplots,
+       aes(x = inlf_1, y = valor, fill = inlf_1)) +
+  geom_boxplot(alpha = 0.7) +
+  facet_wrap(~variable, scales = "free_y", ncol = 3) +
+  labs(title = "Distribución de variables por estado laboral",
+       x = "Estado laboral",
+       y = "Valor") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(size = 22),         
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+:::
+:::
+
+#### Sección 1: Modelos de respuesta binaria (Visualización de Ingreso) {.smaller}
+
+-   ¿Cómo se distribuye el ingreso no generado por la esposa por la condición de empleo?
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: descriptivos3
+
+ggplot(df_mroz, aes(x = nwifeinc, fill = factor(inlf_1, labels = c("No trabaja", "Trabaja")))) +
+  geom_density(alpha = 0.6) +
+  labs(
+    title = "Distribución del ingreso no generado por la esposa",
+    subtitle = "Por estado laboral",
+    x = "Ingreso no-esposa (miles de dólares)",
+    y = "Densidad",
+    fill = "Estado laboral"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+```
+
+#### Sección 1: Modelos de respuesta binaria (Prueba de significancia) {.smaller}
+
+-   Usamos un prueba T (t_test) para comprobar que la diferencia sea significativa
+
+-   Interpretación:
+
+    -   ✅ p \< 0.05 (específicamente p = 0.001226)
+    -   ✅ Hay una diferencia estadísticamente significativa
+
+-   Existe una diferencia significativa en el ingreso no generado por la esposa (nwifeinc) entre:
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: descriptivos4
+
+#prueba T
+t.test(nwifeinc ~ inlf_1, data = df_mroz, var.equal = TRUE)  
+
+
+```
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: descriptivosniños
+
+#prueba T
+t.test(kidslt6 ~ inlf_1, data = df_mroz, var.equal = TRUE)  
+
+
+```
+
+#### Sección 1: Modelos de respuesta binaria (MPL) {.smaller}
+
+-   Estimación en R de MPL para modelo especificado (M.2)
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: MPI
+
+modelo_mpl <- lm(inlf ~ age + educ + exper + I(exper^2) + nwifeinc + kidslt6 + kidsge6, data = mroz)
+
+
+summary(modelo_mpl)
+
+```
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación) {.smaller}
+
+-   Cada $\beta_j$ representa el **efecto marginal** de $x_j$ sobre la probabilidad de que $y = 1$.
+
+-   Si $\beta = 0.04$ se muliplica por 100 para decir que un aumento en una unidad de $x_i$ tendrá un efecto $0.04$ x $100$ pp
+
+| Variable   | Coef.   | Error Est. | Interpretación                                                                                                          |
+|------------|---------|------------|-------------------------------------------------------------------------------------------------------------------------|
+| `exper`    | 0.039   | (0.006)    | Cada año adicional de experiencia laboral **aumenta la probabilidad** de trabajar en **3.9 puntos porcentuales**.       |
+| `exper^2`  | -0.0006 | (0.000)    | El efecto de la experiencia **disminuye con el tiempo**: rendimientos decrecientes.                                     |
+| `nwifeinc` | -0.0034 | (0.001)    | Cada 10 mil dólares extra del ingreso del esposo **reduce la probabilidad** de trabajar en **0.3 puntos porcentuales**. |
+| `kidslt6`  | -0.262  | (0.034)    | Tener un hijo menor de 6 años **reduce la probabilidad** de trabajar en **26.2 puntos porcentuales**.                   |
+| `kidsge6`  | 0.013   | (0.013)    | Tener hijos entre 6 y 18 años **incrementa** la probabilidad (no significativo estadísticamente).                       |
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación Experiencia ) {.smaller}
+
+-   Vimos que el efecto de la experiencia disminuye con el tiempo por lo tanto tenemos **rendimiento decrecientes**
+
+-   El efecto marginal **disminuye con la experiencia**.
+
+Es posible calcular el punto nivel de experiencia donde el efecto marginal se vuelve cero:
+
+$$\frac{\partial P(inlf = 1)}{\partial exper} = \beta_1 + 2\beta_2 \cdot exper = 0$$
+
+Por tanto:
+
+$$exper = \frac{\ \beta_1}{2\beta_2} = \frac{0.039}{2(-0.001)} = 19.5 $$
+
+-   La probabilidad de participación crece con la experiencia hasta los 19.5 años, luego comienza a disminuir.
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación Intercepto) {.smaller}
+
+-   Se estimó:
+
+    $$ \hat\beta_0 = 0.586 $$
+
+-   La probabilidad predicha de que una mujer trabaje cuando todas las variables explicativas son cero.
+
+#### Sección 1: Modelos de respuesta binaria (Prediction range) {.smaller}
+
+-   Al realizar la predicción de probabilidades del modelo se observa que aproximadamente 4.4% de las predicciones del MPL están fuera del intervalo válido es decir, son menores a 0 o mayores a 1.
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: MPI_range
+
+preds <- predict(modelo_mpl)
+
+out_range <- mean(preds < 0 | preds > 1)
+
+print(out_range*100)
+
+```
+
+#### Sección 1: Modelos de respuesta binaria (Diagnóstico) {.smaller}
+
+Residuos vs. valores ajustados
+
+✔️ Ideal: dispersión aleatoria alrededor de 0\
+→ indica **linealidad** y **homocedasticidad**\
+❌ Problemas: - Curvas = falla de linealidad\
+- Forma de embudo = heterocedasticidad
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: MPI_diag
+
+plot(modelo_mpl, which = 1, main = "Residuos vs Valores ajustados")
+
+
+```
+
+#### Sección 1: Modelos de respuesta binaria (Diagnóstico) {.smaller}
+
+Gráfico Q-Q (cuantil-cuantil)
+
+✔️ Ideal: residuos alineados en diagonal\
+→ indica **normalidad de los errores**
+
+❌ Problemas: - Forma de “S” - colas ligeras\
+- Curvatura - asimetría\
+- Puntos extremos - outliers o colas pesadas
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: MPI_diag1
+
+plot(modelo_mpl, which = 2, main = "Gráfico Q-Q de los residuos")
+
+```
+
+#### Sección 1: Modelos de respuesta binaria (Diagnóstico) {.smaller}
+
+Colinealidad – VIF (Variance Inflation Factor)
+
+✔️ Ideal: VIF \< 5 (o 10 como límite laxo)\
+→ no hay **multicolinealidad severa**\
+❌ Problemas: - VIF altos = variables muy correlacionadas
+
+Soluciones: - Elimina variables redundantes
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: MPI_diag2
+
+p_load('car')
+
+vif( modelo_mpl)
+
+```
+
+#### Sección 1: Modelos de respuesta binaria (Regresor ) {.smaller}
+
+-   ¿Qué sucede cuando tengo una variable explicativa binaria?
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: MPI_bin
+
+modelo_mpl_bi <- lm(inlf ~ age + educ + exper + I(exper^2) + nwifeinc + kidslt6 + kidsge6 + city, data = mroz)
+
+
+summary(modelo_mpl_bi)
+
+```
+
+-   El coeficiente representa la diferencia en la probabilidad promedio entre las dos categorías.
+
+-   Interpretación: Las mujeres que viven en áreas metropolitanas tienen una probabilidad de participar en la fuerza laboral que es 1.25 puntos porcentuales menor comparado con las mujeres que no viven en áreas metropolitanas, manteniendo todas las demás variables constantes.
+
+#### Sección 1: Modelos de respuesta binaria (Conclusión) {.smaller}
+
+-   El **Modelo de Probabilidad Lineal (MPL)** es fácil de estimar con OLS, pero tiene fallas importantes:
+
+    -   Puede predecir valores fuera del intervalo (\[0, 1\])
+    -   Supone **varianza constante** (homocedasticidad), lo cual no se cumple con variable binaria
+    -   No modela bien la relación no lineal entre $x_k$ y la probabilidad
+
+-   Alternativas
+
+    -   Utilizar modelos que utilicen una forma funcional $F(\cdot)$ que asegure que la probabilidad predicha esté entre 0 y 1.
+    -   **Logit y Probit**
+
+#### Sección 1: Modelos de respuesta binaria (Modelo índice) {.smaller}
+
+-   Dado que el MPL lineal tiene la limitación de que la probabilidad de respuesta no siempre puede estar en 0 y 1 para todas las \$\mathbf x_i \$ utilizaremos el **modelo índice** representado como:
+
+$$P(y = 1 \mid \mathbf{x}) = G(\mathbf{x}\boldsymbol{\beta}) \equiv p(\mathbf{x}) ~~~~(m.índice)$$
+
+-   La probabilidad de respuesta depende de $\mathbf{x}$ **solo** a través del índice:
+
+$$\mathbf{x}\boldsymbol{\beta} = \beta_1+ \beta_2x_2 + \beta_kx_k$$
+
+#### Sección 1: Modelos de respuesta binaria (Modelo índice) {.smaller}
+
+-   La función $G(\cdot)$ convierte ese índice ($\mathbf{x}\boldsymbol{\beta}$) en una probabilidad.
+
+-   En la mayoría de las aplicaciones $G$ es una función de distribución acumuladada (cdf)
+
+-   $0 < G(z) < 1 \quad \text{para todo } z \in \mathbb{R}$
+
+-   La función $G(z)$ **transforma** la combinación lineal $\mathbf{x}\boldsymbol{\beta}$ en una **probabilidad válida**.
+
+#### Sección 1: Modelos de respuesta binaria (Modelo índice) {.smaller}
+
+-   Dado un comportamiento binario observado $y \in \{0,1\}$, suponemos que hay una variable continua no observada $y^*$:
+
+$$
+y^* = \mathbf{x} \boldsymbol{\beta} + e, \quad y = 1 \quad si \quad y^*>0
+$$
+
+-   $y^*$ será una variable latente que representa la utilidad neta, deseo, propensión o decisión interna.
+
+-   $e$ es **continuamente distribuido**, independiente de $\mathbf{x}$ y tiene **distribución simétrica respecto a 0**
+
+#### Sección 1: Modelos de respuesta binaria (Modelo índice) {.smaller}
+
+-   Si se cumple los supuestos de $e$ podemor derivar la probabilidad de respuesta como:
+
+$$\mathbb{P}(y = 1 \mid \mathbf{x}) = \mathbb{P}(y^* > 0|\mathbf{x} )=\mathbb{P}( \mathbf{x}\boldsymbol{\beta} + e > 0|\mathbf{x})=(e > -\mathbf{x}\boldsymbol{\beta}|\mathbf{x})= \mathbb{P}(e > -\mathbf{x}\boldsymbol{\beta}|\mathbf{x})=
+$$ - Como $e$ es una variable aleatoria con una distribución acumulada $G(.)$ y por el supuesto de simetría respecto a 0 del error $e$:
+
+$$1 - G(-\mathbf{x}\boldsymbol{\beta}) = G(\mathbf{x}\boldsymbol{\beta})$$ - La probabilidad de que $G$ tome un valor positivo $\mathbf{x}\boldsymbol{\beta}$ es igual a que $G$ tome un valor negativo $-\mathbf{x}\boldsymbol{\beta}$
+
+#### Sección 1: Modelos de respuesta binaria (Modelo índice) {.smaller}
+
+Por tanto tenemos la formula general del modelo índice:
+
+$$\mathbb{P}(y = 1 \mid \mathbf{x})  = G(\mathbf{x}\boldsymbol{\beta})$$
+
+Donde G es una función acumulada simétrica y en casos particulares:
+
+-   Probit:
+
+$$G(z) = \Phi(z) = \int_{-\infty}^{z} \phi(v) \, dt
+\quad $$
+
+-   Logit:
+
+$$
+G(z)= \Lambda(z) = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}}
+$$
+
+#### Sección 1: Modelos de respuesta binaria (Probit) {.smaller}
+
+-   El modelo **Probit** es un caso particular\
+    $$P(y = 1 \mid \mathbf{x}) = \Phi(z) \quad (m.probit)$$
+
+Donde la CDF:
+
+$$\Phi(z) = \int_{-\infty}^{z} \phi(v) \, dt
+\quad $$
+
+-   y su densidad normal estándar:
+
+$$\phi(v) = \frac{1}{\sqrt{2\pi}} e^{-v^2/2}$$
+
+#### Sección 1: Modelos de respuesta binaria (Probit:Estimación) {.smaller}
+
+**¿Cómo se estima el modelo Probit?**
+
+-   Máxima verosimilitud condicional (*CMLE*)
+
+Partimos de:
+
+$$y_i^* = \mathbf{x}_i \boldsymbol{\beta} + e_i, \quad e_i \sim \mathcal{N}(0,1)$$
+
+-   Dado que la variable $y_i$ toma dos valores:
+
+$$\mathbb{P}(y_i = 1 \mid \mathbf{x}_i) =  \Phi(\mathbf{x}_i \boldsymbol{\beta})$$
+
+$$\mathbb{P}(y_i = 0 \mid \mathbf{x}_i) = 1 - \Phi(\mathbf{x}_i \boldsymbol{\beta})$$
+
+#### Sección 1: Modelos de respuesta binaria (Probit:Estimación) {.smaller}
+
+-   Asumimos que contamos con $N$ observaciones independientes e idénticamente distribuidas $(i.i.d)$
+
+-   y dada la función de probabilidad de $y_i$ dado $\mathbf{x}_i$ podemos escribirla como:
+
+$$ f(y|\mathbf{x}_i;\boldsymbol{\beta}) =  \left[\Phi(\mathbf{x}_i \boldsymbol{\beta})\right]^{y_i} \left[1 - \Phi(\mathbf{x}_i \boldsymbol{\beta})\right]^{1 - y_i}$$
+
+#### Sección 1: Modelos de respuesta binaria (Probit:Estimación) {.smaller}
+
+-   El **Paso 1. será obtener la verosimilutd** de la función de densidad para un conjunto de datos dados:
+
+$$L(\boldsymbol{\beta}) = \prod_{i=1}^N \left[\Phi(\mathbf{x}_i \boldsymbol{\beta})\right]^{y_i} \left[1 - \Phi(\mathbf{x}_i \boldsymbol{\beta})\right]^{1 - y_i}$$
+
+-   Producto de probabilidades
+
+-   La verosimilitud es una función que mide qué tan probable es observar los datos que tenemos, dados ciertos valores de los parámetros del modelo.
+
+-   El objetivo de *CMLE* es encontrar los parámetros del modelo que hacen más probable (verosímil) haber observado los datos que tenemos.
+
+#### Sección 1: Modelos de respuesta binaria (Probit:Estimación) {.smaller}
+
+-   Paso 2: Con el fin de simplificar matemática y computacionalmente la estimación obtenemos la función **log-verosimilitud** $\ell(\boldsymbol{\beta})$:
+
+-   $\ell(\boldsymbol{\beta}) = log(L(\boldsymbol{\beta}))$
+
+$$\ell(\boldsymbol{\beta}) = \sum_{i=1}^N \left\{ y_i \log \left[\Phi(\mathbf{x}_i \boldsymbol{\beta}) \right] + (1 - y_i) \log \left[1 - \Phi(\mathbf{x}_i \boldsymbol{\beta}) \right] \right\}$$
+
+#### Sección 1: Modelos de respuesta binaria (Probit:Estimación) {.smaller}
+
+-   Paso 3: Estimación de $\boldsymbol{\beta}$
+
+$$\hat{\boldsymbol{\beta}} = \arg \max_{\boldsymbol{\beta}} \ell(\boldsymbol{\beta})$$
+
+-   No hay solución analítica: se debe resolver por métodos de optimización numérica
+
+-   Newton-Raphson ,BFGS (Broyden–Fletcher–Goldfarb–Shanno), Fisher scoring
+
+#### Sección 1: Modelos de respuesta binaria (Probit:Estimación) {.smaller}
+
+-   Todos buscan encontrar el valor de $\boldsymbol{\beta}$ que **maximiza la log-verosimilitud**.
+
+-   Resuelven la **condición de primer orden**:
+
+| Método         | Usa Hessiana exacta | Usa gradiente | Aprox. Hessiana   | Estable y eficiente          |
+|----------------|---------------------|---------------|-------------------|------------------------------|
+| Newton-Raphson | ✅ Sí               | ✅ Sí         | ❌ No             | ⚠️ Solo si Hessiana es fácil |
+| BFGS           | ❌ No               | ✅ Sí         | ✅ Sí             | ✅ Muy usado                 |
+| Fisher Scoring | ❌ Usa esperanza    | ✅ Sí         | ✅ Sí (esperanza) | ✅ Muy usado en GLM          |
+
+#### Sección 1: Modelos de respuesta binaria (Logit) {.smaller}
+
+-   Dado que $e_i \sim \text{Logística}(0,1)$, se tiene:
+
+-   La forma particular del modelo indice:
+
+$$
+\mathbb{P}(y_i = 1 \mid \mathbf{x}_i) = G(z)= \Lambda(\mathbf{x}_i \boldsymbol{\beta}) = \frac{1}{1 + e^{-\mathbf{x}_i \boldsymbol{\beta}}} = \frac{e^{\mathbf{x}_i \boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i \boldsymbol{\beta}}}
+$$
+
+$$
+\mathbb{P}(y_i = 0 \mid \mathbf{x}_i) = 1 - \Lambda(\mathbf{x}_i \boldsymbol{\beta}) = \frac{e^{-\mathbf{x}_i \boldsymbol{\beta}}}{1 + e^{-\mathbf{x}_i \boldsymbol{\beta}}}
+$$
+
+#### Sección 1: Modelos de respuesta binaria (Logit) {.smaller}
+
+-   Paso 1: Obtener verosimilutd de la función de densidad
+
+$f(y|\mathbf{x}_i;\boldsymbol{\beta})$ :
+
+$$L(\boldsymbol{\beta}) = \prod_{i=1}^N \left[ \Lambda(\mathbf{x}_i \boldsymbol{\beta}) \right]^{y_i} \left[ 1 - \Lambda(\mathbf{x}_i \boldsymbol{\beta}) \right]^{1 - y_i}$$
+
+#### Sección 1: Modelos de respuesta binaria (Logit) {.smaller}
+
+-   Paso 2: obtenemos la función log-verosimilitud $\ell(\boldsymbol{\beta})$
+
+$$\ell(\boldsymbol{\beta}) = \sum_{i=1}^N \left[ 
+y_i \log \Lambda(\mathbf{x}_i \boldsymbol{\beta}) + (1 - y_i) \log \left( 1 - \Lambda(\mathbf{x}_i \boldsymbol{\beta}) \right)
+\right]$$
+
+#### Sección 1: Modelos de respuesta binaria (Logit) {.smaller}
+
+-   Reemplazamos en la función $\Lambda(z)$ en la $\ell(\boldsymbol{\beta})$:
+
+$$\Lambda(z) = \frac{e^z}{1 + e^z}, \quad \log \Lambda(z) = z - \log(1 + e^z)$$
+
+Por tanto:
+
+$$\ell(\boldsymbol{\beta}) = \sum_{i=1}^N \left[
+y_i \cdot \mathbf{x}_i \boldsymbol{\beta} - \log(1 + e^{\mathbf{x}_i \boldsymbol{\beta}})
+\right]$$
+
+#### Sección 1: Modelos de respuesta binaria (Logit) {.smaller}
+
+-   Es estimdor se encuentra solucionando la:
+
+$$\hat{\boldsymbol{\beta}} = \arg \max_{\boldsymbol{\beta}} \ell(\boldsymbol{\beta})$$
+
+-   Para encontrar máximo encontramos la ecuación de primer orden
+
+#### Sección 1: Modelos de respuesta binaria (Logit) {.smaller}
+
+-   Encontramos el gradiente de $\ell(\boldsymbol{\beta})$ respecto a $\boldsymbol{\beta}$:
+
+$$
+\frac{\partial \ell(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}} =
+\sum_{i=1}^N \left[
+y_i - \Lambda(\mathbf{x}_i \boldsymbol{\beta})
+\right] \cdot \mathbf{x}_i=0
+$$
+
+-   Lo cual es un sistema de ecuaciones no lineales y como no tiene solución cerrada se usan métodos de optimización iterativos.
+
+#### Sección 1: Modelos de respuesta binaria (Ejemplo) {.smaller}
+
+Estimaremos el M.1 como un modelo probit:
+
+$$\mathbb{P}(inlf_i = 1 \mid \mathbf{x}_i) =\Phi( 
+\beta_0 + \beta_1 \cdot age_i + \beta_2 \cdot educ_i + \beta_3 \cdot exper_i + \beta_4 \cdot nwifeinc_i +$$
+
+$$\beta_5 \cdot kidslt6_i + \beta_6 \cdot kidsge6_i)$$
+
+-   Donde $\Phi(\cdot)$ es la **función de distribución normal estándar acumulada**.
+
+#### Sección 1: Modelos de respuesta binaria (Probit en R) {.smaller}
+
+-   En R utilizaremos la funión `glm()` de la paquetería base `stats` para estimar modelos lineal genralizados:
+
+-   La función glm utilizan IRLS (Iteratively Reweighted Least Squares) y es una forma del algoritmo de Fisher Scoring
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: Probit
+
+
+# Modelo Probit con glm()
+modelo_probit <- glm(inlf ~ age + educ + exper + I(exper^2) + nwifeinc + kidslt6 + kidsge6,
+                     data = mroz,
+                     family = binomial(link = "probit"))                    
+
+# Resumen del modelo
+summary(modelo_probit)
+```
+
+#### Sección 1: Modelos de respuesta binaria (Evaluación) {.smaller}
+
+¿Cómo evaluar un modelo Probit?
+
+-   Dos medidas de bondad de ajuste: **porcentaje de predicciones correctas y pseudo** $R^2$
+
+**1. Porcentaje de observaciones correctamente clasificadas (Accuracy)**
+
+-   Si $G(\mathbf{x_i }\hat{\mathbf\beta} )>.5$ será 1 y $G(\mathbf{x_i }\hat{\mathbf\beta} )<=.5$ la predicción será 0
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: Probit1
+
+
+# Predicción de probabilidades
+p_hat <- predict(modelo_probit, type = "response")
+
+# Clasificación binaria con umbral 0.5
+y_pred <- ifelse(p_hat > 0.5, 1, 0)
+
+# Variable observada
+y_obs <- mroz$inlf
+
+# Accuracy
+accuracy <- mean(y_pred == y_obs)
+print(paste("Accuracy:", round(accuracy, 4)))
+```
+
+#### Sección 1: Modelos de respuesta binaria (Evaluación) {.smaller}
+
+**2. Pseudo R-cuadrado (McFadden)**
+
+-   En modelos lineales: $R^2$ mide la proporción de varianza explicada.
+
+$$R^2_{\text{McFadden}} = 1 - \frac{\ell(\hat{\boldsymbol{\beta}})}{\ell(\boldsymbol{0})}$$
+
+Donde: - $\ell(\hat{\boldsymbol{\beta}})$: log-verosimilitud del modelo ajustado\
+- $\ell(\boldsymbol{0})$: log-verosimilitud del modelo nulo (solo intercepto)
+
+#### Sección 1: Modelos de respuesta binaria (Evaluación) {.smaller}
+
+**2. Pseudo R-cuadrado (McFadden)**
+
+-   Para calcular el pseudo $R^2$ utilizamos la función `pR2` de la libreria `pscl`:
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: Probit2
+
+#Instalamos paquetería
+p_load(pscl)
+
+
+pR2(modelo_probit)["McFadden"]
+```
+
+-   Valores entre 0.2 y 0.4 **buen ajuste**
+-   No se interpreta igual que el $R^2$ de OLS
+-   Solo útil para **comparar modelos**
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación) {.smaller}
+
+**¿Los coeficientes estimados** $\hat\beta$ se interpretan igual en un modelo Probit y un MPL?
+
+-   Los coeficientes de un Probit no se interpretan directamente como el cambio en la probabilidad.
+
+-   Esto se debe a la naturaleza no lineal de la función de enlace Probit (la función de distribución acumulada normal estándar).
+
+**¿Cómo se interpretan?**
+
+Se tiene que calcular el efecto marginal que mide el cambio en la probabilidad al cambiar $x_j$, manteniendo lo demás constante como:
+
+$$\frac{\partial \mathbb{P}(y_i = 1)}{\partial x_{ij}} = \phi(\mathbf{x}_i \boldsymbol{\beta}) \cdot \beta_j$$
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación) {.smaller}
+
+1.  Estimación $z_i = \mathbf{x}_i \hat{\boldsymbol{\beta}}$
+
+2.  Evaluar en densidad:
+
+$$\phi(z_i) = \frac{1}{\sqrt{2\pi}} e^{-z_i^2 / 2}$$ 3. Multiplicamos:
+
+$$\phi(z_i) \cdot \hat{\beta}_j$$
+
+#### Sección 1: Modelos de respuesta binaria (Efectos marginales en R) {.smaller}
+
+¿Cómo estimamos los efectos marginales de un modelos probit en R?
+
+-   Utilizamos el paquete `margins`:
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: Probit3
+
+
+#Cargamos paquetería
+p_load(margins)
+
+#Calculamos
+efectos_marginales <- margins(modelo_probit)
+
+summary(efectos_marginales)
+```
+
+#### Sección 1: Modelos de respuesta binaria (Efectos marginales en R) {.smaller}
+
+-   Interpretaciones efectos marginales del modelo probit
+
+| Variable   | AME     | Interpretación                                                                                                                          |
+|------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `age`      | -0.0159 | Un año más de edad **reduce** la probabilidad de trabajar en **1.59 puntos porcentuales**, en promedio.                                 |
+| `educ`     | 0.0394  | Un año adicional de educación **aumenta** la probabilidad de trabajar en **3.94 puntos porcentuales**.                                  |
+| `exper`    | 0.0256  | Un año adicional de experiencia laboral **aumenta** la probabilidad de trabajar en **2.56 puntos porcentuales**.                        |
+|            |         |                                                                                                                                         |
+| `kidsge6`  | 0.0108  | Tener un hijo mayor de 6 años **aumenta** la probabilidad en **1.08 puntos**, pero **no es estadísticamente significativo** (p = 0.41). |
+| `kidslt6`  | -0.2612 | Tener un hijo menor de 6 años **reduce** la probabilidad de trabajar en **26.12 puntos porcentuales**.                                  |
+| `nwifeinc` | -0.0036 | Un aumento de \$1,000 en el ingreso del esposo **reduce** la probabilidad de trabajar en **0.36 puntos porcentuales**.                  |
+
+> Todos los efectos están expresados en **puntos porcentuales (pp)** de cambio en la probabilidad de participación laboral.
+
+#### Sección 1: Modelos de respuesta binaria (Logit estimación) {.smaller}
+
+-   Al igual que modelo probit utilizaremos la funión `glm()` de la paquetería base `stats` para estima el modelo logit.
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: Logit
+
+
+# Modelo Logit con glm()
+modelo_logit <- glm(inlf ~ age + educ + exper + I(exper^2) + 
+                      nwifeinc + kidslt6 + kidsge6,
+                    data = mroz,
+                    family = binomial(link = "logit"))
+#summary
+summary(modelo_logit)
+```
+
+#### Sección 1: Modelos de respuesta binaria (Evaluación Logit) {.smaller}
+
+**¿Cómo evaluar un modelo Logit?**
+
+-   **1. Porcentaje de observaciones correctamente clasificadas (Accuracy)**
+
+-   Si $G(\mathbf{x_i }\hat{\mathbf\beta} )>.5$ será 1 y $G(\mathbf{x_i }\hat{\mathbf\beta} )<=.5$ la predicción será 0
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: Logit1
+
+
+# Predicción de probabilidades
+p_hat <- predict(modelo_logit, type = "response")
+
+# Clasificación binaria con umbral 0.5
+y_pred <- ifelse(p_hat > 0.5, 1, 0)
+
+# Variable observada
+y_obs <- mroz$inlf
+
+# Accuracy
+accuracy <- mean(y_pred == y_obs)
+print(paste("Accuracy:", round(accuracy, 4)))
+```
+
+#### Sección 1: Modelos de respuesta binaria (Evaluación Logit) {.smaller}
+
+**2. Pseudo R-cuadrado (McFadden)**
+
+-   Para calcular el pseudo $R^2$ utilizamos la función `pR2` de la libreria `pscl`:
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: Logit2
+
+#Instalamos paquetería
+p_load(pscl)
+
+
+pR2(modelo_logit)["McFadden"]
+```
+
+-   Valores entre 0.2 y 0.4 **buen ajuste**
+-   No se interpreta igual que el $R^2$ de OLS
+-   Solo útil para **comparar modelos**
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación Logit) {.smaller}
+
+**¿Los coeficientes estimados** $\hat\beta$ del modelo Logit se interpretan igual en un modelo de LPM o Probit ?
+
+-   No se pueden interpretar directamente como los $\beta's$ estimados por el MPL ya que los coeficientes $\boldsymbol{\beta}$ estimados representan el **cambio en el logarítmo de los odds** cuando $x_i$ aumenta en una unidad:
+
+$$
+\log \left( \frac{\mathbb{P}(y = 1)}{\mathbb{P}(y = 0)} \right) = \mathbf{x}_i \boldsymbol{\beta}
+$$
+
+-   Indican cuántas veces es más probable es que ocurra un evento respecto a que no ocurra.
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación Logit) {.smaller}
+
+**¿Cómo se interpretan?**
+
+-   Podemos interpretarlos como **odds ratio**:
+
+-   $e^{\beta_i}$: multiplicador de las **odds** (odds ratio)
+
+$$\text{Cambio % en odds} = \left( e^{\beta} - 1 \right) \times 100$$
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación Logit) {.smaller}
+
+-   Coeficientes del modelo logit:
+
+| Variable   | ( \hat{\beta} ) | Odds Ratio ( e\^{\hat{\beta}} ) | Interpretación                                       |
+|------------|----------------:|--------------------------------:|------------------------------------------------------|
+| Intercepto |           0.425 |                            1.53 | Valor base de los log-odds (no interpretable solo)   |
+| age        |          -0.088 |                           0.916 | ↑ Edad → odds de trabajar ↓ 8.4%                     |
+| educ       |           0.221 |                           1.247 | ↑ 1 año educación → odds de trabajar ↑ 24.7%         |
+| exper      |           0.206 |                           1.229 | ↑ 1 año experiencia → odds ↑ 22.9%                   |
+| exper²     |        -0.00315 |                          0.9968 | Rendimientos decrecientes de la experiencia          |
+| nwifeinc   |          -0.021 |                           0.979 | ↑ ingreso esposo → odds de trabajar ↓ 2.1%           |
+| kidslt6    |          -1.443 |                           0.236 | Tener hijos \<6 años → odds ↓ 76.4%                  |
+| kidsge6    |           0.060 |                           1.062 | Tener hijos ≥6 años → odds ↑ 6.2% (no significativo) |
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación Logit) {.smaller}
+
+-   Si queremos interpretarlo como efectos marginales tenemos que:
+
+$$\frac{\partial \mathbb{P}(y = 1)}{\partial x_j} =
+\lambda(\mathbf{x} \boldsymbol{\beta}) \cdot \beta_j
+\quad \text{donde } \lambda(z) =
+\frac{e^{-z}}{(1 + e^{-z})^2}$$
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación Logit) {.smaller}
+
+Cálculo de efecto marginales para el modelo logit:
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: Logit3
+
+#Calculamos (Average Marginals Effects (AME))
+efectos_marginales_logit <- margins(modelo_logit)
+
+summary(efectos_marginales_logit)
+```
+
+#### Sección 1: Modelos de respuesta binaria (Interpretación Logit) {.smaller}
+
+-   Interpretación por coeficiente
+
+| Variable | AME     | Interpretación                                       |
+|----------|---------|------------------------------------------------------|
+| age      | -0.0157 | ↑ edad → ↓ probabilidad de trabajar (1.57 pp)        |
+| educ     | 0.0395  | ↑ 1 año educación → ↑ prob. de trabajar (3.95 pp)    |
+| exper    | 0.0254  | ↑ 1 año experiencia → ↑ prob. de trabajar (2.54 pp)  |
+| kidsge6  | 0.0107  | Tener hijo ≥6 años → sin efecto claro                |
+| kidslt6  | -0.2578 | Tener hijo \<6 años → ↓ prob. de trabajar (25.8 pp)  |
+| nwifeinc | -0.0038 | ↑ ingreso del esposo → ↓ prob. de trabajar (0.38 pp) |
+
+> Todos los efectos están expresados en **puntos porcentuales (pp)** de cambio en la probabilidad de participación laboral.
+
+#### Sección 1: Modelos de respuesta binaria (Conclusiones generales) {.smaller}
+
+*Comparativa general de los modelos de respuesta binarios*
+
+-   **MPL:** rápido, coeficientes interpretables directamente como cambios en probabilidad\
+    pero puede predecir probabilidades inválidas (\<0 o \>1).
+
+-   **Probit y Logit:** predicen probabilidades en $[0,1]$, manejo natural de la no linealidad.
+
+-   **Logit:** interpreta coeficientes como log-odds, fácil convertir a odds ratio.
+
+-   **Probit:** interpreta coeficientes en función de error normal latent variable.
+
+#### Sección 1: Modelos de respuesta binaria (Conclusiones generales) {.smaller}
+
+```{r}
+
+#| echo: true
+#| label: plot_final
+#| warning: false
+#| fig-width: 10
+#| fig-height: 8
+
+
+set.seed(123)
+n <- 200
+x <- seq(-3, 3, length.out = n)
+# Variable latente con función logística
+prob_true <- 1 / (1 + exp(- (0.5 + 1.5 * x)))
+y <- rbinom(n, 1, prob_true)
+data <- data.frame(x = x, y = y)
+
+# Ajustar MPL (modelo de probabilidad lineal)
+mpl <- lm(y ~ x, data = data)
+data$mpl_fit <- predict(mpl, newdata = data)
+
+# Ajustar Probit
+probit <- glm(y ~ x, data = data, family = binomial(link = "probit"))
+data$probit_fit <- predict(probit, newdata = data, type = "response")
+
+# Ajustar Logit
+logit <- glm(y ~ x, data = data, family = binomial(link = "logit"))
+data$logit_fit <- predict(logit, newdata = data, type = "response")
+
+#PLOT
+ggplot(data, aes(x = x)) +
+  geom_point(aes(y = y), alpha = 0.4, color = "black") +
+  geom_line(aes(y = mpl_fit), color = "blue", size = 1, linetype = "dashed") +
+  geom_line(aes(y = probit_fit), color = "lightblue", size = 1) +
+  geom_line(aes(y = logit_fit), color = "salmon", size = 1) +
+  labs(
+    y = "Probabilidad estimada / Observada",
+    x = "Variable explicativa (x)",
+    title = "Comparación: MPL, Probit y Logit",
+    subtitle = "Puntos: Observados (binarios) | Líneas: Modelos ajustados"
+  ) +
+  scale_y_continuous(limits = c(-0.1, 1.1)) +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold")) +
+  scale_color_manual(
+    name = "Modelo",
+    values = c("MPL" = "blue", "Probit" = "lightblue", "Logit" = "salmon")
+  ) +
+  guides(color = guide_legend(override.aes = list(linetype = c(2, 1, 1)))) +
+  annotate("text", x = 2, y = 0.9, label = "MPL (azul, punteado)") +
+  annotate("text", x = 2, y = 0.8, label = "Probit (light blue)") +
+  annotate("text", x = 2, y = 0.7, label = "Logit (salmon)")
+
+```
+
+#### Sección 1: Modelos de respuesta binaria (Conclusiones generales) {.smaller}
+
+**¿Cuál modelo elegir para variable binaria?**
+
+| Criterio                           | MPL                                 | Logit                              | Probit                                        |
+|------------------------------------|-------------------------------------|------------------------------------|-----------------------------------------------|
+| **Facilidad de estimación**        | ✅ Muy fácil (OLS)                  | ⚠️ Requiere MLE                    | ⚠️ Requiere MLE                               |
+| **Probabilidades válidas \[0,1\]** | ❌ Puede salirse de rango           | ✅ Siempre en \[0,1\]              | ✅ Siempre en \[0,1\]                         |
+| **Interpretación directa**         | ✅ Coef. son cambios en prob.       | ⚠️ Coef. en log-odds               | ⚠️ Coef. en unidad normal                     |
+| **Robustez estadística**           | ❌ Problemas con heterocedasticidad | ✅ Más robusto                     | ✅ Más robusto                                |
+| **Velocidad de cálculo**           | ✅ Muy rápida                       | ✅ Rápido con paquetes optimizados | ⚠️ Más lento                                  |
+| **Tradición en economía**          | 🟡 Preliminar o por simplicidad     | ✅ Muy común                       | ✅ Usado especialmente con variables latentes |
+| **Interpretación de odds ratio**   | ❌ No aplica                        | ✅ Sí, odds y odds ratio           | ❌ Menos intuitiva                            |
+| **Predicción razonable**           | ❌ A veces no                       | ✅ Sí                              | ✅ Sí                                         |
+
+#### Sección 1: Modelos de respuesta binaria (Conclusiones generales) {.smaller}
+
+-   Usar **MPL** solo para exploración inicial.
+-   **Logit** si quieres interpretar en términos de **odds**.
+-   Usar **Probit** si el error se supone **normal** o si hay variable latente subyacente.
