@@ -13,8 +13,8 @@ This repository contains comprehensive teaching materials for the Microeconometr
 
 - **Panel Data Models**
 
-1. Fixed effects and random effects models
-2. Pooled OLS vs. panel estimators
+1. Pooled OLS 
+2. Fixed effects and random effects models
 3. Hausman test for model selection
 4. Dynamic panel data models
 5. Unbalanced panels and attrition
