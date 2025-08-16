@@ -883,25 +883,36 @@ Estar afiliado a un sindicato se asocia con un incremento promedio de 18.94% uni
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (¿Cómo funciona? ) {.smaller}
 
--   Controla por individuo (persona, empresa, países, escuelas, hospitales, etc)
+Dado que el modelo POLS no logra controlar efectos individuales no observado que son constantes buscaremos otro métodos que lo hagan.
 
--   Por tanto, se enfoca en la variación en cada individuo (**within**) tratando dejar fuera la variación entre individuo (**between**).
+Efectos fijos (*FE*)  es un método que se enfoca en la variación dentro de cada individuo a lo largo del tiempo (**within**), eliminando la variación entre individuos (**between**).
+
+- Controla por individuo/agente/observación (persona, empresa, países, escuelas, hospitales, etc)
+
 
     -   **Variación within**: la variación dentro de cada indiviudo a través de multiples períodos de tiempo.
+         (Ej.: cómo cambia el salario de una persona a lo largo de los años).
+         
     -   **Variación between**: variación de una carácterística entre inviduos en un período de tiempo o en el promedio de diferentes períodos.
+         (Ej.: comparar el salario promedio de dos personas diferentes).
+         
+         
 
 #### Modelos Lineales con Datos Panel: Fixed Effects (¿Cómo funciona? ) Estáticos {.smaller}
 
-| Nombre | Año  | Días de ejercicio | mean | within |
-|--------|------|-------------------|------|--------|
-| Diego  | 2019 | 160               | 130  | 30     |
-| Raul   | 2019 | 150               | 145  | 5      |
-| Diego  | 2020 | 100               | 130  | -30    |
-| Raul   | 2020 | 140               | 145  | -5     |
+Ejemplo de variación *within* 
+
+| Nombre | Año  | Días de ejercicio | Media individual (mean) | Within |
+|--------|------|-------------------|-------------------------|--------|
+| Diego  | 2019 | 160               | <span class="fragment" style="color:blue;font-weight:bold;">130</span> | <span class="fragment" style="color:green;font-weight:bold;">+30</span> |
+| Diego  | 2020 | 100               | <span class="fragment" style="color:blue;font-weight:bold;">130</span> | <span class="fragment" style="color:red;font-weight:bold;">-30</span> |
+| Raúl   | 2019 | 150               | <span class="fragment" style="color:blue;font-weight:bold;">145</span> | <span class="fragment" style="color:green;font-weight:bold;">+5</span> |
+| Raúl   | 2020 | 140               | <span class="fragment" style="color:blue;font-weight:bold;">145</span> | <span class="fragment" style="color:red;font-weight:bold;">-5</span> |
+
+
 
 
 #### Modelos Lineales con Datos Panel: Fixed Effects (¿Cómo funciona? ) Estáticos {.smaller}
-
 
 **Interpretación**
 
@@ -919,7 +930,10 @@ Estar afiliado a un sindicato se asocia con un incremento promedio de 18.94% uni
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (¿Cómo lo implementamos? ) {.smaller}
 
-El método de Efectos Fijos o Efectos Within busca controlar efectos no observados constantes en el tiempo, como características individuales no medidas mediante la técnica de **demeaning**.
+El método de Efectos Fijos o Efectos Within busca controlar efectos no observados constantes en el tiempo.
+como lo son las características individuales no medidas. 
+
+- Para ello utiliza la técnica de **demeaning** o **transformación within**.
 
 - Resta la media individual a cada variable $x_i$
 
@@ -942,19 +956,28 @@ $$  y_{it} -  \bar{y}_{i} =  (\textbf{x}_{it}-\mathbf{\bar{x}_{i}}) \boldsymbol{
 
 $$  y_{it} -  \bar{y}_{i} =  (\textbf{x}_{it}-\mathbf{\bar{x}_{i}})\boldsymbol{\beta}  + u_{it} - \bar{u}_{i}$$
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (¿Cómo lo implementamos? ) {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (¿Cómo lo implementamos? )
+ 
 
 -   Podemos representar la ecuación transformado de efectos fijos de la siguiente forma:
 
-$$  \ddot{y}_{it} = \mathbf{\ddot{x}_{it}}\boldsymbol{\beta}   + \ddot{u}_{it}  ~~~t=1,2,...T $$ Donde:
+$$  \ddot{y}_{it} = \mathbf{\ddot{x}_{it}}\boldsymbol{\beta}   + \ddot{u}_{it}  ~~~t=1,2,...T $$ 
+Donde:
 
-$$   \ddot{y}_{it} \equiv  y_{it} -  \bar{y}_{i}$$ $$  \mathbf{\ddot{x}_{it}} \equiv \textbf{x}_{it} -  \mathbf{\bar{x}_{i}}$$ $$   \ddot{u}_{it} \equiv  u{it} -  \bar{u}_{i}$$
+$$   \ddot{y}_{it} \equiv  y_{it} -  \bar{y}_{i}$$ 
+$$  \mathbf{\ddot{x}_{it}} \equiv \textbf{x}_{it} -  \mathbf{\bar{x}_{i}}$$ 
+$$   \ddot{u}_{it} \equiv  u{it} -  \bar{u}_{i}$$
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (¿Cómo lo implementamos? ) {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Supuestos)
+> **La transformación *within*** elimina todo lo que es constante en el tiempo para cada individuo.  
+
+- Trabaja únicamente con la variación temporal de cada individuo, lo que garantiza que la estimación de $\beta$  de interés no esté sesgada por características no observadas y constantes en el tiempo.
+
+- En otras palabras, el estimador de efectos fijos “controla” por todo aquello que no cambia para un individuo, aunque no lo midamos explícitamente.
+
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos)  {.smaller}
 
 -   FE.1 Exogeneidad estricta: $$E( \ddot{u}_{it}|  \mathbf{{x}_{i}} ) = E( {u}_{it}|  \mathbf{{x}_{i}} ) -E( \bar{u}_{it}|  \mathbf{{x}_{i}} ) = 0$$ Lo cual implica que:
 
@@ -964,36 +987,102 @@ $$ \mathbf{{x}_{i}}= ( \mathbf{{x}_{i1},... \mathbf{{x}_{iT}} } )  $$
 
 -   Satisface la condición de expectativa condicional 0.
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Supuestos)
 
--   FE2. No multicolinealidad (no hay dependencia lineal exacta):
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos) {.smaller}
+
+
+- En **FE** se permite arbitrariamente que: 
+
+$$E( \textbf{x}_{i}'| c_{i}) \neq 0$$
+
+Es decir, se permite que las variables omitidas estén correlacionadas con las variables observadas  $\textbf{x}_{it}$
+
+- Dado lo anterior, no se podrá disntinguir el efecto de las $\textbf{c}_{i}$ y de las variables constantes observables  $\textbf{x}_{t}$, por lo tanto no se incluyen regresores constantes en el tiempo.
+
+- A nivel individual variables como el sexo o grupo étnico; a nivel empresa la industria; a nivel ciudad la distancia con un río o el clima. 
+
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Precisión en supuestos) {.smaller}
+
+Diferencia entre supuesto **condicional** y **no condicional**
+
+1. Condicional $E(\mathbf{x}_i' \mid c_i) = 0$:  supuesto de independencia estricta respecto a efectos no observados
+
+    - **Lectura**: el valor esperado de $\mathbf{x}_i'$ dado  $c_i$ es cero
+    
+  
+    - **Interpretación**: Para cualquier valor posible de $c_i$ la media $\mathbf{x}_i'$ es cero
+
+
+
+2. No condicional $E( c_i \mathbf{x}_i') =0$: 
+
+    - **Lectura**: el valor esperado del producto $\mathbf{x}_i'c_i$ es cero
+  
+    - **Interpretación**: Permite que $c_i$ y $\mathbf{x}_i$ están correlacionados dentro de ciertos grupos, siempre que esas correlaciones positivas y negativas se compensen al promediar (no hay correlación en media)
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Efectos Fijos (Fixed Effects) (Supuestos){.smaller}
+
+- **Condicional**:  independencia media dentro de cada grupo definido por  Muy fuerte y útil para modelos de efectos aleatorios o independencia estricta.
+
+- **No condicional**:independencia media en toda la población. Más débil y no garantiza ausencia de sesgo.
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos){.smaller}
+
+**FE2. No multicolinealidad (no hay dependencia lineal exacta)**:
 
 $$ rank[\sum_{t=1}^{T}E( \mathbf{\ddot{x}_{it}}' \mathbf{\ddot{x}_{it}})] = K $$ - Si $\mathbf{{x}_{it}}$ contiene alguna variable que no cambie en el tiempo para cada $i$, entonces $\mathbf{\ddot{x}_{it}}$ será igual a 0 en cada período.
 
--   No permite la inclusión de variables constantes en el tiempo en su estimación como el género o carácterísticas georáficas.
+-   No permite la inclusión de variables constantes en el tiempo en su estimación como el sexo o variables geográficas.
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+- Columna de ceros viola este supuesto, porque no hay información dentro del individuo para estimar el coeficiente.
 
-##### Efectos Fijos (Fixed Effects) (Supuestos)
 
--   El **estimador within** se representa como: $$ \hat\beta_{FE} = ( \sum_{i=1}^{N}\sum_{t=1}^{T} \mathbf{\ddot{x}_{it}}' \mathbf{\ddot{x}_{it}})^{-1} (\sum_{i=1}^{N}\sum_{t=1}^{T} \mathbf{\ddot{x}_{it}}' \ddot{y}_{it}) $$
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos){.smaller}
+
+**FE3. Eficiencia del estimador FE**
+
+$$\mathbf{E}(\mathbf{u}_i \mathbf{u}_i' \mid \mathbf{x}_i, c_i) = \sigma_u^2 \mathbf{I}_T$$
+
+
+
+1. **Varianza constante**: los errores idiosincráticos $u_{it}$ tienen **varianza constante** en todos los periodos $t$ para cada individuo $i$. 
+
+2. **No autocorrelación**: los errores idiosincráticos son **independientes a lo largo del tiempo** (no hay correlación serial).  
+
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos){.smaller}
+
+
+- FE.3  puede ser equivalentea  RE.3 en *Random Effects*: 
+
+  1. Si FE.1 se cumple  $\mathbf{E}(\mathbf{u}_i  \mid \mathbf{x}_i, c_i) = 0$
+    
+     
+  2. La esperanza incondicional es igual a la condicional $\mathbf{E}(\mathbf{u}_i \mathbf{u}_i' \mid      \mathbf{x}_i, c_i) =\mathbf{E}(\mathbf{u}_i \mathbf{u}_i' )$
+     
+  3. Tendrá la forma de  $\sigma_u^2 I_T$. 
+     
+
+- Sin embargo, no es necesariamente el más eficiente, porque FE.1 no impone restricciones sobre la varianza-covarianza de los errores. 
+
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Estimador){.smaller}
+
+
+-   El **estimador within** se representa como: 
+$$ \hat\beta_{FE} = ( \sum_{i=1}^{N}\sum_{t=1}^{T} \mathbf{\ddot{x}_{it}}' \mathbf{\ddot{x}_{it}})^{-1} (\sum_{i=1}^{N}\sum_{t=1}^{T} \mathbf{\ddot{x}_{it}}' \ddot{y}_{it}) $$
 
 -   Por FE.1 y por FE.2 (versión de muestra finita) el estimador $\boldsymbol{\hat\beta}_{FE}$ es insesgado.
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Ejemplo){.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Ejemplo)
 
-$$ Esperanza_{it} =\beta_i + log(PIBpercap)_{it}\beta_1 + u_{it}
-$$
+$$ Esperanza_{it} =\beta_i + log(PIBpercap)_{it}\beta_1 + u_{it}$$
 
 -   Controlar por cada individuo permitiendo que el intercepto cambie para cada $i$
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
-
-##### Efectos Fijos (Fixed Effects) (Ejemplo)
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Ejemplo) {.smaller}
 
 -   Tendremos un $\beta_{Mexico}$, $\beta_{Argentina}$ y $\beta_{Turkey}$
 
@@ -1022,9 +1111,8 @@ ggplot(df_mex_turk , aes(x = gdpPercap, y = lifeExp, color = country)) +
 
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos Fixed Effects (Implementación en R) {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Implementación en R)
 
 -   Primero lo primero: Absorción o extracción de efecto fijo
 
@@ -1037,33 +1125,28 @@ p_load('tidyverse')
 
 df_gapmind <- causaldata::gapminder
 
+#Substracción de media a esperanza de vida y log percapita
 df_gapmind  <- df_gapmind  |> 
-             mutate(log_PIBper = log(gdpPercap)) |> 
-             group_by(country) |> 
-             mutate(life_exp_aver = mean(lifeExp),
-                    lag_exp = lag(lifeExp),
-                    
-                    #Esperanza de vida within
-                    lifeExp_within = lifeExp - mean(lifeExp),
-                    
-                    log_PIBper_mean = mean(log_PIBper) , 
-                    
-                     #PIB within
-                    log_PIBper_within = log_PIBper  - mean(log_PIBper )) |>  
-  
-            ungroup() |> 
-            group_by(continent) |> 
-            mutate(life_exp_aver_Continent = mean(lifeExp)) |> 
-            ungroup() |> 
-            arrange(continent)
+               mutate(log_PIBper = log(gdpPercap)) |> 
+               group_by(country) |> 
+               mutate(#media esperanza de vida
+                      life_exp_aver = mean(lifeExp),
+                      #Esperanza de vida within
+                      lifeExp_within = lifeExp - mean(lifeExp),
+                      #media log(pib_percapita)
+                      log_PIBper_mean = mean(log_PIBper) , 
+                      #PIB within
+                      log_PIBper_within = log_PIBper  - mean(log_PIBper )) |>  
+               
+               ungroup() |> 
+               arrange(country)
 
 head(df_gapmind)
 
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Implementación en R)
+#### Modelos Lineales con Datos Panel Estáticos Fixed Effects (Implementación en R) {.smaller}
 
 -   Estimamos modelo de efectos fijos transformados por OLS
 
@@ -1076,12 +1159,10 @@ head(df_gapmind)
 m_FE1 <- lm(lifeExp_within ~ log_PIBper_within, data = df_gapmind)
 
 summary(m_FE1)
-
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Implementación en R) {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Implementación en R)
 
 -   Estimamos modelo de FE con función plm
 
@@ -1097,18 +1178,30 @@ df_pdata <- pdata.frame(df_gapmind , index = c("country", "year"))
 
 
 #Modelo FE con plm
-m_FE2 <- plm(lifeExp ~ log_PIBper , data = df_pdata , model = "within")
+m_FE2 <- plm(lifeExp ~ log_PIBper , data = df_pdata , model = "within",  effect = 'individual')
 
 summary(m_FE2)
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (con Dummy) {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Implementación en R)
 
 -   Otra forma de implementarlo: Dummy por cada país
 
--   Sirve cuando tenemos pocos individuos, categorías o entidades por las que queramos controlar.
+$${y_{it} = \alpha + \beta x_{it} + \gamma_1 D_{USA} + \gamma_2 D_{Mexico} + \dots + u_{it}}$$
+
+Captura todos los efectos fijos constantes del país.
+
+- Requiere una **categoría base** para evitar colinealidad.
+
+**Desventaja**: si hay muchas observaciones, el número de dummies crece demasiado y el modelo pesado y poco eficiente.
+
+**Transformation within**: Más eficiente con muchos individuos/países, evita problemas de colinealidad, y se centra en la variación *within*, que es la que nos interesa para estimar $\beta$.
+
+
+#### Modelos Lineales con Datos Panel Estáticos:Fixed Effects (con Dummy en R) {.smaller}
+
+- En R utilizamos la función  `factor()` para incluir cad país como dummy:
 
 ```{r}
 #| warning: false
@@ -1120,41 +1213,99 @@ summary(m_FE3)
 
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Interpretación)
 
--   Vemos que el coeficiente del PIB per capita es FE 9.769 y en POLS fue 8.40
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effect  (Interpretación) {.smaller}
+
+-   Vemos que el coeficiente del logarítmo del PIB per capita es **FE: 9.769** y en **POLS: 8.40**
+
 -   Interpretación: El coeficiente del log(gdpPercap) indica que un aumento del 1% en el PIB per cápita está asociado con un aumento de 0.09769 años (alrededor de 35.6 días) en la esperanza de vida.
+
 -   Si el intercepto de México es 6.40 y el de Brasil es 6.3181, podemos decir que si México y Brasil tuvieran el mismo PIB per capita, la esperanza de vida en México podría ser 0.09 más alta.
--   Consideración importante: "Tener en cuenta que los efectos fijos son una buena forma de controlar una larga lista de variables no observadas constantes en el tiempo para observar el efecto de una o unas pocas variables " - Nick Huntington-Klein
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Pruebas)
+Consideración importante: "Tener en cuenta que los efectos fijos son una buena forma de controlar una larga lista de variables no observadas constantes en el tiempo para observar el efecto de una o unas pocas variables " **- Nick Huntington-Klein**
 
--   Prueba F (Pooled vs FE), buscamos evaluar si existen diferencias significativas entre las unidades en sus niveles constantes a lo largo del tiempo.
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (R-squared within) {.smaller}
 
--   Hipótesis nula $(H_0)$: $\beta_{i}=0$
+**R-squared within**
 
--   Hipótesis alternativa $(H_1)$ : $\beta_{i}\neq0$
+- Mide cuánto de la variación dentro de cada individuo $i$ a lo largo del tiempo es explicado por el modelo.
 
--   Interpretación, si se rechaza $H_0$ (p-valor \< 0.05), existen efectos individuales significativos. Por lo tanto el modelo de FE es adecuado. Al menos un efecto fijo.
+- Aquí estamos quitando la variación entre individuos, centrándonos solo en cambios internos.
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Pruebas)
+$$
+R^2_{\text{within}} = 1 - \frac{RSS_i}{TSS_i} 
+= 1 - \frac{\sum_{it} (y_{it} - \hat{y}_{it})^2}{\sum_{it} (y_{it} - \bar{y}_i)^2}
+$$
+
+**Interpretación**: “¿Cuánto cambian los valores dentro de cada unidad y es explicado por X?”
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Prueba F) {.smaller}
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: R_squared
+
+#### R-sq Within ----
+
+df_gapmind <- df_gapmind |>
+               mutate(residuos =  residuals(m_FE2) ,
+                      life_exp_fit = fitted(m_FE2))
+
+# r2 = 1 - (rss/tss)
+r2_within <- 1 - sum(df_gapmind$residuos^2) / sum(df_gapmind$lifeExp_within^2) 
+print(r.squared(m_FE2))
+```
+
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Prueba F) {.smaller}
+
+**Prueba F: Pooled vs FE**
+
+
+Evalúa si existen **diferencias significativas** entre las unidades en sus niveles constantes a lo largo del tiempo.
+
+- En términos estadísticos la prueba F, está probando si los efectos individuales (interceptos) son todos iguales en cada $i$ o si al menos uno es distinto.
+
+**Hipótesis**  
+
+- **$H_0$**: $\beta_{i} = 0$ → No hay diferencias individuales (**Pooled OLS** adecuado).  
+- **$H_1$**: $\beta_{i} \neq 0$ → Hay al menos un efecto fijo (**FE** adecuado).  
+
+
+**Interpretación**: si se rechaza $H_0$ (p-valor < 0.05), existe al menos un efecto no observado individual significativo. Por lo tanto el modelo de FE es adecuado.
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Prueba F) {.smaller}
+
+
+- Utilizamos la función `pFtest()` de la paquetería `plm`
+
+ **Sintáxis**: `pFtest(modelo FE, modelo pooled,)`
+
 
 ```{r}
 #| warning: false
 #| echo: true
 #| label: FEpruebas
 
+#Datos
 df_paneld <- pdata.frame(gapminder, index = c("country", "year"))
+
 #Pooled
 pooled_plm <- plm(lifeExp ~ log(gdpPercap) , data = df_paneld, model = 'pooling')
 #FE
-m_FE2 <- plm(lifeExp ~ log_PIBper , data = df_pdata  , model = "within")
+m_FE2 <- plm(lifeExp ~ log_PIBper , data = df_pdata  , model = "within", effect = 'individual')
 
 # Test F para efectos individuales (Pooled vs EF)
 f_test <- pFtest(m_FE2,pooled_plm)
@@ -1162,17 +1313,25 @@ f_test <- pFtest(m_FE2,pooled_plm)
 print(f_test)
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos :Fixed Effects (Ejemplo 2) {.smaller}
 
-##### Efectos Fijos (Fixed Effects) (Ejemplo 2)
+- Continuamos con la función de salarios la cual será estimada por el método de FE:
 
 $$ log(wage)_{it} =\beta_i + union_{it}\beta_1 + educ_{it}\beta_2 + exp_{it}\beta_3 + exp^2_{it}\beta_4 + u_{it} $$
+
+
+#### Modelos Lineales con Datos Panel Estáticos :Fixed Effects (Ejemplo 2) {.smaller}
+
+
+- Para estimar por FE en la función `plm()` tenemos que cambiar el argumento `model = 'within' ` y los demás argumento permanecen iguales que en el POLS
+
+- El estimador FE también es conocido como *within*
 
 ```{r}
 #| warning: false
 #| echo: true
 #| label: FE5
-#| 
+
 library(pacman)
 p_load('wooldridge', 'plm', "modelsummary")
 data("wagepan")
@@ -1182,10 +1341,18 @@ pdata_wage <- pdata.frame(wagepan, index = c("nr", "year"))
 pooled_plm_wage <- plm(lwage ~  union + educ + exper + I(exper^2) , data = pdata_wage, model = 'pooling')
 #Efectos Fijos
 FE_plm_wage <- plm(lwage ~  union + educ + exper + I(exper^2) , 
-                      data = pdata_wage, model = "within")
+                      data = pdata_wage, model = "within", effect = 'individual')
 
 summary(FE_plm_wage)
 ```
+
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos :Fixed Effects (Ejemplo 2: Prueba F) {.smaller}
+
+
+- Comparamos POLS y FE mediante prueba F:
 
 ```{r}
 #| warning: false
@@ -1198,21 +1365,193 @@ f_test_wage <- pFtest(FE_plm_wage,pooled_plm_wage)
 print(f_test_wage)
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Efectos fijos de dos vías (Two-Way Fixed Effects) {.smaller}
 
-##### Efectos fijos de dos vías (Two-Way Fixed Effects)
+**Efectos fijos de dos vías (Two-Way Fixed Effects)**
 
--   No sólo tendremos un intercepto que cambié por cada individuo $\beta_{i}$, también tendremos un intercepto que cambie por cada período $\beta_{t}$
+-   No sólo tendremos un intercepto que cambié por cada individuo $\beta_{i}$, también tendremos un intercepto que cambie por cada período $\beta_{t}$:
 
-    $$ Esperanza_{it} =\beta_i + \beta_t  + logPIBpercap_{it}\beta_1 + u_{it} $$
+$$y_{it} =\beta_i + \beta_t  + x_{it}\gamma_i + u_{it} $$
 
-    -   Con los FE por $i$, tratamos de eliminar la variación entre unidades (países, individuos, etc.) y nos centramos en la variación dentro de la unidad a lo largo del tiempo.
+1. Con los FE por $i$, tratamos de eliminar la variación entre unidades (países, individuos, etc.) y nos centramos en la variación dentro de la unidad a lo largo del tiempo.
 
-    -   Con los FE por cada $t$, tratamos de controlar la variación a lo largo del tiempo y nos centramos en la variación entre unidades dentro de un mismo período.
+2. Con los FE por cada $t$, tratamos de controlar la variación a lo largo del tiempo y nos centramos en la variación entre unidades dentro de un mismo período. (Shocks económicos)
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double Demeaning) {.smaller}
 
-##### Efectos fijos de dos vías (Two-Way Fixed Effects) (Implementación en R)
+- Utilizando la **transformación within** o **double demeaning**: 
+
+$$\ddot{Y}_{it} = Y_{it} - \bar{Y}_{it} - \bar{Y}_{ t} + \bar{Y}_{\cdot\cdot}$$
+
+Donde:  
+- $\bar{Y}_{i}$ = promedio de la unidad $i$ (en todos los $t$)  
+- $\bar{Y}_{t}$ = promedio del período $t$ (en todas las unidades)  
+- $\bar{Y}_{\cdot\cdot}$ = promedio global
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double Demeaning) {.smaller}
+
+1️⃣ **Restar promedio por unidad** → elimina diferencias *entre unidades*.  
+2️⃣ **Restar promedio por tiempo** → elimina diferencias *entre períodos*.  
+3️⃣ **Sumar promedio global** → corrige doble resta.
+
+Ejemplo: 
+
+| Nombre | Año  | Días | Media persona | Within (Y - mean_persona) |
+|--------|------|------|---------------|---------------------------|
+| Diego  | 2019 | 160  | <span class="fragment" style="color:blue;font-weight:bold;">130</span> | <span class="fragment" style="color:green;font-weight:bold;">+30</span> |
+| Diego  | 2020 | 100  | <span class="fragment" style="color:blue;font-weight:bold;">130</span> | <span class="fragment" style="color:red;font-weight:bold;">-30</span> |
+| Raúl   | 2019 | 150  | <span class="fragment" style="color:blue;font-weight:bold;">145</span> | <span class="fragment" style="color:green;font-weight:bold;">+5</span> |
+| Raúl   | 2020 | 140  | <span class="fragment" style="color:blue;font-weight:bold;">145</span> | <span class="fragment" style="color:red;font-weight:bold;">-5</span> |
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double Demeaning) {.smaller}
+
+**Media por año (efecto tiempo)**
+
+| Año  | Promedio año |
+|------|--------------|
+| 2019 | 155          |
+| 2020 | 120          |
+
+
+**Media total**
+
+- $\bar{Y}_{\cdot\cdot}$ = media global = 137.5 
+
+
+    - En el promedio por unidad ya estaba incluida la variación por tiempo y en el promedio por tiempo ya estaba incluida la variación por unidad. 
+    - Promedio global se quita dos veces.
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double Demeaning) {.smaller}
+
+Con las medias por año y global podemos calcular la transformación Double Demeaning:
+
+- $\ddot{h}_{it} = h_{it} - \bar{h}_{i\cdot} - \bar{h}_{\cdot t} + \bar{h}_{\cdot\cdot}$
+
+| Nombre | Año  | Cálculo doble | Double Demeaning |
+|--------|------|---------------|-----------------|
+| Diego  | 2019 | 160 - 130 - 155 + 137.5 | +12.5 |
+| Diego  | 2020 | 100 - 130 - 120 + 137.5 | -12.5 |
+| Raúl   | 2019 | 150 - 145 - 155 + 137.5 | -12.5 |
+| Raúl   | 2020 | 140 - 145 - 120 + 137.5 | +12.5 |
+
+- Valores positivos:  más que la combinación de media persona y media año  
+- Valores negativos: menos que la combinación de media persona y media año
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double demeaning en R) {.smaller}
+
+1. Para la **transformación double demeaning** (sustracción de medias por dos dimensiones) retomamos el ejemplo de la esperanza de vida y pib por método within (sustracción de la media por país):
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: TWFE_ddtrans0
+
+
+p_load('tidyverse')
+
+df_gapmind <- causaldata::gapminder
+
+#Substracción de media a esperanza de vida y log percapita
+df_gapmind  <- df_gapmind  |> 
+               mutate(log_PIBper = log(gdpPercap)) |> 
+               group_by(country) |> 
+               mutate(#media esperanza de vida
+                      life_exp_aver = mean(lifeExp),
+                      #Esperanza de vida within
+                      lifeExp_within = lifeExp - mean(lifeExp),
+                      #media log(pib_percapita)
+                      log_PIBper_mean = mean(log_PIBper) , 
+                      #PIB within
+                      log_PIBper_within = log_PIBper  - mean(log_PIBper )) |>  
+               
+               ungroup() |> 
+               arrange(country)
+
+head(df_gapmind)
+
+
+
+```
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double demeaning en R) {.smaller}
+
+¿Qué nos falta para realizar un TWFE con transfromación Double Demeaning?
+
+- Calculamos la medias por año y totales tanto de la $Esperanza_i$ así como del $log(PIBpercap)$:
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: TWFE_ddtrans1
+
+## Substracción de media doble (Doubledemeaning ) ----
+  
+#Media por año y media global 
+df_gapmind <- df_gapmind  |> 
+group_by(year) |> 
+mutate(lifeExp_year_mean = mean(lifeExp),
+       logPIBper_year_mean = mean(log_PIBper))  |> 
+ungroup() |> 
+mutate(lifeExp_global_mean = mean(lifeExp),
+         logPIBper_global_mean = mean(log_PIBper))
+
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double demeaning en R) {.smaller}
+
+Con esto podemos calcular las variables transformadas: 
+
+- $\ddot{y}_{it} = y_{it} - \bar{y}_{i} - \bar{y}_{t} + \bar{y}_{\cdot\cdot}$
+
+- $\ddot{x}_{it} = x_{it} - \bar{x}_{i} - \bar{x}_{t} + \bar{x}_{\cdot\cdot}$
+
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: TWFE_ddtrans2
+
+#Creación de variables Double Demeaning  yit​−yˉ​i⋅​−yˉ​⋅t​+yˉ​⋅⋅​
+df_gapmind <- df_gapmind  |> 
+               mutate( 
+                 lifeExp_within_2way = lifeExp - life_exp_aver - lifeExp_year_mean + lifeExp_global_mean,
+                 logPIBper_within_2way = log_PIBper - log_PIBper_mean  - logPIBper_year_mean + logPIBper_global_mean
+                 )
+head(df_gapmind)
+
+```
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double demeaning en R) {.smaller}
+
+Estimación de **modelo Double Demeaning** por OLS:
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: TWFE_ddtrans3
+
+## Estimación por  TWFE por transformación Doubledemeneaning ------
+m_FE2way_double <- lm(lifeExp_within_2way ~ logPIBper_within_2way, data = df_gapmind)
+summary(m_FE2way_double)
+```
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Implementación en R) {.smaller}
+
+
+- Estimamos el modelo de **Two-Way Fixed Effects** de la esperanza de vida con la función `plm()`
+
+$$ Esperanza_{it} =\beta_i + \beta_t  + log(PIBpercap)_{it}\beta_1 + u_{it} $$
+
 
 ```{r}
 #| warning: false
@@ -1228,9 +1567,12 @@ m_twfe <- plm(lifeExp ~   log_PIBper, data = df_pdata, model = "within", effect 
 summary(m_twfe)
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
-##### Efectos fijos de dos vías (Two-Way Fixed Effects) (Implementación en R 2)
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Implementación en R 2) {.smaller}
+
+- También podemos utilizar la función `feols()` de la paquetería `fixest `
+
+- Usa una proyección algorítmica más eficiente mediante métodos matriciales lo cual es útil en datos grandes.
 
 ```{r}
 #| warning: false
@@ -1244,9 +1586,12 @@ m1_twfe <- feols(lifeExp ~ log_PIBper | country + year,
 summary(m1_twfe)
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
-##### Two-Way Fixed Effects VS FE
+
+
+#### Modelos Lineales con Datos Panel Estáticos:  Two-Way Fixed Effects {.smaller}
+
+**Comparación de Resultados de Modelos**
 
 ```{r}
 #| warning: false
@@ -1266,13 +1611,13 @@ results_df <- data.frame(
   
 )
 
-kable(results_df, caption = "Comparación de Resultados de Modelos")
+kable(results_df, caption = "")
 
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects VS FE {.smaller}
 
-##### Two-Way Fixed Effects VS FE
+**¿Efectos Fijos (solo por id) vs Efectos Fijos Bidireccionales (id + tiempo)? **
 
 $$
 \begin{align*}
@@ -1298,9 +1643,11 @@ print(pFtest(m_twfe , m_FE2))
 
 -   $\therefore$ Rechazamos $H_0$ y tenemos evidencia que existen efectos temporales
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
+- Buena parte de la variación inicial estaba capturada por diferencias temporales comunes a todas las unidades.
 
-##### Two-Way Fixed Effects VS FE (Consideraciones)
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects VS FE {.smaller}
+
+**Consideraciones**
 
 | Característica      | Fixed Effects (FE) Simple                       | Two-Way Fixed Effects (TWFE)                 |
 |:----------------|:----------------------------|:--------------------------|
@@ -1309,11 +1656,75 @@ print(pFtest(m_twfe , m_FE2))
 | Foco del análisis   | Interés principalen variación within individual | Efectos temporales significativos            |
 | Estructura temporal | Estructura temporal simple                      | Necesidad de controlar tendencias temporales |
 
-#### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
-##### *Random Effects* (Efectos aleatorías)
 
--   Recordemos nuestro efecto no observado (efecto heterogéneo, variable latente) $c_i$
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects  {.smaller}
+
+Modelo de ecuación de salario por Two-Way Fixed Effects: 
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: TWFE_wage1
+
+#TWFE ----
+m_twfe_wage <- plm(lwage ~  union + educ + exper + I(exper^2),
+                   data = pdata_wage, 
+                   model = "within",
+                   effect = "twoways")
+summary(m_twfe_wage)
+
+
+```
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects  {.smaller}
+
+**Interpretación**
+
+- Estimación: 0.0813  
+- Significancia: p < 0.001 
+
+Ser miembro de un sindicato se asocia con un aumento promedio de 8.1% en el salario dentro del mismo individuo a lo largo del tiempo.
+
+- Si observamos en la salida del modelo, no está la variable  experiencia.
+
+La variable termina siendo aproximadamente constante (muy poca variación dentro de la unidad después de ajustar por tiempo), R la elimina porque no aporta información adicional al modelo.
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects  {.smaller}
+
+**¿FE o Two-Way Fixed Effects?** Prueba F para comprobar
+
+```{r}
+#| warning: false
+#| echo: true
+#| label: TWFE_wage2
+
+
+#Modelo FE con plm ----
+FE_plm_wage <- plm(lwage ~  union + educ + exper + I(exper^2) , 
+                   data = pdata_wage,
+                   model = "within", 
+                   effect = 'individual')
+
+#Efectos fijos (FE) vs  Efectos fijos de dos vías (TWFE) ----
+print(pFtest(m_twfe_wage , FE_plm_wage))
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects  {.smaller}
+
+- **F = 1.8966**  
+- **p-value ≈ 0.078 > 0.05**  
+
+Conclusión: No se rechaza la hipóstesis nula al 5% de significancia. Los efectos fijos por tiempo no aportan información significativa al modelo.
+
+#### Modelos Lineales con Datos Panel Estáticos: Random Effects {.smaller}
+
+ 
+Recordemos nuestro efecto no observado (efecto heterogéneo, variable latente) $c_i$
 
 -   En FE el objetivo es elimiar $c_i$ con el método demeaned, ya que pensamos que los $c_i$ están correlacionado con $x_{it}$.
 
