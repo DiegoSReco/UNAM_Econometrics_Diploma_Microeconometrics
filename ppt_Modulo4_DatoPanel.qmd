@@ -18,7 +18,6 @@ format:
 
 **2.2 Modelos de efectos aleatorios**
 
-
 #### ¿Qué son los datos panel ?
 
 -   Observaciones repetidas en el tiempo de las características de una misma muestra o población.
@@ -203,8 +202,6 @@ datos_wide <- data.frame(
                )
 ```
 
-
-
 ```{r}
 #| warning: false
 #| echo: true
@@ -228,7 +225,7 @@ print(datos_long)
 
 #### Ejemplo en R: Wide a Long 2 {.smaller}
 
-- Uso de la función `pivot_longer()`
+-   Uso de la función `pivot_longer()`
 
 ```{r}
 #| warning: false
@@ -247,8 +244,6 @@ datos_long_2 <- datos_wide |>
 print(datos_long_2)
 
 ```
-
-
 
 #### Ejemplo en R: Long a Wide {.smaller}
 
@@ -282,8 +277,7 @@ print(datos_wide_n)
 
 #### Ejemplo en R: Long a Wide 2 {.smaller}
 
-- Uso de la función `pivot_wider()`
-
+-   Uso de la función `pivot_wider()`
 
 ```{r}
 #| warning: false
@@ -303,9 +297,6 @@ datos_wide_n_1 <- datos_long %>%
 print(datos_wide_n_1)
 ```
 
-
-
-
 #### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
 ¿Por qué es funcional tener conjuntos de datos panel?
@@ -316,14 +307,13 @@ print(datos_wide_n_1)
 
 -   Se puede resolver uno de los problemas principales en la microeconometría e inferencia causal: **el problma de la variable omitida**
 
-#### Modelos Lineales con Datos Panel Estáticos  {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
 ##### Heterogeneidad
 
 -   Variabilidad o diversidad en las unidades de una población o muestra que estamos analizando.
 
-- **Gapminder: The gapminder data contains data on life expectancy and GDP per capita by country and year
-**
+-   **Gapminder: The gapminder data contains data on life expectancy and GDP per capita by country and year**
 
 ```{r}
 #| warning: false
@@ -378,16 +368,15 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
 
 Existen diferencias no observadas (muchas veces no pueden ser observadas) que afectan la variable de interés:
 
-- Factores culturales, historia, políticas públicas, geografía, clima, etc.
+-   Factores culturales, historia, políticas públicas, geografía, clima, etc.
 
-- Si no controlamos, pueden sesgar tus estimaciones.
+-   Si no controlamos, pueden sesgar tus estimaciones.
 
-- Este sesgo es el famoso sesgo por *variable omitida*: confundes el efecto de una variable observada con el de una no observada pero correlacionada.
+-   Este sesgo es el famoso sesgo por *variable omitida*: confundes el efecto de una variable observada con el de una no observada pero correlacionada.
 
 Intuición:
 
-- Relación Esperanza de vidas y PIB percapita: $\beta$ podría capturar tanto el efecto del PIB como el efecto de factores no observados correlacionados (infraestructura sanitaria, educación, estabilidad política), que además suelen ser similares dentro de cada continente. Por tanto, la estimación estaría sesgada.
-
+-   Relación Esperanza de vidas y PIB percapita: $\beta$ podría capturar tanto el efecto del PIB como el efecto de factores no observados correlacionados (infraestructura sanitaria, educación, estabilidad política), que además suelen ser similares dentro de cada continente. Por tanto, la estimación estaría sesgada.
 
 #### Modelos Lineales con Datos Panel Estáticos: Problema de variable omitida {.smaller}
 
@@ -395,38 +384,35 @@ La principal motivación para utilizar datos panel es el **problema de la variab
 
 -   Nos interesa encontrar efectos parciales de un conjunto de variables explicativas en una función de regresión poblacional :
 
-$$ E(y|x_{1}, x_{2}, ... x_{k}, c ) =  \textbf{x}\boldsymbol{\beta} + c $$ 
+$$ E(y|x_{1}, x_{2}, ... x_{k}, c ) =  \textbf{x}\boldsymbol{\beta} + c $$
 
-- Donde c es una variable aleatoria que no observamos.
+-   Donde c es una variable aleatoria que no observamos.
 
-- Constante en el tiempo, por tanto tendrá un efecto parcial sobre el tiempo, y como no es es observado le llamaremos **efecto no observado**.
+-   Constante en el tiempo, por tanto tendrá un efecto parcial sobre el tiempo, y como no es es observado le llamaremos **efecto no observado**.
 
-- A nivel individual este tipo de variables son **preferencias personales, redes sociales, moral, características como las habilidades cognitivas, la motivación, educación precoz, moral,etc.**
+-   A nivel individual este tipo de variables son **preferencias personales, redes sociales, moral, características como las habilidades cognitivas, la motivación, educación precoz, moral,etc.**
 
+#### Modelos Lineales con Datos Panel Estáticos: Problema de variable omitida {.smaller}
 
-#### Modelos Lineales con Datos Panel Estáticos:  Problema de variable omitida {.smaller}
+Asumiendo un modelo poblacional:
 
-Asumiendo un modelo poblacional: 
-
-$$ E(y|\mathbf{x},c ) = \beta_o+ \textbf{x}\boldsymbol{\beta} + c $$ 
+$$ E(y|\mathbf{x},c ) = \beta_o+ \textbf{x}\boldsymbol{\beta} + c $$
 
 Si $\mathrm{Cov}(\mathbf{x}, c) \neq 0$
 
-- Las variables explicativas $x$ están correlacionadas con el término de error $c$,  
-  la estimación por OLS en dato transversales es sesgada e inconsistente.
-  
-- Posibles soluciones  
+-   Las variables explicativas $x$ están correlacionadas con el término de error $c$,\
+    la estimación por OLS en dato transversales es sesgada e inconsistente.
 
-1. **Variable proxy:**  
-   Encontrar una variable que represente la variable omitida $c$ y usarla en el modelo para reducir el sesgo.
+-   Posibles soluciones
 
-2. **Variables instrumentales (IV):**  
-   Usar instrumentos que estén correlacionados con $x$ pero no con el error $c$, estimando con métodos como 2SLS.
+1.  **Variable proxy:**\
+    Encontrar una variable que represente la variable omitida $c$ y usarla en el modelo para reducir el sesgo.
 
-3. **Instrumentos con múltiples indicadores:**  
-   Incorporar varios indicadores que reflejen la variable omitida y usar técnicas avanzadas de IV.
+2.  **Variables instrumentales (IV):**\
+    Usar instrumentos que estén correlacionados con $x$ pero no con el error $c$, estimando con métodos como 2SLS.
 
-
+3.  **Instrumentos con múltiples indicadores:**\
+    Incorporar varios indicadores que reflejen la variable omitida y usar técnicas avanzadas de IV.
 
 #### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
@@ -434,79 +420,69 @@ Si $\mathrm{Cov}(\mathbf{x}, c) \neq 0$
 
 Aprovechando la información y estructura de datos panel podemos:
 
-- Observar cambios dentro de cada unidad a lo largo del tiempo, en lugar de solo diferencias entre unidades.
+-   Observar cambios dentro de cada unidad a lo largo del tiempo, en lugar de solo diferencias entre unidades.
 
-- **Controlar las características fijas en el tiempo** (cultura, ubicación, instituciones históricas) que no podemos medir pero que podrían sesgar el análisis.
+-   **Controlar las características fijas en el tiempo** (cultura, ubicación, instituciones históricas) que no podemos medir pero que podrían sesgar el análisis.
 
-- Separar el efecto de las variables que cambian con el tiempo (PIB, gasto en salud) de las que son constantes.
+-   Separar el efecto de las variables que cambian con el tiempo (PIB, gasto en salud) de las que son constantes.
 
-- Esto reduce el sesgo porque las comparaciones se hacen contra la propia unidad en el tiempo, no solo entre unidades distintas.
-
+-   Esto reduce el sesgo porque las comparaciones se hacen contra la propia unidad en el tiempo, no solo entre unidades distintas.
 
 #### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
-##### Pooled OLS or POLS (¿Cómo funciona?) 
+##### Pooled OLS or POLS (¿Cómo funciona?)
 
 -   Estimación de OLS con datos longitudinales.
 
-
-$$ y_{t} =   \textbf{x}_{t}\boldsymbol{\beta} + u_{t}~~~t=1,2,3,..., T $$ 
+$$ y_{t} =   \textbf{x}_{t}\boldsymbol{\beta} + u_{t}~~~t=1,2,3,..., T $$
 
 Donde:
 
-- $y_{t} ~vector~ de~ nT~ \times ~1$ 
+-   $y_{t} ~vector~ de~ nT~ \times ~1$
 
-- $\textbf{x}_{t}~matriz~de~nT\times K$
+-   $\textbf{x}_{t}~matriz~de~nT\times K$
 
-- $u_{t}~vector~de~nT\times 1$
-
+-   $u_{t}~vector~de~nT\times 1$
 
 -   No se toma el diseño de datos panel, es decir la temporalidad y la dimensión transversal.
 
-
-
 #### Modelos Lineales con Datos Panel Estáticos {.smaller}
 
+-   Para identificar una observación específica usamos subíndices:
 
-- Para identificar una observación específica usamos subíndices:
+    $y_{it}$ = variable para el individuo (o unidad) $i$ en el tiempo $t$.
 
-  $y_{it}$ = variable para el individuo (o unidad) $i$ en el tiempo $t$.
+-   El modelo puede parecer **restrictivo** porque el coeficiente $\beta$ es igual en todos los períodos.
 
-- El modelo puede parecer **restrictivo** porque el coeficiente $\beta$ es igual en todos los períodos.
+-   Pero al elegir las variables explicativas $x_{it}$ correctamente, podemos capturar cambios en los parámetros a lo largo del tiempo. Por ejemplo: una **dummy de tiempo** que sirva para capturar efectos específicos de cada año.
 
-- Pero al elegir las variables explicativas $x_{it}$ correctamente, podemos capturar cambios en los parámetros a lo largo del tiempo. Por ejemplo: una **dummy de tiempo** que sirva para capturar efectos específicos de cada año. 
-
-- Es decir, cambios que afectan a todos por igual en ese año, como una crisis económica o un cambio en la ley.
+-   Es decir, cambios que afectan a todos por igual en ese año, como una crisis económica o un cambio en la ley.
 
 #### Modelos Lineales con Datos Panel Estáticos: ¿Cómo funciona? {.smaller}
 
 Ecuación de salarios con datos de panel
 
+-   Tenemos datos para los años **1990, 1991 y 1992** sobre un mismo conjunto de individuos y queremos estimar el efecto del uso de computadoras sobre el salario.
 
-- Tenemos datos para los años **1990, 1991 y 1992** sobre un mismo conjunto de individuos y 
- queremos estimar el efecto del uso de computadoras sobre el salario.
- 
- $$\log(wage_{it}) = \beta_0 + \theta_1 d91_t + \theta_2 d92_t 
+$$\log(wage_{it}) = \beta_0 + \theta_1 d91_t + \theta_2 d92_t 
    + \delta_1 computer_{it} + \delta_2 educ_{it} 
    + \delta_3 exper_{it} + \delta_4 female_i + u_{it}$$
- 
+
 Donde:
 
-- $d91_t, d92_t$: dummies para 1991 y 1992 (efectos de tiempo).  
-- $computer_{it}$: uso de computadora por persona \(i\) en año \(t\).  
-- $educ_{it}$: años de educación (puede variar en el tiempo para algunos).  
-- $exper_{it}$: experiencia laboral.  
-- $female_i$: dummy de género (constante en el tiempo).
-
+-   $d91_t, d92_t$: dummies para 1991 y 1992 (efectos de tiempo).\
+-   $computer_{it}$: uso de computadora por persona (i) en año (t).\
+-   $educ_{it}$: años de educación (puede variar en el tiempo para algunos).\
+-   $exper_{it}$: experiencia laboral.\
+-   $female_i$: dummy de género (constante en el tiempo).
 
 #### Modelos Lineales con Datos Panel Estáticos: ¿Cómo funciona? {.smaller}
 
-- **Constantes en el tiempo**: $female_i$, industria.  
+-   **Constantes en el tiempo**: $female_i$, industria.
 
-- **Cambiantes en el tiempo**: uso de computadora, experiencia, educación.
+-   **Cambiantes en el tiempo**: uso de computadora, experiencia, educación.
 
-- Aunque el coeficiente $\delta$ es fijo para otras variables, los coeficientes  $\theta_1$ y $\theta_2$ asociados a las dummies permiten capturar efectos distintos en cada año, es decir, permiten que el modelo refleje cambios en el impacto del tiempo.
-
+-   Aunque el coeficiente $\delta$ es fijo para otras variables, los coeficientes $\theta_1$ y $\theta_2$ asociados a las dummies permiten capturar efectos distintos en cada año, es decir, permiten que el modelo refleje cambios en el impacto del tiempo.
 
 #### Modelos Lineales con Datos Panel Estáticos: POLS (Supuestos) {.smaller}
 
@@ -518,9 +494,9 @@ Donde:
 -   POLS2. No multicolinealidad (no combinación lineal exacta)\
     $$rank[\sum_{t=1}^{T}E(\textbf{x}_{t}'\textbf{x}_{t})] = K$$
 
-- Si el rango es igual a K (el número de variables explicativas), significa que todas las variables son linealmente independientes entre sí. 
+-   Si el rango es igual a K (el número de variables explicativas), significa que todas las variables son linealmente independientes entre sí.
 
-- Por lo tanto, no hay ninguna variable que pueda escribirse exactamente como combinación lineal de otras variables.
+-   Por lo tanto, no hay ninguna variable que pueda escribirse exactamente como combinación lineal de otras variables.
 
 #### Modelos Lineales con Datos Panel Estáticos: POLS (Supuestos) {.smaller}
 
@@ -531,16 +507,14 @@ Donde:
     b.  No correlación serial $$ E(u_tu_s\textbf{x}_{t}'\textbf{x}_{s}) = 0~~~~~, t\neq s~~~t,s=1,2,...t$$
 
     Por tanto : $$ u_{t}\sim iid(0,\sigma^2) $$
-    
-    
 
 #### Modelos Lineales con Datos Panel Estáticos: POLS (Implementación) {.smaller}
 
--   Modelo de efectos no observados a estimar por POLS : 
+-   Modelo de efectos no observados a estimar por POLS :
 
 $$  y_{it}= \textbf{x}_{it}\boldsymbol{\beta} + c_{i}+ u_{it} ~~~t=1,2,...T$$
 
-- Donde tendrá un **error compuesto** que será la suma del **error no observado (efecto no observado)** y un error idiosincrático
+-   Donde tendrá un **error compuesto** que será la suma del **error no observado (efecto no observado)** y un error idiosincrático
 
 $$ v_{it } = c_{i}+ u_{it}   ~~~t=1,2,...T$$
 
@@ -548,32 +522,29 @@ $$ v_{it } = c_{i}+ u_{it}   ~~~t=1,2,...T$$
 
 **No olvidemos**
 
-1. $c_i$ **Efecto no observado**
-   - Características **constantes en el tiempo** para cada unidad \(i\).
-   - No se miden directamente.
-   - Ejemplos:
-     - Personas: habilidades innatas, entorno familiar.
-     - Empresas: ubicación, cultura organizacional.
-
-2. $u_{it}$ **Error idiosincrático**
-   - Factores **que cambian con el tiempo** y afectan solo esa observación.
-   - Ejemplos:
-     - Personas: enfermedad puntual, aumento temporal de productividad.
-     - Empresas: fluctuación de demanda, problemas temporales
-
+1.  $c_i$ **Efecto no observado**
+    -   Características **constantes en el tiempo** para cada unidad (i).
+    -   No se miden directamente.
+    -   Ejemplos:
+        -   Personas: habilidades innatas, entorno familiar.
+        -   Empresas: ubicación, cultura organizacional.
+2.  $u_{it}$ **Error idiosincrático**
+    -   Factores **que cambian con el tiempo** y afectan solo esa observación.
+    -   Ejemplos:
+        -   Personas: enfermedad puntual, aumento temporal de productividad.
+        -   Empresas: fluctuación de demanda, problemas temporales
 
 #### Modelos Lineales con Datos Panel Estáticos: POLS (Implementación) {.smaller}
 
-La estimación por Pooled OLS or POLS del MEO  será consistente si se cumple principalmente que:
+La estimación por Pooled OLS or POLS del MEO será consistente si se cumple principalmente que:
 
 -   POLS1. Exogeneidad\
-  
-$$ E( \textbf{x}_{it}' v_{it}) = 0~~~t=1,2,..., T$$ 
+
+$$ E( \textbf{x}_{it}' v_{it}) = 0~~~t=1,2,..., T$$
 
 Se tiene que cumplir que:
 
 $$ E( \textbf{x}_{it}' u_{it}) = 0 ~~~~~y~~~ E( \textbf{x}_{it}' c_{i}) = 0~~~t=1,2,..., T$$
-
 
 #### Modelos Lineales con Datos Panel Estáticos: POLS (Implementación) {.smaller}
 
@@ -581,37 +552,31 @@ $$ E( \textbf{x}_{it}' u_{it}) = 0 ~~~~~y~~~ E( \textbf{x}_{it}' c_{i}) = 0~~~t=
 
     b.  No correlación serial
 
-
-$$E(v_{it}v_{is}\textbf{x}_{it}'\textbf{x}_{is}) = 0~~~~~, t\neq s~~~t,s=1,2,...t$$ 
+$$E(v_{it}v_{is}\textbf{x}_{it}'\textbf{x}_{is}) = 0~~~~~, t\neq s~~~t,s=1,2,...t$$
 
 $$ E(v_{it}v_{is})=0$$
 
 -   Dado que el error compuesto estará correlacionado serialmente por la presencia del error no observado que es constante en cada período, POLS requiere del estimador de varianza robusta.
 
-- Supuestos muy estrictos
-
+-   Supuestos muy estrictos
 
 #### Modelos Lineales con Datos Panel Estáticos: POLS (Consideraciones) {.smaller}
 
-- **Pooled OLS** estima el modelo de panel como si todos los datos fueran una sola gran muestra de corte transversal.
+-   **Pooled OLS** estima el modelo de panel como si todos los datos fueran una sola gran muestra de corte transversal.
 
-- No diferencia entre variación **entre individuos** y **a lo largo del tiempo**.
+-   No diferencia entre variación **entre individuos** y **a lo largo del tiempo**.
 
-- Como $v_{it} = c_i + u_{it}$ y $c_i$ es constante en el tiempo, existe correlación perfecta entre $v_{it}$ y $v_{is}$  para un mismo individuo
+-   Como $v_{it} = c_i + u_{it}$ y $c_i$ es constante en el tiempo, existe correlación perfecta entre $v_{it}$ y $v_{is}$ para un mismo individuo
 
-- Por eso, en la práctica **POLS no es consistente** si $x_{it}$ está correlacionada con $c_i$
+-   Por eso, en la práctica **POLS no es consistente** si $x_{it}$ está correlacionada con $c_i$
 
-- Para que POLS sea aplicable y consistente necesitamos:
+-   Para que POLS sea aplicable y consistente necesitamos:
 
-  - $x_{it}$ no correlacionada con $c_i$ 
-  
-  - **Exogeneidad estricta y No correlación serial**
+    -   $x_{it}$ no correlacionada con $c_i$
 
-
+    -   **Exogeneidad estricta y No correlación serial**
 
 #### Modelos Lineales con Datos Panel Estáticos: POLS (Implementación en R) {.smaller}
-
-
 
 -   Utilizaremos la librería de R `'plm' (Panel Linear Models)`
 
@@ -674,9 +639,7 @@ summary(pooled_plm)
 
 #### Modelos Lineales con Datos Panel Estáticos POLS (Implementación en R) {.smaller}
 
-
-
--   Estimamos el modelo Pooled OLS con la función `lm() `
+-   Estimamos el modelo Pooled OLS con la función `lm()`
 
 -   Interpretación: El coeficiente del log(gdpPercap) indica que un aumento del 1% en el PIB per cápita está asociado con un aumento de 0.0840 años (alrededor de 30.7 días) en la esperanza de vida.
 
@@ -692,29 +655,29 @@ summary(pooled_lm)
 
 ```
 
-
-
 #### Modelos Lineales con Datos Panel Estáticos Pooled OLS or POLS (Implementación en R 2) {.smaller}
-
 
 -   F. Vella and M. Verbeek (1998), “Whose Wages Do Unions Raise? A Dynamic Model of Unionism and Wage Rate Determination for Young Men”
 
--  Ecuación de salario a estimar es:
+-   Ecuación de salario a estimar es:
 
 $$lwage_{it} = \beta_0 + \beta_1 union_{it} + \beta_2 educ_{it} + \beta_3 exper_{it} + \beta_4 exper_{it}^2 + u_{it} $$
 
-- $lwage$: Logaritmo natural del salario (variable dependiente)
-- $union$: Variable dummy que indica si el trabajador pertenece a un sindicato (1 = sí, 0 = no)
-- $educ$: Años de educación del trabajador
-- $exper$: Años de experiencia laboral
-- $exper^2$: Años de experiencia laboral al cuadrado
+-   $lwage$: Logaritmo natural del salario (variable dependiente)
 
-- Coeficiente objetivo: $\beta_1$
+-   $union$: Variable dummy que indica si el trabajador pertenece a un sindicato (1 = sí, 0 = no)
 
+-   $educ$: Años de educación del trabajador
+
+-   $exper$: Años de experiencia laboral
+
+-   $exper^2$: Años de experiencia laboral al cuadrado
+
+-   Coeficiente objetivo: $\beta_1$
 
 #### Modelos Lineales con Datos Panel Estáticos Pooled OLS or POLS (Implementación en R 2) {.smaller}
 
-- En R podemos encontrar el conjunto de datos en `wooldridge` como wagepan:
+-   En R podemos encontrar el conjunto de datos en `wooldridge` como wagepan:
 
 ```{r}
 #| warning: false
@@ -732,9 +695,7 @@ print(pdata_wage)
 
 ```
 
-
 #### Modelos Lineales con Datos Panel Estáticos Pooled OLS or POLS (Implementación en R 2) {.smaller}
-
 
 -Estimación por OLS en :
 
@@ -750,14 +711,9 @@ summary(pooled_lm_wage)
 
 ```
 
-
-
 #### Modelos Lineales con Datos Panel Estáticos Pooled OLS or POLS (Implementación en R 2) {.smaller}
 
-
-- También podemos utilizar la función `plm()` con el argumento `pooling` lo cual tomara todo como una muestra transversal. 
-
-
+-   También podemos utilizar la función `plm()` con el argumento `pooling` lo cual tomara todo como una muestra transversal.
 
 ```{r}
 #| warning: false
@@ -771,44 +727,43 @@ summary(pooled_plm_wage)
 
 ```
 
-
 #### Modelos Lineales con Datos Panel Estáticos Pooled OLS or POLS (Paréntesis) {.smaller}
 
 **Paréntesis: Técnicas de selección de modelos**
 
-1. **Forward Selection** (hacia adelante):
-   - Empieza sin variables.
-   - Va agregando la variable que más mejora el ajuste (según un criterio AIC, BIC, p-valor).
+1.  **Forward Selection** (hacia adelante):
 
-2. **Backward Elimination** (hacia atrás):
-   - Empieza con todas las variables.
-   - Va eliminando la menos significativa.
+    -   Empieza sin variables.
+    -   Va agregando la variable que más mejora el ajuste (según un criterio AIC, BIC, p-valor).
 
-3. **Stepwise** (combinado):
+2.  **Backward Elimination** (hacia atrás):
 
-   - Combina forward y backward.
-   - Agrega y elimina variables según su contribución estadística
+    -   Empieza con todas las variables.
+    -   Va eliminando la menos significativa.
+
+3.  **Stepwise** (combinado):
+
+    -   Combina forward y backward.
+    -   Agrega y elimina variables según su contribución estadística
 
 #### Modelos Lineales con Datos Panel Estáticos Pooled OLS or POLS (Paréntesis) {.smaller}
 
 **Funcionamiento:**
 
-1. **Modelo inicial**  
-   - Vacío, completo o parcial.
-2. **Iteración:**
-   - **Incluir**: probar agregar una variable que no esté.
-   - **Eliminar**: probar quitar una variable presente.
-3. **Evaluar mejora** usando:
-   - AIC (Akaike Information Criterion) ↓
-   - BIC (Bayesian Information Criterion) ↓
-   - p-valores (entrada/salida)
-   
-4. **Parar** cuando no hay mejoras.
-
+1.  **Modelo inicial**
+    -   Vacío, completo o parcial.
+2.  **Iteración:**
+    -   **Incluir**: probar agregar una variable que no esté.
+    -   **Eliminar**: probar quitar una variable presente.
+3.  **Evaluar mejora** usando:
+    -   AIC (Akaike Information Criterion) ↓
+    -   BIC (Bayesian Information Criterion) ↓
+    -   p-valores (entrada/salida)
+4.  **Parar** cuando no hay mejoras.
 
 #### Modelos Lineales con Datos Panel Estáticos Pooled OLS or POLS (Paréntesis) {.smaller}
 
-En R podemos utilizar la paquetería `MASS`: 
+En R podemos utilizar la paquetería `MASS`:
 
 ```{r}
 #| warning: false
@@ -830,87 +785,72 @@ table_sum <- summary(modelo_step)$coefficients
 dim(table_sum)
 ```
 
-
-
 #### Modelos Lineales con Datos Panel Estáticos Pooled OLS or POLS (Paréntesis) {.smaller}
 
 **Consideraciones**
 
-- Riesgo de sobreajuste (overfitting): si se usan muchos predictores y pocos datos.
+-   Riesgo de sobreajuste (overfitting): si se usan muchos predictores y pocos datos.
 
-- Ignora el contexto teórico: puede eliminar variables importantes desde el punto de vista sustantivo.
+-   Ignora el contexto teórico: puede eliminar variables importantes desde el punto de vista sustantivo.
 
-- Inestabilidad: pequeños cambios en los datos pueden producir modelos distintos.
+-   Inestabilidad: pequeños cambios en los datos pueden producir modelos distintos.
 
-- No garantiza encontrar el modelo verdadero, solo uno “óptimo” según el criterio elegido.
+-   No garantiza encontrar el modelo verdadero, solo uno “óptimo” según el criterio elegido.
 
-
-#### Modelos Lineales con Datos Panel Estáticos: POLS (Interpretación){.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: POLS (Interpretación) {.smaller}
 
 **Recordando interpretación de coeficientes**
 
-- **Lin-Log (Nivel-Log)**
+-   **Lin-Log (Nivel-Log)**
 
 $$Y = \beta_0 + \beta_1ln(X) + u $$
 
 Un incremento de 1% en $X$ está asociado con un cambio de $\frac{\beta_1}{100}$ unidades en $Y$
 
-
-- **Log - Lin(Log-Nivel)**
+-   **Log - Lin(Log-Nivel)**
 
 $$ ln(Y) = \beta_0 + \beta_1X + u $$
 
 Un cambio de una unidad en $X$ está asociado con un incremento de $\beta_1$ unidades en $\ln(Y)$
 
--  Para ser más preciso: el cambio porcentual en $Y$ es $(e^{\beta_1} - 1) \times 100%$
+-   Para ser más preciso: el cambio porcentual en $Y$ es $(e^{\beta_1} - 1) \times 100%$
 
-#### Modelos Lineales con Datos Panel Estáticos: POLS (Interpretación){.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: POLS (Interpretación) {.smaller}
 
 -   Interpretación $\beta_1$ el cual corresponde a la variable de asociación a sindicato:
 
 Estar afiliado a un sindicato se asocia con un incremento promedio de 18.94% unidades en la variable dependiente, manteniendo constantes las demás variables.
 
-
-| Variable    | Coeficiente | Interpretación breve                        |
-|-------------|-------------|--------------------------------------------|
-| (Intercept) | -0.0905     | Valor base del log salario cuando todo es 0. |
-| union       | 0.1735      | Estar en sindicato aumenta el salario ~17%. |
-| educ        | 0.1029      | Cada año extra de educación sube el salario ~10%. |
-| exper       | 0.0993      | Cada año extra de experiencia aumenta el salario ~9.9%. |
-| I(exper^2)  | -0.00317    | El efecto de la experiencia disminuye con más años. |
-
-
+| Variable    | Coeficiente | Interpretación breve                                     |
+|----------------|----------------|-----------------------------------------|
+| (Intercept) | -0.0905     | Valor base del log salario cuando todo es 0.             |
+| union       | 0.1735      | Estar en sindicato aumenta el salario \~17%.             |
+| educ        | 0.1029      | Cada año extra de educación sube el salario \~10%.       |
+| exper       | 0.0993      | Cada año extra de experiencia aumenta el salario \~9.9%. |
+| I(exper^2) | -0.00317    | El efecto de la experiencia disminuye con más años.      |
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (¿Cómo funciona? ) {.smaller}
 
 Dado que el modelo POLS no logra controlar efectos individuales no observado que son constantes buscaremos otro métodos que lo hagan.
 
-Efectos fijos (*FE*)  es un método que se enfoca en la variación dentro de cada individuo a lo largo del tiempo (**within**), eliminando la variación entre individuos (**between**).
+Efectos fijos (*FE*) es un método que se enfoca en la variación dentro de cada individuo a lo largo del tiempo (**within**), eliminando la variación entre individuos (**between**).
 
-- Controla por individuo/agente/observación (persona, empresa, países, escuelas, hospitales, etc)
+-   Controla por individuo/agente/observación (persona, empresa, países, escuelas, hospitales, etc)
 
+    -   **Variación within**: la variación dentro de cada indiviudo a través de multiples períodos de tiempo. (Ej.: cómo cambia el salario de una persona a lo largo de los años).
 
-    -   **Variación within**: la variación dentro de cada indiviudo a través de multiples períodos de tiempo.
-         (Ej.: cómo cambia el salario de una persona a lo largo de los años).
-         
-    -   **Variación between**: variación de una carácterística entre inviduos en un período de tiempo o en el promedio de diferentes períodos.
-         (Ej.: comparar el salario promedio de dos personas diferentes).
-         
-         
+    -   **Variación between**: variación de una carácterística entre inviduos en un período de tiempo o en el promedio de diferentes períodos. (Ej.: comparar el salario promedio de dos personas diferentes).
 
 #### Modelos Lineales con Datos Panel: Fixed Effects (¿Cómo funciona? ) Estáticos {.smaller}
 
-Ejemplo de variación *within* 
+Ejemplo de variación *within*
 
-| Nombre | Año  | Días de ejercicio | Media individual (mean) | Within |
-|--------|------|-------------------|-------------------------|--------|
-| Diego  | 2019 | 160               | <span class="fragment" style="color:blue;font-weight:bold;">130</span> | <span class="fragment" style="color:green;font-weight:bold;">+30</span> |
-| Diego  | 2020 | 100               | <span class="fragment" style="color:blue;font-weight:bold;">130</span> | <span class="fragment" style="color:red;font-weight:bold;">-30</span> |
-| Raúl   | 2019 | 150               | <span class="fragment" style="color:blue;font-weight:bold;">145</span> | <span class="fragment" style="color:green;font-weight:bold;">+5</span> |
-| Raúl   | 2020 | 140               | <span class="fragment" style="color:blue;font-weight:bold;">145</span> | <span class="fragment" style="color:red;font-weight:bold;">-5</span> |
-
-
-
+| Nombre | Año  | Días de ejercicio | Media individual (mean)                               | Within                                                 |
+|------------|------------|---------------|---------------------|------------|
+| Diego  | 2019 | 160               | [130]{.fragment style="color:blue;font-weight:bold;"} | [+30]{.fragment style="color:green;font-weight:bold;"} |
+| Diego  | 2020 | 100               | [130]{.fragment style="color:blue;font-weight:bold;"} | [-30]{.fragment style="color:red;font-weight:bold;"}   |
+| Raúl   | 2019 | 150               | [145]{.fragment style="color:blue;font-weight:bold;"} | [+5]{.fragment style="color:green;font-weight:bold;"}  |
+| Raúl   | 2020 | 140               | [145]{.fragment style="color:blue;font-weight:bold;"} | [-5]{.fragment style="color:red;font-weight:bold;"}    |
 
 #### Modelos Lineales con Datos Panel: Fixed Effects (¿Cómo funciona? ) Estáticos {.smaller}
 
@@ -918,39 +858,37 @@ Ejemplo de variación *within*
 
 **Variación within**:
 
-- Representa cuánto difiere la observación de un individuo en un año específico respecto a su promedio personal.
+-   Representa cuánto difiere la observación de un individuo en un año específico respecto a su promedio personal.
 
-- Para Diego en 2019, la variación within es +30 días, es decir, 30 días más que su promedio (130 días).
+-   Para Diego en 2019, la variación within es +30 días, es decir, 30 días más que su promedio (130 días).
 
-- En 2020, Diego tiene -30 días, es decir, 30 días menos que su promedio.
+-   En 2020, Diego tiene -30 días, es decir, 30 días menos que su promedio.
 
 **Variación between:**
 
-- En este caso, la diferencia de medias entre Diego (130 días) y Raul (145 días) es de 15 días.
+-   En este caso, la diferencia de medias entre Diego (130 días) y Raul (145 días) es de 15 días.
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (¿Cómo lo implementamos? ) {.smaller}
 
-El método de Efectos Fijos o Efectos Within busca controlar efectos no observados constantes en el tiempo.
-como lo son las características individuales no medidas. 
+El método de Efectos Fijos o Efectos Within busca controlar efectos no observados constantes en el tiempo. como lo son las características individuales no medidas.
 
-- Para ello utiliza la técnica de **demeaning** o **transformación within**.
+-   Para ello utiliza la técnica de **demeaning** o **transformación within**.
 
-- Resta la media individual a cada variable $x_i$
+-   Resta la media individual a cada variable $x_i$
 
 Método de transformación de efecto fijo o absorción del efecto fijo (absorbing fixed effect)
 
 -   Teniendo al menos dos períodos de tiempo obtenemos el promedio de la ecuación de POLS:
 
-$$  y_{it}= \textbf{x}_{it}\boldsymbol{\beta} + c_{i}+ u_{it} ~~~t=1,2,...T$$ 
-
+$$  y_{it}= \textbf{x}_{it}\boldsymbol{\beta} + c_{i}+ u_{it} ~~~t=1,2,...T$$
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (¿Cómo lo implementamos? ) {.smaller}
 
 Obtenemos:
 
-$$\bar{y}_{i} = {\bar{x}_{i}}\beta + c_i + \bar{u}_{i}$$ 
+$$\bar{y}_{i} = {\bar{x}_{i}}\beta + c_i + \bar{u}_{i}$$
 
-- Substrayendo la ecuación de medias de POLS:
+-   Substrayendo la ecuación de medias de POLS:
 
 $$  y_{it} -  \bar{y}_{i} =  (\textbf{x}_{it}-\mathbf{\bar{x}_{i}}) \boldsymbol{\beta} + c_{i} - c_{i}+ u_{it} - \bar{u}_{i}$$
 
@@ -958,26 +896,21 @@ $$  y_{it} -  \bar{y}_{i} =  (\textbf{x}_{it}-\mathbf{\bar{x}_{i}})\boldsymbol{\
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (¿Cómo lo implementamos? ) {.smaller}
 
- 
-
 -   Podemos representar la ecuación transformado de efectos fijos de la siguiente forma:
 
-$$  \ddot{y}_{it} = \mathbf{\ddot{x}_{it}}\boldsymbol{\beta}   + \ddot{u}_{it}  ~~~t=1,2,...T $$ 
-Donde:
+$$  \ddot{y}_{it} = \mathbf{\ddot{x}_{it}}\boldsymbol{\beta}   + \ddot{u}_{it}  ~~~t=1,2,...T $$ Donde:
 
-$$   \ddot{y}_{it} \equiv  y_{it} -  \bar{y}_{i}$$ 
-$$  \mathbf{\ddot{x}_{it}} \equiv \textbf{x}_{it} -  \mathbf{\bar{x}_{i}}$$ 
-$$   \ddot{u}_{it} \equiv  u{it} -  \bar{u}_{i}$$
+$$   \ddot{y}_{it} \equiv  y_{it} -  \bar{y}_{i}$$ $$  \mathbf{\ddot{x}_{it}} \equiv \textbf{x}_{it} -  \mathbf{\bar{x}_{i}}$$ $$   \ddot{u}_{it} \equiv  u{it} -  \bar{u}_{i}$$
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (¿Cómo lo implementamos? ) {.smaller}
 
-> **La transformación *within*** elimina todo lo que es constante en el tiempo para cada individuo.  
+> **La transformación *within*** elimina todo lo que es constante en el tiempo para cada individuo.
 
-- Trabaja únicamente con la variación temporal de cada individuo, lo que garantiza que la estimación de $\beta$  de interés no esté sesgada por características no observadas y constantes en el tiempo.
+-   Trabaja únicamente con la variación temporal de cada individuo, lo que garantiza que la estimación de $\beta$ de interés no esté sesgada por características no observadas y constantes en el tiempo.
 
-- En otras palabras, el estimador de efectos fijos “controla” por todo aquello que no cambia para un individuo, aunque no lo midamos explícitamente.
+-   En otras palabras, el estimador de efectos fijos “controla” por todo aquello que no cambia para un individuo, aunque no lo midamos explícitamente.
 
-#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos)  {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos) {.smaller}
 
 -   FE.1 Exogeneidad estricta: $$E( \ddot{u}_{it}|  \mathbf{{x}_{i}} ) = E( {u}_{it}|  \mathbf{{x}_{i}} ) -E( \bar{u}_{it}|  \mathbf{{x}_{i}} ) = 0$$ Lo cual implica que:
 
@@ -987,49 +920,41 @@ $$ \mathbf{{x}_{i}}= ( \mathbf{{x}_{i1},... \mathbf{{x}_{iT}} } )  $$
 
 -   Satisface la condición de expectativa condicional 0.
 
-
-
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos) {.smaller}
 
-
-- En **FE** se permite arbitrariamente que: 
+-   En **FE** se permite arbitrariamente que:
 
 $$E( \textbf{x}_{i}'| c_{i}) \neq 0$$
 
-Es decir, se permite que las variables omitidas estén correlacionadas con las variables observadas  $\textbf{x}_{it}$
+Es decir, se permite que las variables omitidas estén correlacionadas con las variables observadas $\textbf{x}_{it}$
 
-- Dado lo anterior, no se podrá disntinguir el efecto de las $\textbf{c}_{i}$ y de las variables constantes observables  $\textbf{x}_{t}$, por lo tanto no se incluyen regresores constantes en el tiempo.
+-   Dado lo anterior, no se podrá disntinguir el efecto de las $\textbf{c}_{i}$ y de las variables constantes observables $\textbf{x}_{t}$, por lo tanto no se incluyen regresores constantes en el tiempo.
 
-- A nivel individual variables como el sexo o grupo étnico; a nivel empresa la industria; a nivel ciudad la distancia con un río o el clima. 
+-   A nivel individual variables como el sexo o grupo étnico; a nivel empresa la industria; a nivel ciudad la distancia con un río o el clima.
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Precisión en supuestos) {.smaller}
 
 Diferencia entre supuesto **condicional** y **no condicional**
 
-1. Condicional $E(\mathbf{x}_i' \mid c_i) = 0$:  supuesto de independencia estricta respecto a efectos no observados
+1.  Condicional $E(\mathbf{x}_i' \mid c_i) = 0$: supuesto de independencia estricta respecto a efectos no observados
 
-    - **Lectura**: el valor esperado de $\mathbf{x}_i'$ dado  $c_i$ es cero
-    
-  
-    - **Interpretación**: Para cualquier valor posible de $c_i$ la media $\mathbf{x}_i'$ es cero
+    -   **Lectura**: el valor esperado de $\mathbf{x}_i'$ dado $c_i$ es cero
 
+    -   **Interpretación**: Para cualquier valor posible de $c_i$ la media $\mathbf{x}_i'$ es cero
 
+2.  No condicional $E( c_i \mathbf{x}_i') =0$:
 
-2. No condicional $E( c_i \mathbf{x}_i') =0$: 
+    -   **Lectura**: el valor esperado del producto $\mathbf{x}_i'c_i$ es cero
 
-    - **Lectura**: el valor esperado del producto $\mathbf{x}_i'c_i$ es cero
-  
-    - **Interpretación**: Permite que $c_i$ y $\mathbf{x}_i$ están correlacionados dentro de ciertos grupos, siempre que esas correlaciones positivas y negativas se compensen al promediar (no hay correlación en media)
+    -   **Interpretación**: Permite que $c_i$ y $\mathbf{x}_i$ están correlacionados dentro de ciertos grupos, siempre que esas correlaciones positivas y negativas se compensen al promediar (no hay correlación en media)
 
+#### Modelos Lineales con Datos Panel Estáticos: Efectos Fijos (Fixed Effects) (Supuestos) {.smaller}
 
-#### Modelos Lineales con Datos Panel Estáticos: Efectos Fijos (Fixed Effects) (Supuestos){.smaller}
+-   **Condicional**: independencia media dentro de cada grupo definido por Muy fuerte y útil para modelos de efectos aleatorios o independencia estricta.
 
-- **Condicional**:  independencia media dentro de cada grupo definido por  Muy fuerte y útil para modelos de efectos aleatorios o independencia estricta.
+-   **No condicional**:independencia media en toda la población. Más débil y no garantiza ausencia de sesgo.
 
-- **No condicional**:independencia media en toda la población. Más débil y no garantiza ausencia de sesgo.
-
-
-#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos){.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos) {.smaller}
 
 **FE2. No multicolinealidad (no hay dependencia lineal exacta)**:
 
@@ -1037,46 +962,37 @@ $$ rank[\sum_{t=1}^{T}E( \mathbf{\ddot{x}_{it}}' \mathbf{\ddot{x}_{it}})] = K $$
 
 -   No permite la inclusión de variables constantes en el tiempo en su estimación como el sexo o variables geográficas.
 
-- Columna de ceros viola este supuesto, porque no hay información dentro del individuo para estimar el coeficiente.
+-   Columna de ceros viola este supuesto, porque no hay información dentro del individuo para estimar el coeficiente.
 
-
-#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos){.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos) {.smaller}
 
 **FE3. Eficiencia del estimador FE**
 
 $$\mathbf{E}(\mathbf{u}_i \mathbf{u}_i' \mid \mathbf{x}_i, c_i) = \sigma_u^2 \mathbf{I}_T$$
 
+1.  **Varianza constante**: los errores idiosincráticos $u_{it}$ tienen **varianza constante** en todos los periodos $t$ para cada individuo $i$.
 
+2.  **No autocorrelación**: los errores idiosincráticos son **independientes a lo largo del tiempo** (no hay correlación serial).
 
-1. **Varianza constante**: los errores idiosincráticos $u_{it}$ tienen **varianza constante** en todos los periodos $t$ para cada individuo $i$. 
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos) {.smaller}
 
-2. **No autocorrelación**: los errores idiosincráticos son **independientes a lo largo del tiempo** (no hay correlación serial).  
+-   FE.3 puede ser equivalentea RE.3 en *Random Effects*:
 
-#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Supuestos){.smaller}
+    1.  Si FE.1 se cumple $\mathbf{E}(\mathbf{u}_i \mid \mathbf{x}_i, c_i) = 0$
 
+    2.  La esperanza incondicional es igual a la condicional $\mathbf{E}(\mathbf{u}_i \mathbf{u}_i' \mid \mathbf{x}_i, c_i) =\mathbf{E}(\mathbf{u}_i \mathbf{u}_i' )$
 
-- FE.3  puede ser equivalentea  RE.3 en *Random Effects*: 
+    3.  Tendrá la forma de $\sigma_u^2 I_T$.
 
-  1. Si FE.1 se cumple  $\mathbf{E}(\mathbf{u}_i  \mid \mathbf{x}_i, c_i) = 0$
-    
-     
-  2. La esperanza incondicional es igual a la condicional $\mathbf{E}(\mathbf{u}_i \mathbf{u}_i' \mid      \mathbf{x}_i, c_i) =\mathbf{E}(\mathbf{u}_i \mathbf{u}_i' )$
-     
-  3. Tendrá la forma de  $\sigma_u^2 I_T$. 
-     
+-   Sin embargo, no es necesariamente el más eficiente, porque FE.1 no impone restricciones sobre la varianza-covarianza de los errores.
 
-- Sin embargo, no es necesariamente el más eficiente, porque FE.1 no impone restricciones sobre la varianza-covarianza de los errores. 
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Estimador) {.smaller}
 
-#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Estimador){.smaller}
-
-
--   El **estimador within** se representa como: 
-$$ \hat\beta_{FE} = ( \sum_{i=1}^{N}\sum_{t=1}^{T} \mathbf{\ddot{x}_{it}}' \mathbf{\ddot{x}_{it}})^{-1} (\sum_{i=1}^{N}\sum_{t=1}^{T} \mathbf{\ddot{x}_{it}}' \ddot{y}_{it}) $$
+-   El **estimador within** se representa como: $$ \hat\beta_{FE} = ( \sum_{i=1}^{N}\sum_{t=1}^{T} \mathbf{\ddot{x}_{it}}' \mathbf{\ddot{x}_{it}})^{-1} (\sum_{i=1}^{N}\sum_{t=1}^{T} \mathbf{\ddot{x}_{it}}' \ddot{y}_{it}) $$
 
 -   Por FE.1 y por FE.2 (versión de muestra finita) el estimador $\boldsymbol{\hat\beta}_{FE}$ es insesgado.
 
-#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Ejemplo){.smaller}
-
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Ejemplo) {.smaller}
 
 $$ Esperanza_{it} =\beta_i + log(PIBpercap)_{it}\beta_1 + u_{it}$$
 
@@ -1113,7 +1029,6 @@ ggplot(df_mex_turk , aes(x = gdpPercap, y = lifeExp, color = country)) +
 
 #### Modelos Lineales con Datos Panel Estáticos Fixed Effects (Implementación en R) {.smaller}
 
-
 -   Primero lo primero: Absorción o extracción de efecto fijo
 
 ```{r}
@@ -1145,7 +1060,6 @@ head(df_gapmind)
 
 ```
 
-
 #### Modelos Lineales con Datos Panel Estáticos Fixed Effects (Implementación en R) {.smaller}
 
 -   Estimamos modelo de efectos fijos transformados por OLS
@@ -1162,7 +1076,6 @@ summary(m_FE1)
 ```
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Implementación en R) {.smaller}
-
 
 -   Estimamos modelo de FE con función plm
 
@@ -1185,23 +1098,21 @@ summary(m_FE2)
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (con Dummy) {.smaller}
 
-
 -   Otra forma de implementarlo: Dummy por cada país
 
 $${y_{it} = \alpha + \beta x_{it} + \gamma_1 D_{USA} + \gamma_2 D_{Mexico} + \dots + u_{it}}$$
 
 Captura todos los efectos fijos constantes del país.
 
-- Requiere una **categoría base** para evitar colinealidad.
+-   Requiere una **categoría base** para evitar colinealidad.
 
 **Desventaja**: si hay muchas observaciones, el número de dummies crece demasiado y el modelo pesado y poco eficiente.
 
 **Transformation within**: Más eficiente con muchos individuos/países, evita problemas de colinealidad, y se centra en la variación *within*, que es la que nos interesa para estimar $\beta$.
 
-
 #### Modelos Lineales con Datos Panel Estáticos:Fixed Effects (con Dummy en R) {.smaller}
 
-- En R utilizamos la función  `factor()` para incluir cad país como dummy:
+-   En R utilizamos la función `factor()` para incluir cad país como dummy:
 
 ```{r}
 #| warning: false
@@ -1213,12 +1124,7 @@ summary(m_FE3)
 
 ```
 
-
-
-
-
-
-#### Modelos Lineales con Datos Panel Estáticos: Fixed Effect  (Interpretación) {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Fixed Effect (Interpretación) {.smaller}
 
 -   Vemos que el coeficiente del logarítmo del PIB per capita es **FE: 9.769** y en **POLS: 8.40**
 
@@ -1226,17 +1132,15 @@ summary(m_FE3)
 
 -   Si el intercepto de México es 6.40 y el de Brasil es 6.3181, podemos decir que si México y Brasil tuvieran el mismo PIB per capita, la esperanza de vida en México podría ser 0.09 más alta.
 
-
 Consideración importante: "Tener en cuenta que los efectos fijos son una buena forma de controlar una larga lista de variables no observadas constantes en el tiempo para observar el efecto de una o unas pocas variables " **- Nick Huntington-Klein**
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (R-squared within) {.smaller}
 
 **R-squared within**
 
-- Mide cuánto de la variación dentro de cada individuo $i$ a lo largo del tiempo es explicado por el modelo.
+-   Mide cuánto de la variación dentro de cada individuo $i$ a lo largo del tiempo es explicado por el modelo.
 
-- Aquí estamos quitando la variación entre individuos, centrándonos solo en cambios internos.
-
+-   Aquí estamos quitando la variación entre individuos, centrándonos solo en cambios internos.
 
 $$
 R^2_{\text{within}} = 1 - \frac{RSS_i}{TSS_i} 
@@ -1244,8 +1148,6 @@ R^2_{\text{within}} = 1 - \frac{RSS_i}{TSS_i}
 $$
 
 **Interpretación**: “¿Cuánto cambian los valores dentro de cada unidad y es explicado por X?”
-
-
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Prueba F) {.smaller}
 
@@ -1265,34 +1167,26 @@ r2_within <- 1 - sum(df_gapmind$residuos^2) / sum(df_gapmind$lifeExp_within^2)
 print(r.squared(m_FE2))
 ```
 
-
-
-
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Prueba F) {.smaller}
 
 **Prueba F: Pooled vs FE**
 
-
 Evalúa si existen **diferencias significativas** entre las unidades en sus niveles constantes a lo largo del tiempo.
 
-- En términos estadísticos la prueba F, está probando si los efectos individuales (interceptos) son todos iguales en cada $i$ o si al menos uno es distinto.
+-   En términos estadísticos la prueba F, está probando si los efectos individuales (interceptos) son todos iguales en cada $i$ o si al menos uno es distinto.
 
-**Hipótesis**  
+**Hipótesis**
 
-- **$H_0$**: $\beta_{i} = 0$ → No hay diferencias individuales (**Pooled OLS** adecuado).  
-- **$H_1$**: $\beta_{i} \neq 0$ → Hay al menos un efecto fijo (**FE** adecuado).  
+-   $H_0$: $\beta_{i} = 0$ → No hay diferencias individuales (**Pooled OLS** adecuado).\
+-   $H_1$: $\beta_{i} \neq 0$ → Hay al menos un efecto fijo (**FE** adecuado).
 
-
-**Interpretación**: si se rechaza $H_0$ (p-valor < 0.05), existe al menos un efecto no observado individual significativo. Por lo tanto el modelo de FE es adecuado.
-
+**Interpretación**: si se rechaza $H_0$ (p-valor \< 0.05), existe al menos un efecto no observado individual significativo. Por lo tanto el modelo de FE es adecuado.
 
 #### Modelos Lineales con Datos Panel Estáticos: Fixed Effects (Prueba F) {.smaller}
 
+-   Utilizamos la función `pFtest()` de la paquetería `plm`
 
-- Utilizamos la función `pFtest()` de la paquetería `plm`
-
- **Sintáxis**: `pFtest(modelo FE, modelo pooled,)`
-
+**Sintáxis**: `pFtest(modelo FE, modelo pooled,)`
 
 ```{r}
 #| warning: false
@@ -1315,17 +1209,15 @@ print(f_test)
 
 #### Modelos Lineales con Datos Panel Estáticos :Fixed Effects (Ejemplo 2) {.smaller}
 
-- Continuamos con la función de salarios la cual será estimada por el método de FE:
+-   Continuamos con la función de salarios la cual será estimada por el método de FE:
 
 $$ log(wage)_{it} =\beta_i + union_{it}\beta_1 + educ_{it}\beta_2 + exp_{it}\beta_3 + exp^2_{it}\beta_4 + u_{it} $$
 
-
 #### Modelos Lineales con Datos Panel Estáticos :Fixed Effects (Ejemplo 2) {.smaller}
 
+-   Para estimar por FE en la función `plm()` tenemos que cambiar el argumento `model = 'within'` y los demás argumento permanecen iguales que en el POLS
 
-- Para estimar por FE en la función `plm()` tenemos que cambiar el argumento `model = 'within' ` y los demás argumento permanecen iguales que en el POLS
-
-- El estimador FE también es conocido como *within*
+-   El estimador FE también es conocido como *within*
 
 ```{r}
 #| warning: false
@@ -1346,13 +1238,9 @@ FE_plm_wage <- plm(lwage ~  union + educ + exper + I(exper^2) ,
 summary(FE_plm_wage)
 ```
 
-
-
-
 #### Modelos Lineales con Datos Panel Estáticos :Fixed Effects (Ejemplo 2: Prueba F) {.smaller}
 
-
-- Comparamos POLS y FE mediante prueba F:
+-   Comparamos POLS y FE mediante prueba F:
 
 ```{r}
 #| warning: false
@@ -1373,37 +1261,35 @@ print(f_test_wage)
 
 $$y_{it} =\beta_i + \beta_t  + x_{it}\gamma_i + u_{it} $$
 
-1. Con los FE por $i$, tratamos de eliminar la variación entre unidades (países, individuos, etc.) y nos centramos en la variación dentro de la unidad a lo largo del tiempo.
+1.  Con los FE por $i$, tratamos de eliminar la variación entre unidades (países, individuos, etc.) y nos centramos en la variación dentro de la unidad a lo largo del tiempo.
 
-2. Con los FE por cada $t$, tratamos de controlar la variación a lo largo del tiempo y nos centramos en la variación entre unidades dentro de un mismo período. (Shocks económicos)
+2.  Con los FE por cada $t$, tratamos de controlar la variación a lo largo del tiempo y nos centramos en la variación entre unidades dentro de un mismo período. (Shocks económicos)
 
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double Demeaning) {.smaller}
 
-- Utilizando la **transformación within** o **double demeaning**: 
+-   Utilizando la **transformación within** o **double demeaning**:
 
-$$\ddot{Y}_{it} = Y_{it} - \bar{Y}_{it} - \bar{Y}_{ t} + \bar{Y}_{\cdot\cdot}$$
+$$\ddot{Y}_{it} = Y_{it} - \bar{Y}_{i} - \bar{Y}_{ t} + \bar{Y}_{\cdot\cdot}$$
 
-Donde:  
-- $\bar{Y}_{i}$ = promedio de la unidad $i$ (en todos los $t$)  
-- $\bar{Y}_{t}$ = promedio del período $t$ (en todas las unidades)  
+Donde:\
+- $\bar{Y}_{i}$ = promedio de la unidad $i$ (en todos los $t$)\
+- $\bar{Y}_{t}$ = promedio del período $t$ (en todas las unidades)\
 - $\bar{Y}_{\cdot\cdot}$ = promedio global
 
-
-
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double Demeaning) {.smaller}
 
-1️⃣ **Restar promedio por unidad** → elimina diferencias *entre unidades*.  
-2️⃣ **Restar promedio por tiempo** → elimina diferencias *entre períodos*.  
+1️⃣ **Restar promedio por unidad** → elimina diferencias *entre unidades*.\
+2️⃣ **Restar promedio por tiempo** → elimina diferencias *entre períodos*.\
 3️⃣ **Sumar promedio global** → corrige doble resta.
 
-Ejemplo: 
+Ejemplo:
 
-| Nombre | Año  | Días | Media persona | Within (Y - mean_persona) |
-|--------|------|------|---------------|---------------------------|
-| Diego  | 2019 | 160  | <span class="fragment" style="color:blue;font-weight:bold;">130</span> | <span class="fragment" style="color:green;font-weight:bold;">+30</span> |
-| Diego  | 2020 | 100  | <span class="fragment" style="color:blue;font-weight:bold;">130</span> | <span class="fragment" style="color:red;font-weight:bold;">-30</span> |
-| Raúl   | 2019 | 150  | <span class="fragment" style="color:blue;font-weight:bold;">145</span> | <span class="fragment" style="color:green;font-weight:bold;">+5</span> |
-| Raúl   | 2020 | 140  | <span class="fragment" style="color:blue;font-weight:bold;">145</span> | <span class="fragment" style="color:red;font-weight:bold;">-5</span> |
+| Nombre | Año  | Días | Media persona                                         | Within (Y - mean_persona)                              |
+|------------|------------|------------|------------|------------------------|
+| Diego  | 2019 | 160  | [130]{.fragment style="color:blue;font-weight:bold;"} | [+30]{.fragment style="color:green;font-weight:bold;"} |
+| Diego  | 2020 | 100  | [130]{.fragment style="color:blue;font-weight:bold;"} | [-30]{.fragment style="color:red;font-weight:bold;"}   |
+| Raúl   | 2019 | 150  | [145]{.fragment style="color:blue;font-weight:bold;"} | [+5]{.fragment style="color:green;font-weight:bold;"}  |
+| Raúl   | 2020 | 140  | [145]{.fragment style="color:blue;font-weight:bold;"} | [-5]{.fragment style="color:red;font-weight:bold;"}    |
 
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double Demeaning) {.smaller}
 
@@ -1414,36 +1300,32 @@ Ejemplo:
 | 2019 | 155          |
 | 2020 | 120          |
 
-
 **Media total**
 
-- $\bar{Y}_{\cdot\cdot}$ = media global = 137.5 
+-   $\bar{Y}_{\cdot\cdot}$ = media global = 137.5
 
-
-    - En el promedio por unidad ya estaba incluida la variación por tiempo y en el promedio por tiempo ya estaba incluida la variación por unidad. 
-    - Promedio global se quita dos veces.
+    -   En el promedio por unidad ya estaba incluida la variación por tiempo y en el promedio por tiempo ya estaba incluida la variación por unidad.
+    -   Promedio global se quita dos veces.
 
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double Demeaning) {.smaller}
 
 Con las medias por año y global podemos calcular la transformación Double Demeaning:
 
-- $\ddot{h}_{it} = h_{it} - \bar{h}_{i\cdot} - \bar{h}_{\cdot t} + \bar{h}_{\cdot\cdot}$
+-   $\ddot{h}_{it} = h_{it} - \bar{h}_{i} - \bar{h}_{t} + \bar{h}_{\cdot\cdot}$
 
-| Nombre | Año  | Cálculo doble | Double Demeaning |
-|--------|------|---------------|-----------------|
-| Diego  | 2019 | 160 - 130 - 155 + 137.5 | +12.5 |
-| Diego  | 2020 | 100 - 130 - 120 + 137.5 | -12.5 |
-| Raúl   | 2019 | 150 - 145 - 155 + 137.5 | -12.5 |
-| Raúl   | 2020 | 140 - 145 - 120 + 137.5 | +12.5 |
+| Nombre | Año  | Cálculo doble           | Double Demeaning |
+|--------|------|-------------------------|------------------|
+| Diego  | 2019 | 160 - 130 - 155 + 137.5 | +12.5            |
+| Diego  | 2020 | 100 - 130 - 120 + 137.5 | -12.5            |
+| Raúl   | 2019 | 150 - 145 - 155 + 137.5 | -12.5            |
+| Raúl   | 2020 | 140 - 145 - 120 + 137.5 | +12.5            |
 
-- Valores positivos:  más que la combinación de media persona y media año  
-- Valores negativos: menos que la combinación de media persona y media año
-
-
+-   Valores positivos: más que la combinación de media persona y media año\
+-   Valores negativos: menos que la combinación de media persona y media año
 
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double demeaning en R) {.smaller}
 
-1. Para la **transformación double demeaning** (sustracción de medias por dos dimensiones) retomamos el ejemplo de la esperanza de vida y pib por método within (sustracción de la media por país):
+1.  Para la **transformación double demeaning** (sustracción de medias por dos dimensiones) retomamos el ejemplo de la esperanza de vida y pib por método within (sustracción de la media por país):
 
 ```{r}
 #| warning: false
@@ -1477,12 +1359,11 @@ head(df_gapmind)
 
 ```
 
-
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double demeaning en R) {.smaller}
 
 ¿Qué nos falta para realizar un TWFE con transfromación Double Demeaning?
 
-- Calculamos la medias por año y totales tanto de la $Esperanza_i$ así como del $log(PIBpercap)$:
+-   Calculamos la medias por año y totales tanto de la $Esperanza_i$ así como del $log(PIBpercap)$:
 
 ```{r}
 #| warning: false
@@ -1505,12 +1386,11 @@ mutate(lifeExp_global_mean = mean(lifeExp),
 
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double demeaning en R) {.smaller}
 
-Con esto podemos calcular las variables transformadas: 
+Con esto podemos calcular las variables transformadas:
 
-- $\ddot{y}_{it} = y_{it} - \bar{y}_{i} - \bar{y}_{t} + \bar{y}_{\cdot\cdot}$
+-   $\ddot{y}_{it} = y_{it} - \bar{y}_{i} - \bar{y}_{t} + \bar{y}_{\cdot\cdot}$
 
-- $\ddot{x}_{it} = x_{it} - \bar{x}_{i} - \bar{x}_{t} + \bar{x}_{\cdot\cdot}$
-
+-   $\ddot{x}_{it} = x_{it} - \bar{x}_{i} - \bar{x}_{t} + \bar{x}_{\cdot\cdot}$
 
 ```{r}
 #| warning: false
@@ -1527,8 +1407,6 @@ head(df_gapmind)
 
 ```
 
-
-
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Double demeaning en R) {.smaller}
 
 Estimación de **modelo Double Demeaning** por OLS:
@@ -1543,15 +1421,11 @@ m_FE2way_double <- lm(lifeExp_within_2way ~ logPIBper_within_2way, data = df_gap
 summary(m_FE2way_double)
 ```
 
-
-
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Implementación en R) {.smaller}
 
-
-- Estimamos el modelo de **Two-Way Fixed Effects** de la esperanza de vida con la función `plm()`
+-   Estimamos el modelo de **Two-Way Fixed Effects** de la esperanza de vida con la función `plm()`
 
 $$ Esperanza_{it} =\beta_i + \beta_t  + log(PIBpercap)_{it}\beta_1 + u_{it} $$
-
 
 ```{r}
 #| warning: false
@@ -1567,12 +1441,11 @@ m_twfe <- plm(lifeExp ~   log_PIBper, data = df_pdata, model = "within", effect 
 summary(m_twfe)
 ```
 
-
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects (Implementación en R 2) {.smaller}
 
-- También podemos utilizar la función `feols()` de la paquetería `fixest `
+-   También podemos utilizar la función `feols()` de la paquetería `fixest`
 
-- Usa una proyección algorítmica más eficiente mediante métodos matriciales lo cual es útil en datos grandes.
+-   Usa una proyección algorítmica más eficiente mediante métodos matriciales lo cual es útil en datos grandes.
 
 ```{r}
 #| warning: false
@@ -1586,10 +1459,7 @@ m1_twfe <- feols(lifeExp ~ log_PIBper | country + year,
 summary(m1_twfe)
 ```
 
-
-
-
-#### Modelos Lineales con Datos Panel Estáticos:  Two-Way Fixed Effects {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects {.smaller}
 
 **Comparación de Resultados de Modelos**
 
@@ -1617,7 +1487,7 @@ kable(results_df, caption = "")
 
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects VS FE {.smaller}
 
-**¿Efectos Fijos (solo por id) vs Efectos Fijos Bidireccionales (id + tiempo)? **
+**¿Efectos Fijos (solo por id) vs Efectos Fijos Bidireccionales (id + tiempo)?**
 
 $$
 \begin{align*}
@@ -1643,24 +1513,22 @@ print(pFtest(m_twfe , m_FE2))
 
 -   $\therefore$ Rechazamos $H_0$ y tenemos evidencia que existen efectos temporales
 
-- Buena parte de la variación inicial estaba capturada por diferencias temporales comunes a todas las unidades.
+-   Buena parte de la variación inicial estaba capturada por diferencias temporales comunes a todas las unidades.
 
 #### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects VS FE {.smaller}
 
 **Consideraciones**
 
 | Característica      | Fixed Effects (FE) Simple                       | Two-Way Fixed Effects (TWFE)                 |
-|:----------------|:----------------------------|:--------------------------|
+|:-----------------|:---------------------------|:-------------------------|
 | Tamaño muestral     | Muestra pequeña                                 | Muestra grande                               |
 | Shocks              | No hay shocks temporales importantes            | Presencia de shocks macroeconómicos          |
 | Foco del análisis   | Interés principalen variación within individual | Efectos temporales significativos            |
 | Estructura temporal | Estructura temporal simple                      | Necesidad de controlar tendencias temporales |
 
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects {.smaller}
 
-
-#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects  {.smaller}
-
-Modelo de ecuación de salario por Two-Way Fixed Effects: 
+Modelo de ecuación de salario por Two-Way Fixed Effects:
 
 ```{r}
 #| warning: false
@@ -1677,23 +1545,20 @@ summary(m_twfe_wage)
 
 ```
 
-
-
-#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects  {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects {.smaller}
 
 **Interpretación**
 
-- Estimación: 0.0813  
-- Significancia: p < 0.001 
+-   Estimación: 0.0813\
+-   Significancia: p \< 0.001
 
 Ser miembro de un sindicato se asocia con un aumento promedio de 8.1% en el salario dentro del mismo individuo a lo largo del tiempo.
 
-- Si observamos en la salida del modelo, no está la variable  experiencia.
+-   Si observamos en la salida del modelo, no está la variable experiencia.
 
 La variable termina siendo aproximadamente constante (muy poca variación dentro de la unidad después de ajustar por tiempo), R la elimina porque no aporta información adicional al modelo.
 
-
-#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects  {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects {.smaller}
 
 **¿FE o Two-Way Fixed Effects?** Prueba F para comprobar
 
@@ -1714,68 +1579,694 @@ print(pFtest(m_twfe_wage , FE_plm_wage))
 
 ```
 
-#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects  {.smaller}
+#### Modelos Lineales con Datos Panel Estáticos: Two-Way Fixed Effects {.smaller}
 
-- **F = 1.8966**  
-- **p-value ≈ 0.078 > 0.05**  
+-   **F = 1.8966**\
+-   **p-value ≈ 0.078 \> 0.05**
 
 Conclusión: No se rechaza la hipóstesis nula al 5% de significancia. Los efectos fijos por tiempo no aportan información significativa al modelo.
 
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (¿Cómo funciona?) {.smaller}
+
+**El Estimador de diferencia en diferencias**
+
+Partimos de un modelo de **efectos fijos** en donde el regresor de interés es binario:
+
+$$y_{it} = \delta_t +  \alpha_i+ \phi D_{it}  + c_i + u_{it}$$ Donde: $$D_{it} = 
+\begin{cases} 
+1 & \text{si el individuo i recibe tratamiento/intervención en t} \\ 
+0 & \text{en otro caso}
+\end{cases}$$ 
+
+- efecto fijo $\alpha_i$ 
+
+- efecto temporal $\delta_t$ 
+
+- efecto constante no observado $c_i$
+
+**Cameron & Trivedi (2005, 2009)**
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (¿Cómo funciona?) {.smaller}
+
+Al aplicar **primeras diferencias**:
+
+$$\Delta y_{it} = (\delta_t - \delta_{t-1}) + \phi \Delta D_{it}  + \Delta u_{it}$$ - El **efecto fijo individual** desaparece.\
+- Ya no nos preocupa la correlación entre $c_i$ y $D_{it}$.\
+- $\phi$ será el efecto de tratamiento y será estimado consistentemente por pooled OLS
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (¿Cómo funciona?) {.smaller}
+
+**Intuición de la Primera Diferencia**
+
+-   Al diferenciar, estamos **comparando a cada individuo consigo mismo en dos pereíodos consecutivos**.
+
+-   Esto elimina todo lo que es **constante en el tiempo** para ese individuo (ej. habilidades innatas, características estructurales, nivel socioeconómico fijo).
+
+-   Solo queda la **variación en el tiempo** (cambio en tratamiento y shocks).
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (¿Cómo funciona?) {.smaller}
+
+1.  Considerando el caso particular de $T = 2$ (sólo dos períodos)
+
+2.  Suponiendo que la intervención sólo ocurre en el período dos:
+
+    -   En $t=1$, para $D_{i1} = 0$ para todos los $i$
+    -   En $t=2$ habrá $D_{i2} = 0$ (no tratados) y $D_{i2} = 1$ (tratados)
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff {.smaller}
+
+Por tanto el modelo a estimar en ese escenario será:
+
+$$\Delta y_{i} = \delta + \phi D_{i} +u_{i}$$
+
+-   $D_i$ es la variable de tratamiento que indica si recibe el tratamiento o no.
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (¿Cómo funciona?) {.smaller}
+
+-   Definiendo el promedio muestral de $\Delta \bar y^{trat}$ y $\Delta \bar y^{no~trat}$
+
+podemos definir el estimador de $phi$ que se estima por OLS como:
+
+$$\hat\phi=  \Delta \bar y^{trat} - \Delta \bar y^{no~trat}$$
+
+-   Al estimador se le conoce como **estimador de diferencias-en-diferencias (DID)**
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (¿Cómo funciona?) {.smaller}
+
+**¿Por qué Diff-in-Diff?**
+
+-   Primero se estima la diferencia de el grupo de tratamiento y de no tramiento en cada período y después se calcula la diferencia de esas diferencias entre cada período:
+
+$$\hat\phi=  (\bar y^{trat}_2 - \bar y^{trat}_1) - (\bar y^{no~trat}_2 - \bar y^{no~trat}_1)$$
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (¿Cómo funciona?) {.smaller}
+
+Otra forma de especificar el modelo si tenemos dos grupos y dos períodos de tiempo:
+
+$$y_i = \beta_o + \beta_1GrupoTratado_i + \beta_2 PostTrat_t + \beta_3(GrupoTratado_i*PostTrat_t) + \epsilon_i $$ Donde:
+
+-   $GrupoTratado_i$: si la unidad pertenece al grupo tratado, 0 si pertenece al grupo de contro
+
+-   $PostTrat_t$: variable indicadora (=1 si el periodo es posterior a la introducción de la política/tratamiento, 0 en caso contrario)
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (¿Cómo funciona?) {.smaller}
+
+**Interpretación de coeficientes**
+
+| Término      | Interpretación                                                                                                                                                                                       |
+|------------------------------------------------|------------------------|
+| $\beta_0$    | Valor promedio del grupo de control **antes** del tratamiento (baseline).                                                                                                                            |
+| $\beta_1$    | Diferencia promedio **entre el grupo tratado y el grupo de control antes** del tratamiento.                                                                                                          |
+| $\beta_2$    | Cambio promedio en el grupo de control **después del tratamiento**, en comparación con el periodo previo.                                                                                            |
+| $\beta_3$    | Estimador **Diff-in-Diff(DID)**: cuánto más (o menos) cambió el grupo tratado en comparación con el grupo de control después del tratamiento. |
+| $\epsilon_i$ | Término de error, captura factores no observados.                                                                                                                                                    |
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo) {.smaller}
+
+Supongamos que medimos **ingresos anuales promedio** antes y después de un programa.
+
+**Grupo Tratado (eligible)**
+
+-   Antes del tratamiento: 10,000\
+-   Después del tratamiento: 13,000\
+-   Cambio: $\bar{y}^{tr}_2 - \bar{y}^{tr}_1 = 13,000 - 10,000 = 3,000$
+
+**Grupo Control (no elegible)**
+
+-   Antes del tratamiento: 15,000\
+-   Después del tratamiento: 17,000\
+-   Cambio: $\bar{y}^{nt}_2 - \bar{y}^{nt}_1 = 17,000 - 15,000 = 2,000$
+
+**Efecto del tratamiento (DiD):**
+
+$\phi = (\bar{y}^{tr}_2 - \bar{y}^{tr}_1) - (\bar{y}^{nt}_2 - \bar{y}^{nt}_1) = 3,000 - 2,000 = 1,000$
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo) {.smaller}
+
+-   De forma gráfica:
+
+```{r}
+#| echo: false
+#| fig-width: 15
+#| fig-height: 8
+#| label: plot_did1
+
+library(ggplot2)
+library(dplyr)
+
+# Datos del ejemplo
+df <- tibble(
+  grupo = c("Tratado", "Tratado", "Control", "Control"),
+  periodo = c("Antes", "Después", "Antes", "Después"),
+  ingreso = c(10000, 13000, 15000, 17000)
+)
+
+# Gráfico
+ggplot(df, aes(x = periodo, y = ingreso, group = grupo, color = grupo)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  geom_text(aes(label = ingreso), vjust = -1) +
+  labs(
+    title = "Efecto Difference-in-Differences",
+    y = "Ingreso promedio",
+    x = "Periodo"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+-   La diferencia adicional observada en el grupo tratado se interpreta como el **efecto causal del tratamiento**. 
+
+-   El estimador de diff-in-dif separa el efecto del tiempo $t$ del tratamiento $D$
+
+-   En este ejemplo: el programa aumentó los ingresos en **1,000**.
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Supuesto) {.smaller}
+
+**Supuesto de Tendencias Paralelas**
+
+-   El estimador **Diff-in-Diff** requiere que, en ausencia del tratamiento, **la evolución media de la variable objetivo del grupo tratado, habría sido la misma que la del grupo de no tratado (control)**.
+
+$$E \big[ Y_{i,t=2}(0) \mid D_i = 1 \big] - 
+E \big[ Y_{i,t=1}(0) \mid D_i = 1 \big] 
+=
+E \big[ Y_{i,t=2}(0) \mid D_i = 0 \big] - 
+E \big[ Y_{i,t=1}(0) \mid D_i = 0 \big]$$
+
+-   El lado izquierdo: evolución esperada del **grupo tratado** en el escenario hipotético donde no hubieran recibido el tratamiento.
+-   El lado derecho: evolución observada del **grupo control**.
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Supuesto) {.smaller}
+
+**¿Por qué es importante?**
+
+Este supuesto es crucial porque permite construir el contrafactual. Es decir, nos permite estimar qué habría pasado con el grupo tratado si no hubiera recibido el tratamiento.
+
+-   Sin esta suposición, no podríamos aislar el impacto del tratamiento de otros factores que puedan estar afectando a ambos grupos de forma diferente.
+
+-   La validez y consistencia del estimador de diff-in-diff depende por completo de que este supuesto se cumpla.
+
+- **Si las tendencias de los grupos ya eran diferentes antes de la intervención, entonces las diferencias observadas después no podrían atribuirse de manera confiable al tratamiento.**
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Supuesto) {.smaller}
+
+**¿Podemos comprobar el supuesto?**
+
+-   No directamente porque no tenemos el escenario contrafactual
+
+-   **Test Visual de Tendencias Previas (Prior Trends)**:
+
+Promedio de la variable de resultado a lo largo del tiempo para ambos grupos (tratado y control). Antes de la intervención, **las líneas de ambos grupos deberían seguir tendencias similares, es decir, ser aproximadamente paralelas.**
+
+```{r}
+#| echo: false
+#| fig-width: 15
+#| fig-height: 7
+#| label: plot_did2
+
+df <- tibble(
+  grupo   = c("Tratado","Tratado","Tratado",
+              "Control","Control","Control"),
+  periodo = c("t=0","t=1 (antes)","t=2 (después)",
+              "t=0","t=1 (antes)","t=2 (después)"),
+  ingreso = c(9000, 10000, 13000,
+              14000, 15000, 17000)
+)
+
+# Gráfico: evolución de ingresos en cada grupo
+ggplot(df, aes(x = periodo, y = ingreso, group = grupo, color = grupo)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  geom_text(aes(label = ingreso), vjust = -1.2) +
+  labs(
+    title = "Evolución promedio de ingresos (Tratados vs Control)",
+    x = "Periodo",
+    y = "Ingreso promedio"
+  ) +
+  theme_minimal(base_size = 14)
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Supuesto) {.smaller}
+
+**Test Estadístico: Tendencias Previas (Prior Trends)**
+
+-   Idea: con sólo un período adicional previo $t=0$ y $t=1$ corre una regresión con interacción $tratados×postpre$.
+
+$$y_{it} = \alpha_i + \delta postpre_t+ \lambda (GrupoTratado_i*postpre_t) +u_{it}$$
+
+Donde:
+
+-   $postpre$: indicador de segundo período pre-tratamiento (t=1)
+
+-   $GrupoTratado_i$: interacción que captura diferencia en cambios entre grupos antes del tratamiento.
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Supuesto) {.smaller}
+
+**Hipótesis**
+
+**H0:** el cambio medio de tratados en el pre es **igual** al de control, por lo tanto $\delta = 0$.
+
+-   Si no rechazamos **H0**, los tratados y controles crecieron igual en el pre, consistente con parallel trends.
+
+-   El estimado de diff-in-diff podría estar sesgado
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+*'Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New Jersey and Pennsylvania' - Card & Krueger (1994)*
+
+**Teoría económica estándar**
+
+Si el salario mínimo se fija por arriba del salario de equilibrio:
+
+         
+- La **demanda de trabajo** cae.  
+
+- La **oferta de trabajo** aumenta.  
+
+
+Resultado esperado: el salario mínimo **perjudica a algunos trabajadores de bajos salarios**.
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+-   **Pregunta de investigación**
+
+    -¿Qué ocurre realmente con los niveles de empleos cuando sube el salario mínimo?
+
+-   **Contexto: Aumento del salario mínimo en Nueva Jersey**
+
+    -   En **1991**, el salario mínimo federal en EE. UU. era **\$4.25/hora**.\
+    
+    -   En **abril de 1992**, Nueva Jersey aumentó su salario mínimo a **\$5.05/hora**.
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+**Datos**
+
+-   Encuestaron a 410 restaurantes de comida rápida en en Nueva Jersey y en el éste de Pensilvania, antes y después de la implementación del aumento en Nueva Jersey
+
+-   Utilizamos el conjunto de datos `njmin` de la paquetería `diffindiff`
+
+```{r}
+#| echo: true
+#| fig-width: 12
+#| fig-height: 7
+#| label: plot_did3
+
+#Instalación de paquetería para obtener Card & Krueger (1994):
+#remotes::install_github("b-rodrigues/diffindiff")
+p_load(diffindiff)
+#Datos
+data("njmin")
+str(njmin)
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+**Distribución de restaurantes por estado**
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 7
+#| label: plot_did4
+
+# Contar restaurantes por estado y año
+df_count <-  njmin |>  
+             group_by(state, observation) %>%
+             summarise(n_restaurantes = n(), 
+             .groups = "drop")
+#Plot
+ggplot(df_count, aes(x = observation, y = n_restaurantes, fill = state)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = n_restaurantes), 
+            position = position_dodge(width = 0.8), 
+            vjust = -0.5, size = 3.5) +
+  labs(
+    x = "Año",
+    y = "Número de restaurantes",
+    fill = "Estado",
+    title = "Cantidad de restaurantes por Estado y Año"
+  ) +
+  scale_fill_manual(values = c("New Jersey" = "#1f77b4", "Pennsylvania" = "lightblue")) +
+  theme_minimal()
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+**Estadística Descriptiva: Participación cadenas por estado**
+
+```{r}
+#| echo: true
+#| warning: false
+#| fig-width: 12
+#| fig-height: 7
+#| label: plot_did5
+
+table_dist_rest  <- njmin |> 
+  group_by( state, chain) |>
+  summarise(n = n()) |> 
+  mutate(prop = n / sum(n)) |> 
+  dplyr::select(-n) |> 
+  tidyr::pivot_wider(names_from = state, values_from = prop, values_fill = 0) 
+
+kable(table_dist_rest, digits = 2, caption = "Participación en el empleo de cadenas por estados")
+
+
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+**Estadística Descriptiva: Medias de empleo total, porcentaje de empleo de tiempo completo, salario, horas operadas**
+
+Creación de variables:
+
+-   emptot : los equivalentes de tiempo completo (FTE, por sus siglas en inglés) consisten en empleados de tiempo completo, gerentes y empleados de medio tiempo (multiplicado por 0.5)
+
+-   prop_fte: proporción de empleados de tiempo completo (empft/emptot)
+
+```{r}
+#| echo: true
+#| warning: false
+#| fig-width: 12
+#| fig-height: 7
+#| label: did5
+
+
+#Creación de variables:
+#emptot : los equivalentes de tiempo completo (FTE, por sus siglas en inglés) 
+#consisten en empleados de tiempo completo, gerentes y empleados de medio tiempo (multiplicado por 0.5) .
+njmin <- njmin  |> 
+         mutate(emptot =  empft + nmgrs +  (emppt * 0.5), 
+                prop_fte = (empft/emptot)*100 )
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+**Medias de empleo total, porcentaje de empleo de tiempo completo, salario, horas operadas**
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-width: 12
+#| fig-height: 7
+#| label: did6
+
+#Pre-tratamiento
+table_medias_pretrat <- njmin   |> 
+                        filter(observation == "February 1992")  |> 
+                        group_by(state) |> 
+                        summarise(emptot = mean(emptot, na.rm = TRUE),
+                                  proptaff  = mean(prop_fte, na.rm = TRUE),
+                                  wage_st = mean(wage_st, na.rm = TRUE),
+                                  hrsopen = mean(hrsopen, na.rm = TRUE))  |> 
+                        pivot_longer(cols=-state, names_to = "variable")  |> 
+                       
+                       mutate(periodo = "Pre")  
+#Post-tratamiento    
+table_medias_posttrat    <-  njmin   |> 
+                             filter(observation == "November 1992")  |> 
+                             group_by(state) |> 
+                             summarise(emptot = mean(emptot, na.rm = TRUE),
+                                       proptaff  = mean(prop_fte, na.rm = TRUE),
+                                       wage_st = mean(wage_st, na.rm = TRUE),
+                                       hrsopen = mean(hrsopen, na.rm = TRUE)) |> 
+                             pivot_longer(cols=-state, names_to = "variable") |>
+                            mutate(periodo = "Post") 
+                             
+tabla_post_pre <- bind_rows(table_medias_pretrat, table_medias_posttrat) |>
+                  pivot_wider(names_from = c(state, periodo), values_from = value)
+
+kable(tabla_post_pre  , digits = 2, caption = "")
+  
+
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+**Primeras diferencias**
+
+$$diff_{pre} = \text{mean_tratado_pre}  - \text{mean_control_pre}$$
+
+$$diff_{post} = \text{mean_tratado_post} - \text{mean_control_post}$$
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+**Primeras diferencias**
+
+```{r}
+#| echo: true
+#| warning: false
+#| fig-width: 12
+#| fig-height: 7
+#| label: did7
+
+#Medias por grupo
+mean_emptot  <- njmin |>  
+                      group_by(observation, state) |>  
+                      summarise(emptotal = mean(emptot , na.rm = TRUE))
+
+# pre-tratamiento  (NJ)
+mean_njfeb <- mean_emptot[1,3]
+# pre-tratamiento  (PA) Control
+mean_pafeb <- mean_emptot[2,3]
+# post_tratamiento (NJ)
+mean_njnov <- mean_emptot[3,3]
+# post_tratamiento (PA) Control
+mean_panov <- mean_emptot[4,3]
+
+
+
+#Diferencia de grupo tratado vs control pre
+diff_pre <- mean_njfeb -  mean_pafeb 
+#Diferencia de grupo tratado vs control post
+diff_post <-  mean_njnov - mean_panov
+
+print(diff_pre)
+print(diff_post)
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+**Segunda diferencia**
+
+$$ATE = diff_{post} - diff_{pre}$$
+
+```{r}
+#| echo: true
+#| warning: false
+#| fig-width: 12
+#| fig-height: 7
+#| label: did8
+
+
+#Diferencia de grupo tratado vs control pre
+diff_pre <- mean_njfeb -  mean_pafeb 
+#Diferencia de grupo tratado vs control post
+diff_post <-  mean_njnov - mean_panov
+
+#ATE
+ATE <-  diff_post - diff_pre 
+
+print(ATE)
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado) {.smaller}
+
+**Interpretación del efecto promedio de tratamiento (ATE):**
+
+*"El aumento del salario mínimo en Nueva Jersey se asoció con un incremento promedio de aproximadamente 2.76 empleados de tiempo completo equivalente por restaurante de comida rápida, en comparación con los restaurantes similares en Pensilvania."*
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado: Estimación) {.smaller}
+
+**Estimación por Diferencias-en-Diferencias**
+
+-   Método de interacción por OLS
+
+```{r}
+#| echo: true
+#| warning: false
+#| fig-width: 12
+#| fig-height: 7
+#| label: did9
+#1. Es necesario crear las variables dummy's de tratamiento (GrupoTratado_i) y tiempo (PostTrat_t) ----
+
+njmin  <- njmin |> 
+          mutate(PostTrat = ifelse(observation == "November 1992", 1, 0),
+                 GrupoTratado = ifelse(state == "New Jersey", 1, 0)  )
+
+model_did_inter <- lm(emptot ~ PostTrat + GrupoTratado + PostTrat:GrupoTratado,
+                      data = njmin)
+
+summary(model_did_inter)
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado: Estimación) {.smaller}
+
+**Estimación por Diferencias-en-Diferencias**
+
+-   Método Efectos Fijos (TWFE)
+
+```{r}
+#| echo: true
+#| warning: false
+#| fig-width: 12
+#| fig-height: 7
+#| label: did10
+
+#Recordando: Le damos estructura de panel al df 
+p_load('plm')
+df_panel_njmin <- pdata.frame(njmin, 
+                              index = c("sheet" ,"PostTrat"))
+#Model TWFE
+model_did_twfe <- plm( emptot ~ GrupoTratado*PostTrat,
+                       data = df_panel_njmin,
+                       model = "within",   # efectos fijos de unidad
+                       effect = "twoways")  # también efectos fijos de tiempo
+
+
+summary(model_did_inter)
+
+```
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Ejemplo aplicado: Estimación) {.smaller}
+
+**Interpretación**
+
+-   **"El aumento en el salario mínimo está asociado con un incremento promedio 2.754 de empleados de tiempos completo en Nueva Jersey, en comparación de Pensilvania."**
+
+-   **Importante**: el efecto no es estadísticamente significativo al 5% (p = 0.1033). Es marginalmente significativo al 10%.
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Críticas) {.smaller}
+
+**¿Qué tan válidos son estos resultados**
+
+-   Recordemos que el principal suspuesto es el de **tendencias pararelas**, el nivel de empleo tendría que ser en promedio el mismo en los dos grupos en ausencia del tratamiento.
+
+-   El estudio original no tenía datos para períodos adicionales así que realizaron un revisión (2000) en donde obtuvieron datos administrativos de nómina de restaurantes de Nueva Jersey y Pensilvania.
+
+- Al igual  en los datos originales se muestra un ligero descenso del empleo en Pensilvania entre febrero y noviembre de 1992, y poco cambio en Nueva Jersey durante el mismo período.
+
+- Sin embargo, los datos también revelan variaciones considerables en el empleo de un año a otro en otros períodos. Pennsylvania ya tenía una tendencia diferente a New Jersey antes del aumento del salario mínimo.
+
+- Esto sugirió que Pensilvania podría **no ser un buen contrafactual** para estimar el empleo que habría tenido Nueva Jersey en ausencia de la política, y viceversa.
+
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Historia) {.smaller}
+
+**Orígenes históricos: John Snow y el cólera**
+
+
+- En 1854, John Snow realizó uno de los primeros análisis comparativos en salud pública.
+
+- Estudió el **brote de cólera en Londres**, comparando tasas de mortalidad entre diferentes barrios antes y después de cerrar la bomba de agua contaminada.
+
+- Este análisis puede considerarse un **antecedente temprano del DID**, al comparar grupos tratados y no tratados en distintos periodos de tiempo.
+
+![El mapa de cólera de John Snow](johnsnow.png){width=70%}
+
+
+#### Modelos Lineales con Datos Panel Estáticos: Diff-in-Diff (Historia) {.smaller}
+
+**Formalización moderna del DID**
+
+- El método DID se formalizó econométricamente en los años 70-80.
+
+- **Ashenfelter (1978):Using the Longitudinal Structure of Earnings to Estimate the Effect of Training Programs**.
+- **Orley Ashenfelter;David Card (1985): Using the Longitudinal Structure of Earnings to Estimate the Effect of Training Programs**
+
+  - Estimaron los efectos de programas de capacitación laboral usando diferencias antes/después y grupo de control.
+  
+- Desde entonces, DID se ha convertido en **herramienta clave para evaluación de políticas públicas y análisis causal con datos de panel**.
+
+
 #### Modelos Lineales con Datos Panel Estáticos: Random Effects {.smaller}
 
- 
-Recordemos nuestro efecto no observado (efecto heterogéneo, variable latente) $c_i$
+Recordemos nuestro efecto no observado (efecto constante individual no observado): $c_i$
 
--   En FE el objetivo es elimiar $c_i$ con el método demeaned, ya que pensamos que los $c_i$ están correlacionado con $x_{it}$.
+-   En FE el objetivo er eliminar $c_i$ con el **método demeaned** (extracción de la media), ya que pensamos que los $c_i$ están correlacionado con $x_{it}$.
 
--   Discusión: ¿Tratar como variable aleatoría o como un parámetro con el que tenemos que estimar?
 
--   El problema principal es si $c_i$ está correlacionado o no con el conjunto de variables explicativas $x_{it}$
+Discusión: **¿Tratar como variable aleatoría o como un parámetro con el que tenemos que estimar?**
+
+- El problema principal es si $c_i$ está correlacionado o no con el conjunto de variables explicativas $x_{it}$
 
 -   Por lo tanto:
 
-$$ Cov(\mathbf{x_{it},c_i}) =0,~~~t = 1,2,...,T $$
+$$Cov(\mathbf{x_{it},c_i}) =0,~~~t = 1,2,...,T $$
+#### Modelos Lineales con Datos Panel Estáticos: Random Effects {.smaller}
 
 -   Tenemos un supuesto de media condicional más fuerte:
 
-$$ E(c_i |\mathbf{x_{i1}},...,\mathbf{x_{iT}}) = E(c_{i}) = 0 $$
+$$E(c_i |\mathbf{x_{i1}},...,\mathbf{x_{iT}}) = E(c_{i}) = 0$$
 
 -   En FE, cuando controlamos por el efecto fijo individual permitimos cierta correlación de $c_{i}$ con $x_{it}$. si no están correlacionados y tratamos de controlar el efecto individual obtendremos un estimador ineficiente.
 
-#### Modelos Lineales con Datos Panel {.smaller}
+#### Modelos Lineales con Datos Panel: Random Effects (Estimación) {.smaller}
 
-##### *Random Effects* (Estimación)
 
 ¿Cómo podemos estimar $\beta$ cuando pensemos que se cumple que $c_{i}$ y $x_{it}$ no estén correlacionadas?
 
 -   Podríamos utilizar POLS y obtendríamos un estimador consistente PERO ignoramos la correlación serial de ${v}_{it}$
 
-$${v}_{it} =  {c}_{i} +  {u}_{it} $$ - Como ${c}_{i}$ está presente en todos los períodos de tiempo:
+$${v}_{it} =  {c}_{i} +  {u}_{it} $$ 
+
+- Como ${c}_{i}$ está presente en todos los períodos de tiempo:
 
 $$Cov({v}_{it},v_{is})  =  \frac{\sigma_{c}^2}{\sigma_{c}^2 +\sigma_{u}^2 } $$
 
 -   Un método que utilizamos para estimar modelos cuando existe autocorrelación serial es el de Mínimo Cuadrados Generalizados (GLS).
 
-#### Modelos Lineales con Datos Panel {.smaller}
+#### Modelos Lineales con Datos Panel:  Random Effects (Estimación){.smaller}
 
-##### *Random Effects* (Estimación)
 
 -   Recordemos que el método de FE sólo permite la variación within, pero si tenemos pocas observaciones los efectos fijos inviduales estarán sesgados $\beta_{i}s$, y por lo tanto $\hat\beta_{FE}$ también.
 
--   El método de RE hará supuestos de la distribución del efecto fijo individual $\beta_{i}s$, tratando de solucionar la correlación serial del error compuesto y asignándole una estructura "especial" a los errores idiosincráticos .
+-   El método de RE hará supuestos de la distribución del efecto fijo individual $\beta_{i}s$, tratando de solucionar la correlación serial del error compuesto $v_i$ y asignándole una estructura "especial" a los errores idiosincráticos .
 
 -   $\therefore$ estimamos en un marco de Mínimos Cuadrados Generalizados (GLS)
 
--   ¿Qué modelo estimaremos?
+#### Modelos Lineales con Datos Panel:  Random Effects (Estimación){.smaller}
+
+A tráves del framework de Mínimo Cuadrados Generalizados (**GLS**) el enfoque de RE explota la correlación serial.
+
+- Para que la estimación sea consistente necesitamos estricta exogeneidad entre las variables explicativas y el error compuesto
+
+
+
+#### Modelos Lineales con Datos Panel:  Random Effects (Estimación){.smaller}
+
+¿Qué modelo estimaremos?
 
 $$  \textbf{y}_{i}= \textbf{X}_{i}\boldsymbol{\beta} +  \textbf{v}_{i}   ~~~t=1,2,...T$$
 
-El error compuesto se escribe como $\textbf{v}_{i} = c_i* \textbf{j}{T} + \textbf{u}_{i}$ donde $\textbf{j}_{T}$ es un vector de unos.
 
-#### Modelos Lineales con Datos Panel {.smaller}
+#### Modelos Lineales con Datos Panel:  Random Effects (Estimación){.smaller}
 
-##### *Random Effects* (Supuestos)
+El error compuesto se escribe como:
 
+$\textbf{v}_{i} = c_i* \textbf{j}{T} + \textbf{u}_{i}$
+
+Donde:
+
+- $\textbf{v}_{i}$ : es un vector de $T$ X 1 de errores compuestos
+
+- $c_{i}$ : es el efecto individual no observado
+
+- $\textbf{j}_{T}$: es un vector de unos
+
+- $\textbf{u}_{i}$: vector de errores idiosincráticos
+
+#### Modelos Lineales con Datos Panel:  Random Effects (Supuestos){.smaller}
 -   RE.1 Exogeneidad estricta :
 
 $a) E(u_{it}|\mathbf{x_{i}},c_i) = 0 ,~~t=1,...,T$
@@ -1784,74 +2275,77 @@ $b) E(c_{i}| \mathbf{x_{i}}) = E(c_{i})=0$
 
 $where~~ \mathbf{x_{i}}\equiv(\mathbf{x_{i1}},\mathbf{x_{i2}},...,\mathbf{x_{iT}})$
 
-#### Modelos Lineales con Datos Panel {.smaller}
 
-##### *Random Effects* (Supuestos)
+#### Modelos Lineales con Datos Panel: Random Effects (Supuestos) {.smaller}
 
--   Tendremos una matriz de varianzas incondicionales de $\textbf{v}_{i}$
+Tendremos una matriz de varianzas incondicionales de $\textbf{v}_{i}$:
 
-$$ \Omega \equiv \mathbb{E}(\textbf{v}_i \textbf{v}_i') $$
+$$ \Omega \equiv \mathbb{E}(\textbf{v}_i \textbf{v}_i')$$
+- Es decir la matriz de varianzas y covarianza
 
-Para poder realizar la estimación utilizando GLS, tendrá que cumplirse
+#### Modelos Lineales con Datos Panel: Random Effects (Supuestos) {.smaller}
 
--   RE.2 rango completo :
+Debemos de suponer que la matriz de varianzas-covarianzas es definida positiva, significa:
 
-$rank E( \mathbf{X_{i}}' \Omega^{-1} \mathbf{X_{i}})] = K$
+- Esto garantiza que no haya colinealidad perfecta ni combinaciones lineales triviales entre los errores.
 
--   Con esta matriz le daremos estructura a los errores idiosincráticos y por tanto se tienen que cumplir los supuestos:
+- Así, la matriz puede invertirse, asi obtendremos estimadores consistentes de Mínimos Cuadrados Generalizados (GLS).
+
+Por tanto: 
+
+- RE.2 rango completo 
+
+$$rank E( \mathbf{X_{i}}' \Omega^{-1} \mathbf{X_{i}})] = K$$
+
+
+#### Modelos Lineales con Datos Panel: Random Effects (Supuestos) {.smaller}
+
+Con la matriz $\Omega$ le daremos estructura a los errores idiosincráticos y por tanto se tienen que cumplir los supuestos:
 
 1)  Varianza constante incondicional: $E(u_{it}^2) = \sigma^2_{u}$
 
 2)  Errors idiosincráticos son serialmente no correlacionados:$~~E(u_{it}, u_{is}) = 0 ~~t\neq s$
 
-#### Modelos Lineales con Datos Panel {.smaller}
+#### Modelos Lineales con Datos Panel: Random Effects (Supuestos) {.smaller}
 
-##### *Random Effects* (Supuestos)
+Bajo esos supuestos podemos calcular las varianzas y covarianzas de $\textbf{v}_{i}$
 
--   Con esto podemos calcular las varianzas y covarianzas de $\textbf{v}_{i}$
-
--   Bajo RE.1 $E(c_{i}u_{it}) = 0,~~t=1,2,...T$ la varianza será:
+-   Tomando en cuenta que RE.1 $E(c_{i}u_{it}) = 0,~~t=1,2,...T$ la **varianza** será:
 
 $$  E(v_{it}^2) =  E(c_{i}^2) +  E(u_{it}^2) + 2E(c_{i}^2u_{it}^2)  =  \sigma^2_{c}  + \sigma^2_{u} $$
 
--   Para la covarianza:
+#### Modelos Lineales con Datos Panel: Random Effects (Supuestos) {.smaller}
 
-$$ E(v_{it}v_{is}) = E[(c\_{i} + u_{it}))(c_{i}+u_{is}))] $$
 
-$$
- = E(c_i^2) + E(c_iu_{is}) + E(u_{it}c_i) + E(u_{it}u_{is}) 
-$$
+Para la **covarianza**:
+
+$$E(v_{it}v_{is}) = E[(c\_{i} + u_{it}))(c_{i}+u_{is}))]$$
+
+$$= E(c_i^2) + E(c_iu_{is}) + E(u_{it}c_i) + E(u_{it}u_{is}) $$
 
 Dados los supuestos RE.1 y $~~E(u_{it}, u_{is}) = 0$
 
-$$
-\therefore ~~ E(v_{it}v_{is}) = \sigma^2_{c}
-$$
+$$\therefore ~~ E(v_{it}v_{is}) = \sigma^2_{c}$$
 
-#### Modelos Lineales con Datos Panel {.smaller}
+#### Modelos Lineales con Datos Panel:Random Effects (Supuestos) {.smaller}
 
-##### *Random Effects* (Supuestos)
 
--   Cuando $\Omega$ tiene esta forma se dice que tiene la forma de **efectos aleatorios**.
+La matriz $\Omega$ tomará la siguiente forma especial: **efectos aleatorios**.
 
-$$
-\Omega = \mathbb{E}(v_i v_i') = \begin{pmatrix}
+$$\Omega = \mathbb{E}(v_i v_i') = \begin{pmatrix}
 \sigma_c^2 + \sigma_u^2 & \sigma_c^2 & \cdots & \sigma_c^2 \\
 \sigma_c^2 & \sigma_c^2 + \sigma_u^2 & \cdots & \sigma_c^2 \\
 \vdots & \vdots & \ddots & \vdots \\
 \sigma_c^2 & \sigma_c^2 & \cdots & \sigma_c^2 + \sigma_u^2
-\end{pmatrix}
-$$
+\end{pmatrix}$$
 
--   También podemos representar la matriz de esta forma:
+También podemos representar la matriz de esta forma:
 
 $\Omega= \sigma_{u} ^2\mathbf{I_{T}}+\sigma^2_{c}\mathbf{j_{T}}\mathbf{j'_{T}}$
 
-#### Modelos Lineales con Datos Panel {.smaller}
+#### Modelos Lineales con Datos Panel: Random Effects (Supuestos) {.smaller}
 
-##### *Random Effects* (Supuestos)
-
--   RE.3 Homocedasticidad :
+RE.3 Homocedasticidad :
 
 $$ a) E(u_{it}^2|\mathbf{x_{i}},c_i) = \sigma^2_{u}\mathbf{I}_T $$
 
@@ -1862,35 +2356,36 @@ $$b) E(c^2_{i}|\mathbf{x_{i}}) = \sigma^2_{c}$$
 -   Se mantiene la forma de $\Omega$
 -   No correlación serial entre $c_i$ y $\mathbf{x_{it}}$
 
-#### Modelos Lineales con Datos Panel {.smaller}
+#### Modelos Lineales con Datos Panel:Random Effects (Supuestos) {.smaller}
 
-##### *Random Effects* (Estimación)
+Como no conocemos $\Omega$, tenemos que estimarla: 
 
--   Como no conocemos $\Omega$, tenemos que estimarla: $\hat\Omega= \hat\sigma_{u} ^2\mathbf{I_{T}}+\hat\sigma^2_{c}\mathbf{j_{T}}\mathbf{j'_{T}}$
+$$\hat\Omega= \hat\sigma_{u} ^2\mathbf{I_{T}}+\hat\sigma^2_{c}\mathbf{j_{T}}\mathbf{j'_{T}}$$
 
--   Obtenemos los residuales del modelo POLS para estimar \$\sigma\^2\_{v} \$:
+- Obtenemos los residuales del modelo POLS para estimar $\sigma^2_{v}$:
 
-$$ \hat\sigma_v^2 = \frac{1}{NT-K} \sum_{i=1}^N \sum_{t=1}^T \hat{\hat{v}} _{it}^2
-$$ Donde: $NT-K$ es la corrección por grados de libertad
+$$ \hat\sigma_v^2 = \frac{1}{NT-K} \sum_{i=1}^N \sum_{t=1}^T \hat{\hat{v}} _{it}^2$$ 
+Donde: $NT-K$ es la corrección por grados de libertad
 
-#### Modelos Lineales con Datos Panel {.smaller}
+#### Modelos Lineales con Datos Panel:Random Effects (Supuestos) {.smaller}
 
-##### *Random Effects* (Estimación)
+Para obtener un estimador de $\sigma^2_{c}$ recordamos que $\sigma^2_{c} = E(v_{it}v_{is})$ :
 
-Para obtener un estimador de $\sigma^2_{c}$ recordamos que \$\sigma\^2\_{c} = E(v\_{it}v\_{is})\$ :
+$$\hat\sigma_c^2 = \frac{1}{[NT(T-1)/2-K]} \sum_{i=1}^N \sum_{t=1}^{T-1} \sum_{s=t+1}^T \hat{\hat{v}}_{it} \hat{\hat{v}}_{is}$$ 
+Donde: $NT(T-1)/2-K$ es la corrección por grados de libertad
 
-$$\hat\sigma_c^2 = \frac{1}{[NT(T-1)/2-K]} \sum_{i=1}^N \sum_{t=1}^{T-1} \sum_{s=t+1}^T \hat{\hat{v}}_{it} \hat{\hat{v}}_{is}
- $$ Donde: $NT(T-1)/2-K$ es la corrección por grados de libertad
+
+#### Modelos Lineales con Datos Panel:Random Effects (Supuestos) {.smaller}
 
 Dado que estimamos $\hat\sigma_v^2$ y $\hat\sigma_c^2$ podemos estimar:
 
-$$ \hat\sigma_u^2 =  \hat\sigma_v^2 - \hat\sigma_c^2$$
+$$\hat\sigma_u^2 =  \hat\sigma_v^2 - \hat\sigma_c^2$$
 
 #### Modelos Lineales con Datos Panel {.smaller}
 
 ##### *Random Effects* (Estimación)
 
--   El estimador de Efectos Aleatorios (RE) se representa como:
+El estimador de Efectos Aleatorios (RE) se representa como:
 
 $$
 \therefore~~~~~\hat{\beta}_{RE} = \left( \sum_{i=1}^{N} \mathbf{x_i}' \hat{\Omega}^{-1} \mathbf{x_i} \right)^{-1} \left( \sum_{i=1}^{N} \mathbf{x_i}' \hat{\Omega}^{-1} \mathbf{y_i} \right)
@@ -1915,7 +2410,7 @@ $$
 ##### *Efectos aleatorios (RE) vs Efectos Fijos (FE)*
 
 | Característica                                      | FE                                            | RE                                   |
-|----------------------------|-------------------------|--------------------|
+|---------------------------|-------------------------|--------------------|
 | Variabilidad entre unidades                         | Absorbida por efectos específicos             | Tratada como aleatoria               |
 | Efectos no observados                               | Correlacionados con las variables explicativa | No correlacionados con las variables |
 | Estimación de variables que no cambian en el tiempo | No posible                                    | Posible                              |
@@ -1951,7 +2446,7 @@ $$
 #Convertimos panel df 
 df_pdata <- pdata.frame(df_gapmind , index = c("country", "year"))
 #Estimación por FE 
-m_FE2 <- plm(lifeExp ~ log_PIBper , data = df_pdata  , model = "within")
+m_FE2 <- plm(lifeExp ~ log_PIBper , data = df_pdata  , model = "within",   effect = 'individual')
 #Estimación por RE
 m_RE <- plm(lifeExp ~ log_PIBper , data = df_pdata  , model = "random")
 
@@ -1967,11 +2462,11 @@ summary(m_RE)
 
 -   Idiosincrático: La varianza idiosincrática es 27.953 con una desviación estándar de 5.287, lo que indica que la variabilidad en los residuos que no puede explicarse por las variables independientes utilizadas es alta.
 
--   Individual: La varianza individual es 30.114 con una desviación estándar de 5.488, sugiere que la variabilidad entre países es importante y por tanto el PIB per capita no se asociade de forma uniforme con la esperanza de vida entre los distintos países.
+-   Individual: La varianza individual es 30.114 con una desviación estándar de 5.488, sugiere que la variabilidad entre países es importante y por tanto el PIB per capita no se asocia de de forma uniforme con la esperanza de vida entre los distintos países.
 
 -   Proporción: La proporción de la varianza idiosincrática es 48.1% y la varianza individual es 51.9%, lo que indica que la variabilidad entre individuos (países) y la variabilidad idiosincrática son aproximadamente iguales en su contribución al total de la varianza.
 
--   El valor de $\theta$ = 0.732 sugiere que una proporción considerable de la variabilidad en la esperanza de vida puede ser explicada por efectos no observables entre los países.
+-   El valor de $\theta$ = 0.732 sugiere que una proporción considerable de la variabilidad en la esperanza de vida puede ser explicada por efectos no observables individualea de los países. Factor de transformación. 
 
 #### Modelos Lineales con Datos Panel {.smaller}
 
