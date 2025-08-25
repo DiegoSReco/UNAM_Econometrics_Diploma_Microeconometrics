@@ -1,0 +1,523 @@
+---
+title: "Diplomado Econometría Modulo IV: Modelos de Datos de Panel Dinámico"
+subtitle: "Universidad Nacional Autónoma de México (UNAM)<br>Facultad de Economía"
+author: "Mtro. Diego Sánchez Rojas"
+editor: visual
+format:
+  revealjs:
+    center-subtitle-slide: false
+    slide-number: c/t
+    self-contained: true
+    slide-level: 4
+    incremental: true
+---
+
+#### Sección 3: Modelos Dinámicos de Datos Panel
+
+**3.1 Método de estimación VI y GMM**
+
+**3.2 Método Arellano y Bond**
+
+**3.3 Método Arellano y Boyer**
+
+**3.4 Aplicaciones**
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### ¿Por qué utilizamos los Modelos Dinámicos de Datos Panel?
+
+-   Recordemos que en los modelos de datos de panel estático suponemos que los errores idiosincráticos no están correlacionados a través de los períodos de tiempo.
+
+- Supuesto de exogeneidad estricta, y por tanto, no correlación serial.
+
+-   Cuando estos supuestos fallan provocando que los estimadores sean inconsistentes, que los regresores (variable explicativas) son endógenas o rezagos (lags) de la variable dependiente.
+
+-   Podremos utilizar valores de variables explicativas en otros períodos ($X_{t-1}$) como instrumentos válidos de las $X_t$.
+
+-   En los modelo dinámicos se toma en cuenta la dependecia temporal.
+
+-   Ejemplos: Nivel de empleo y salarios actuales probablemente dependan de sus niveles pasados
+
+-   Aplicaciones en economía como ecuaciones de consumo de los hogares, modelos de ajustes de costos para la demanda de factores de las empresas y modelos empíricos de crecimiento económico.
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Variables Instrumentales
+
+-   Consideremos el modelo de regresión: $y_i = \beta_0 + \beta_1x_i + u_i$
+
+-   Donde existe endogeneidad: $Cov(x_i, u_i) \neq 0$
+
+-   En el caso de modelos panel\
+    $$y_{it}= \textbf{x}_{it}\boldsymbol{\beta} + u_{it} ~~~t=1,2,...T$$
+
+-   Endogeneidad: $E(\textbf{x}_{it}'u_{it}) \neq 0$
+
+-   Correlación serial:
+
+    $E(u_{it}u_{is})\neq 0s~~~t,s=1,2,...t,s$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Variables Instrumentales
+
+-   Un instrumento válido $z$ debe cumplir dos condiciones:
+
+-   Relevancia: Correlación con variable endógena $$Cov(z_i, x_i) \neq 0$$
+
+-   Exogeneidad: No correlación con el error $$Cov(z_i,u_i) = 0$$
+
+-   Exclusión: El instrumento $z$ solo puede afectar a $y$ a través de su efecto en la variable endógena $x$
+
+#### Modelos Dínamicos de Datos Panel {.smaller}
+
+##### Recordando: Variables Instrumentales
+
+-   El estimador VI se obtiene en dos etapas: Primera Etapa: $$x_i = \pi_0 + \pi_1Z_i + \epsilon_i$$
+
+Segunda Etapa: $$y_i = \beta_0 + \beta_1\hat{x_i} + u_i$$
+
+Estimador VI en caso de un solo instrumento:
+
+$$\hat{\beta}_{VI} = (\mathbf{z}'\mathbf{x})^{-1}\mathbf{z}'\mathbf{y}$$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Utilizando el método de momentos (MM)
+
+-   Técnica que permite estimar parámetros solucionando las condiciones del momento muestral que corresponden al momento poblacional.
+
+-   Por ejemplo, queremos estimar la media poblacional ($\mu$) de una caráterística ($y$) que $iid$, utilizando el operador de expectativas:
+
+    $$ E[y -\mu] = 0 $$
+
+-   Vamos a remplazar el operador de expectativas para la población $E(.)$ por el operador para la muestra:
+
+$$ \frac{1}{N} \sum_{i=1}^{N} (y_i - \mu) = 0 $$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Utilizando el método de momentos (MM)
+
+-   Despejando para $\mu$:
+
+$$ \hat{\mu}_{\text{MM}} = N^{-1} \sum_i y_i = \bar{y} $$
+
+-   Tendremos que el estimador MM de la media poblacional es la media muestral.
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Utilizando el método de momentos (MM)
+
+-   Aplicando a la regresión lineal $y = \mathbf{x}\beta + u$, suponemos que $E[u|\mathbf{x}] = 0$ tendremos
+
+K (variables explicativas) condiciones de momentos no condicionales $E[\mathbf{x}u] = 0$.
+
+-   Operador de expectativas para la población:
+
+$$E[\mathbf{x}'(y - \mathbf{x}\beta)] = 0$$
+
+-   Reemplazamos por el operador muestral:
+
+$$\frac{1}{N} \sum_{i=1}^{N}\mathbf{x}_i'(y_i - \mathbf{x}_i\beta) = 0$$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Utilizando el método de momentos (MM)
+
+-   Despejando para $\beta$ tendremos :
+
+$$ \hat{\beta}_{\text{MM}} = (\sum_i \mathbf{x}_i'\mathbf{x}_i)^{-1} \sum_i \mathbf{x}_i'y_i$$
+
+-   Supuesto media condicional cero, es decir que los regresores (explicativas) son ortogonales al error.
+-   Estimador de MM será consistente.
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Utilizando el MM para VI
+
+-   Tendremos que alguna de las $\mathbf{x}$ son endógenas, es decir, algunos componentes de $\mathbf{x}$ están correlacionadas con los términos de error y por lo tanto el estimador es inconsistente.
+
+-   Suponemos que tenemos un vector de instrumentos y se satisface que $E[u|\mathbf{z}] = 0$, obtenemos las K condiciones de momentos no condicionales poblaciones :
+
+$$E[\mathbf{z}'(y - \mathbf{x}\beta)] = 0$$
+
+-   El estimador MM soluciona el respectivo momento muestral:
+
+$$\frac{1}{N} \sum_{i=1}^{N}\mathbf{z}_i'(y_i - \mathbf{x}_i\beta) = 0$$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Utilizando el MM para VI
+
+-   Despejando para $\beta$ y si $dim(\mathbf{z})= K$ :
+
+$$ \hat{\beta}_{\text{MM}} = ( \sum_{i}^{N} \mathbf{z}_i'\mathbf{x}_i)^{-1} \sum_{i} \mathbf{z}_i'y_i$$
+
+-   Obtenemos el estimador lineal IV, el cual es consistente.
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Método de Generalizado de Momentos (GMM)
+
+-   En GMM se utiliza cuando tendremos diferentes tipos de condiciones de momentos.
+
+-   En MM para el estimador linear VI suponemos que $E[u|\mathbf{z}] = 0$ por tanto teníamos condiciones de momentos no condicionales o momentos de ortogonalidad:
+
+$$ E[z_i(y_i - x_i'\beta)] = 0$$
+
+-   Pero para el supuesto de homocedasticidad $E[u^2|\mathbf{z}] =\sigma^2$ , tendremos condiciones de momento de orden superior:
+
+$$E[z_i(y_i - x_i'\beta)^2] = 0$$
+
+-   O cuando tenemos Datos Panel en donde los rezagos pueden ser instrumentos, tendremos condiciones specíficas para cada período, es decir un vector de r funciones de momentos:
+
+$$ E[z_{it}(y_{it} - x_{it}'\beta - \alpha_i)] = 0$$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Método de Generalizado de Momentos (GMM)
+
+-   El GMM se basa en $r$ condiciones de momentos poblacionales para q parámetros:
+
+$$ E[\mathbf{h}(\mathbf{w_i},\theta_{0})] = 0 $$
+
+Donde:
+
+-   $\theta$ vector de $q~~x~~1$ parámetros a estimar
+
+-   $\mathbf{h}(.)$ : vector de r funciones de momentos
+
+-   $\mathbf{w}$ : conjunto completo de observables. Incluye las variables $\mathbf{y}$, $\mathbf{x}$ y $\mathbf{z}$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Método de Generalizado de Momentos (GMM)
+
+-   Si r=q podremos aplicar el MM Condiciones de momentos muestrales.
+
+-   La igualdad a cero del momento poblacional se sustituye por la igualdad a cero del momento muestral correspondiente, y el estimador de MM $\mathbf{\hat{\theta}_{MM}}$ será definido para ser la solución:
+
+$$\frac{1}{N} \sum_{i=1}^N \mathbf{h}(\mathbf{w_i}, \mathbf{\hat{\theta}}) = 0$$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Método de Generalizado de Momentos (GMM)
+
+-   Para encontrar la solución tendremos que minimizar la función objetivo respecto a $\theta$:
+
+$$ Q_N(\theta) = \left[\frac{1}{N} \sum_{i=1}^N \text{h}(\mathbf{w_i}, \theta)\right]' \left[\frac{1}{N} \sum_{i=1}^N \text{h}(\mathbf{w_i}, \theta)\right] $$
+
+-   Por tanto, calcularemos la derivada pacial: $$ \frac{\partial Q_N(\theta)}{\partial \theta} = 0 $$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Método de Generalizado de Momentos (GMM)
+
+-   Para el caso de VI donde tenemos multiples instrumentos:
+
+$$ E[\mathbf{z}_i'(y_i - \mathbf{x}_i'\beta)] = 0 $$
+
+-   Cada instrumento generará una condición de momentos:
+
+$$
+\ H(.) = \begin{pmatrix}
+z_{1i}(y_i - x_i'\beta) \\
+z_{2i}(y_i - x_i'\beta) \\
+\vdots \\
+z_{ri}(y_i - x_i'\beta)
+\end{pmatrix}
+$$
+
+-   En este caso si $r=q$ decimos que el modelo está identificado exactamente y el MM podrá utilizarse:
+
+$$ \mathbf{\hat{\theta}_{\text{MM}}} = ( \sum_{i}^{N} \mathbf{z}_i'\mathbf{x}_i)^{-1} \sum_{i} \mathbf{z}_i'y_i$$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Método de Generalizado de Momentos (GMM)
+
+-   Ejemplo de la identificación exacta (r=q):
+
+    -   Tenemos dos variables endógenas (k=2)
+    -   Necesitaremos dos intrumentos (r=2)
+    -   y estimaremos dos parámetros (q=2)
+    -   $\therefore$ El sistema está identificado
+
+-   Implicaciones de la identificación exacta (r=q):
+
+    -   Solución única
+    -   El estimador MM podrá utilizarse y concidé con el estimador GMM
+    -   No permite pruebas de sobreidentificación
+    -   Estimador menos eficiente
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Método de Generalizado de Momentos (GMM)
+
+-   ¿Qué pasa cuando r\>q?
+
+-   Existen más instrumentos ($r_i$) que variables endógenas, tendremos por tanto más condiciones de momentos $h_{j}(.)$ que parámetros a estimar ($q_i$).
+
+-   Por tanto tenemos el modelo está sobreidentificado.
+
+-   No hay solución única para $\mathbf{\hat{\theta}}$.
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Recordando: Método de Generalizado de Momentos (GMM)
+
+-   En este caso el estimador \$\mathbf{\hat{\theta}_{GMM} } \$ con base en las condiciones de momentos es el que minimiza la función objetivo en su versión cuadrática:
+
+$$Q_N(\theta) = \left[\frac{1}{N} \sum_{i=1}^N \text{h}(\text{w}_{i}, \theta)\right]' \mathbf{W_{N}} \left[\frac{1}{N} \sum_{i=1}^N \text{h}(\text{w}_{i}, \theta)\right]$$
+
+Donde:
+
+-   $\mathbf{W_{N}}$ es una matriz de pesos de dimensión $r~x~r$, simétrica, definida positiva y no depende de $\theta$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel
+
+-   Regresamos a los **MODELOS de DATOS PANEL**
+
+-   Consideraciones:
+
+    -   Relajación o flexibilización del supuesto de exogeneidad estricta, por tanto tendremos modelos consistentes con variables endógenos o rezagos de la variable dependiente como regresores.
+
+    -   El uso de VI es una alternativa para resolver o manejar el problema de edogeneidad.
+
+    -   En datos panel es más sencillo aplicar VI porque podemos utilizar rezagos de las variables explicativas exógenas como instrumentos de las variables endógenas del período actual.
+
+    -   Adicionalmente, podemos utilizar los rezagos de la variable dependiente como instrumentos.
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel
+
+-   Modelo lineal de datos panel:
+
+$$  y_{it}= \textbf{x}_{it}'\boldsymbol{\beta} + u_{it}$$
+
+-   Notemos que no consideramos el efecto individual no observado $c_{i}$ por la relajación del supuesto de exogeneidad
+
+-   Suponemos que las observaciones son independientes entre individuos y tenemos $T$ períodos de tiempo fijos
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel
+
+-   Por notación, con todos lo períodos apilados tendremos el siguiente sistema de ecuaciones:
+
+$$  \mathbf{y_{i}} = \textbf{X}_{i}\boldsymbol{\beta} + \mathbf{u_{it}}$$
+
+Donde $\mathbf{y_{i}}$ y $\mathbf{u_{it}}$ son vectores de $1~x~T$ y $\textbf{X}_{i}$ es una matriz de $T~x~K$ :
+
+$$ \mathbf{y}_i = \begin{bmatrix} 
+y_{i1} \\
+\vdots \\
+y_{iT}
+\end{bmatrix}; \quad
+\mathbf{X}_i = \begin{bmatrix} 
+\mathbf{x}'_{i1} \\
+\vdots \\
+\mathbf{x}'_{iT}
+\end{bmatrix}; \quad
+\mathbf{u}_i = \begin{bmatrix} 
+u_{i1} \\
+\vdots \\
+u_{iT}
+\end{bmatrix}$$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel
+
+-   Dado que permitimos endogeneidad y la utilización de rezagos (lags) ($\textbf{x}_{it-1}$) exógenos de las variables endógenas tendremos una matriz $\textbf{Z}_{i}$ de dimesiones $T~~x~~r$
+
+-   Donde $r\geq K$ es el número de instrumentos que satisfacen las $r$ condiciones de momentos:
+
+$$E[\mathbf{Z}'\mathbf{u_{i}}] = \mathbf0$$
+
+-   Donde $$\mathbf{u_{i}} = \mathbf{y_i} - \textbf{X}\_{i}\beta$$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel
+
+-   Tendremos que encontrar el estimador GMM que minimiza la función objetivo en su forma cuadrática:
+
+$$Q_N(\beta) = [ \sum_{i=1}^N \mathbf{Z}'\mathbf{u_{i}} ]' \mathbf{W}_N [\sum_{i=1}^N \mathbf{Z}'\mathbf{u_i}]$$
+
+-   Donde:
+
+-   $\mathbf{W_{N}}$ es una matriz de pesos de dimensiones $r~x~r$, simétrica definida positiva y no depende de $\beta$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel
+
+-   Después de realizar malabares algebraicos encontramos el estimador **GMM para datos panel** o **PGMM**
+
+$$
+\hat{\beta}_{\text{PGMM}} = 
+\left[ \left( \sum_{i=1}^{N} \mathbf{X}_i' \mathbf{Z}_i \right)
+\mathbf{W}_N \left( \sum_{i=1}^{N} \mathbf{Z}_i' \mathbf{X}_i \right) \right]^{-1}
+\left( \sum_{i=1}^{N} \mathbf{X}_i' \mathbf{Z}_i \right)
+\mathbf{W}_N \left( \sum_{i=1}^{N} \mathbf{Z}_i' \mathbf{y_i}  \right).
+$$
+
+-   La condicional escencial para \*\*PGMM\* sea consistente es que la :
+
+$$E[\mathbf{Z}'\mathbf{u_{i}}] = \mathbf0$$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Consideraciones)
+
+-   ¿Qué pasa si todas las variables explicativas son exógenas?
+
+$$E[\mathbf{x}_{it}u_{i}] = 0$$
+
+-   En ese caso:
+
+$$\mathbf{Z_i} = [\mathbf{x}'_{i1},...\mathbf{x}'_{iT}] $$
+
+-   Por tanto:
+
+$$\mathbf{Z_i} =  \mathbf{X_i} $$
+
+-   El modelo estará identificado y estimador $\hat{\beta}_{\text{PGMM}}$ será un simple estimador \hat{\beta}\_{\text{POLS}}
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Consideraciones)
+
+-   Pero si asumimos que:
+
+    $$E[\mathbf{x}_{it-1}u_{i}] = 0$$
+
+-   Por tanto tendremos instrumentos disponibles para las ith y el modelo está **sobre identificado**.
+
+-   Por tanto obtendremos estimadores eficientes con el estomador PGMM
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Consideraciones)
+
+-   En un modelo econométrico, decimos que hay sobreidentificación si:
+
+    -   Existen más instrumentos disponibles que restricciones necesarias para identificar los parámetros del modelo.
+    -   En términos simples, tenemos más información de la necesaria para estimar los parámetros del modelo.
+
+-   La sobreidentificación implica un equilibrio entre tener suficientes instrumentos para corregir la **endogeneidad** y no tantos como para crear problemas de **varianza** o invalidación de los supuestos.
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
+
+-   "Estimación Eficiente con Datos de Panel Cuando los Instrumentos Están Predeterminados: Una Comparación Empírica de los Estimadores de Condición de Momento" por James P. Ziliak
+
+![](paperziliak.png)
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
+
+-   Relación salario y oferta laboral (horas de trabajo)
+
+<!-- -->
+
+-   El modelo estándar de la economía laboral sugiere que el efecto de un aumento salarial sobre la oferta de trabajo es ambiguo.
+
+-   **Efecto ingreso**: Un aumento en el salario puede llevar a una persona a trabajar menos horas, ya que ahora gana más y puede permitirse más tiempo libre.
+
+-   **Efecto sustitución**: Por otro lado, el mismo aumento salarial incentiva a trabajar más horas, ya que el costo de oportunidad del tiempo libre es mayor.
+
+Estos dos efectos son opuestos: el efecto ingreso tiende a reducir el trabajo, mientras que el efecto sustitución lo incrementa. El resultado final dependerá de cuál de estos efectos sea más fuerte.
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
+
+-   **Análisis de corte transversal**:
+
+    -   Los estudios de corte transversal (analizando datos de una sola observación por individuo) han encontrado una respuesta positiva, pero pequeña, de las horas trabajadas en respuesta a los salarios entre hombres adultos.
+
+    -   Sin embargo, esta relación podría no ser causal, sino más bien espuria. Es decir, podría deberse a variables no observadas que influyen tanto en las horas trabajadas como en los salarios. Por ejemplo, las personas con una mayor inclinación o preferencia por trabajar más horas podrían también buscar empleos mejor remunerados.
+
+-   **Análisis de datos de panel**:
+
+    -   Permite controlar estas características no observadas que son constantes en el tiempo para cada individuo.
+
+    -   El **"within estimator"** o estimador de efectos fijos compara las horas trabajadas y los salarios de un mismo individuo a lo largo del tiempo, eliminando así las características invariables del individuo (por ejemplo, su preferencia intrínseca por trabajar más).
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
+
+-   MaCurdy (1981) desarrolló este modelo basándose en un marco teórico de oferta laboral durante el ciclo de vida bajo incertidumbre:
+
+$$
+\text{lnhrs}_{it} = \alpha_i + \beta_1\text{lnwg}_{it} + \beta_2\text{kids}_{it} + \beta_3\text{age}_{it} + \beta_4\text{agesq}_{it} + \beta_5\text{disab}_{it} + u_{it}
+$$
+
+-   El concepto $\alpha$ es igual a $c_i$
+
+-   $\alpha_i$ es un multiplicador que representa la utilidad marginal de la riqueza inicial. Este multiplicador es constante en el tiempo (time-invariant). Pero varía entre individuos (differs across individuals)
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
+
+El desafío econométrico:
+
+-   Como $\alpha_i$ depende de variables y restricciones específicas de cada individuo. Como efecto fijo.
+
+-   Donde se tiene que cumplir el supuesto de **exogeneidad estricta**.
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
+
+-   El problema identificado por Ziliak (1997):
+
+    -Permite que logaritmo del salario esté correlacionado contemporáneamente con el termino de error -Esto puede ocurrir por dos razones:
+
+    -   
+
+        a)  Error de medición en los salarios (measurement error in wage)
+
+    -   
+
+        b)  Puntos de inflexión en la restricción presupuestaria
+
+-   La consecuencia:
+
+    -   El estimador de Mínimos Cuadrados Ordinarios (OLS) de la ecuación 22.22 es inconsistente
+
+-   Solucionar endogeneidad por método de variables instrumentales
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
+
+La solución propuesta: - Los instrumentos son rezagos (lags) de las variables regresoras - Supuesto clave: los salarios pasados no están correlacionados con el error actual
+
+Las condiciones:
+
+$$ E[\mathbf{lnwg}_{s}u_{i}] = 0 $$
+
+Donde:
+
+$$ s ≤ t-1$$
+
+-   Esto significa que se pueden usar como instrumentos los rezagos de dos o más períodos
+
+-   Implicación práctica: Se necesitan al menos tres períodos de datos originales para identificar $\beta$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
+
+-   Los instrumentos sonlnwg rezagado dos veces y kids, age, agesq y disab rezagado una y dos veces. Para el caso base hay 9 instrumentos y para los instrumentos apilados hay $8 × 9 = 72$
