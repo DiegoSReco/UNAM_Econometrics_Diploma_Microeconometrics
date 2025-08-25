@@ -3,6 +3,7 @@
 This repository contains comprehensive teaching materials for the Microeconometrics course, part of the Econometrics Diploma Program at the Universidad Nacional Autónoma de México (UNAM). The course focuses on advanced econometric methods specifically designed for microeconomic analysis.
 
 ## Core Topics
+
 - **Binary Choice Models**
 
 1. Logit and Probit models
@@ -14,10 +15,9 @@ This repository contains comprehensive teaching materials for the Microeconometr
 - **Panel Data Models**
 
 1. Pooled OLS 
-2. Fixed effects and random effects models
-3. Hausman test for model selection
-4. Dynamic panel data models
-5. Unbalanced panels and attrition
+2. Fixed Effects and Random Effects models
+3. TWFE and Difference-in-Differences
+5. Dynamic panel data models
 
 ### Students will master:
 
