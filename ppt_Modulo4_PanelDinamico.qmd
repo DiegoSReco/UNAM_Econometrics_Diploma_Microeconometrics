@@ -375,7 +375,7 @@ $$ \frac{\partial Q_N(\beta)}{\partial \beta} = -2\left[\frac{1}{N}  \mathbf{X}'
 
 $$\hat\beta_{GMM} = -2\left[  \mathbf{X}'\mathbf{Z}\mathbf{W_N}\mathbf{Z}'\mathbf{X}\right]^{-1}\mathbf{X}'\mathbf{Z}\mathbf{W_N}\mathbf{Z}'\mathbf{y} $$
 
-- **Estimador GMM en modelo lineal de variables instrumentales**
+- **Estimador GMM de modelo lineal de variables instrumentales**
 
 
 
@@ -400,7 +400,7 @@ Te permite darle más peso a instrumentos confiables y menos peso a los ruidosos
 
 #### Modelos Dínamicos de Datos Panel: GMM con datos Panel {.smaller}
 
-**Método de Generalizado de Momentos (GMM) con datos Panel**
+**Método Generalizado de Momentos (GMM) con datos Panel**
 
 -   Regresamos a los **MODELOS de DATOS PANEL**
 
@@ -510,7 +510,7 @@ $$\mathbf{Z_i} = [\mathbf{x}'_{i1},...\mathbf{x}'_{iT}] $$
 
 $$\mathbf{Z_i} =  \mathbf{X_i} $$
 
--   El modelo estará identificado y estimador $\hat{\beta}_{\text{PGMM}}$ será un simple estimador \hat{\beta}\_{\text{POLS}}
+-   El modelo estará identificado y estimador $\hat{\beta}_{\text{PGMM}}$ será un simple estimador $\hat{\beta}_{pols}$
 
 #### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -519,10 +519,12 @@ $$\mathbf{Z_i} =  \mathbf{X_i} $$
 -   Pero si asumimos que:
 
     $$E[\mathbf{x}_{it-1}u_{i}] = 0$$
+    
+- **Rezagos pueden servir como instrumentos válidos**.
 
 -   Por tanto tendremos instrumentos disponibles para las ith y el modelo está **sobre identificado**.
 
--   Por tanto obtendremos estimadores eficientes con el estomador PGMM
+-   Obtendremos estimadores eficientes con el estimador PGMM
 
 #### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -534,6 +536,42 @@ $$\mathbf{Z_i} =  \mathbf{X_i} $$
     -   En términos simples, tenemos más información de la necesaria para estimar los parámetros del modelo.
 
 -   La sobreidentificación implica un equilibrio entre tener suficientes instrumentos para corregir la **endogeneidad** y no tantos como para crear problemas de **varianza** o invalidación de los supuestos.
+
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+Ejemplo:
+
+- Supongamos una regresión simple con **un parámetro**:
+
+  $$y_i = x_i \beta + u_i$$
+
+- Tenemos **dos instrumentos**:
+
+$z_{1i}, z_{2i}$
+
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+- En población:
+  
+  $$E[z_{1i}(y_i - x_i \beta)] = 0$$
+  
+$$E[z_{2i}(y_i - x_i \beta)] = 0$$
+
+- Son **2 restricciones** $r=2$ para **1 parámetro** $q=1$
+
+-  El sistema está **sobreidentificado** $r > q$
+
+#### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+**Momentos Muestrales**
+
+$$g_N(\beta) = \frac{1}{N}\sum_{i=1}^N 
+  \begin{bmatrix}
+  z_{1i}(y_i - x_i\beta) \\
+  z_{2i}(y_i - x_i\beta)
+  \end{bmatrix}$$
 
 #### Modelos Dínamicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -548,8 +586,6 @@ $$\mathbf{Z_i} =  \mathbf{X_i} $$
 ##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
 
 -   Relación salario y oferta laboral (horas de trabajo)
-
-<!-- -->
 
 -   El modelo estándar de la economía laboral sugiere que el efecto de un aumento salarial sobre la oferta de trabajo es ambiguo.
 
@@ -605,7 +641,7 @@ El desafío econométrico:
 
 -   El problema identificado por Ziliak (1997):
 
-    -Permite que logaritmo del salario esté correlacionado contemporáneamente con el termino de error -Esto puede ocurrir por dos razones:
+    -Permite que logaritmo del salario esté correlacionado contemporáneamente con el termino de error. Esto puede ocurrir por dos razones:
 
     -   
 
@@ -625,7 +661,11 @@ El desafío econométrico:
 
 ##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
 
-La solución propuesta: - Los instrumentos son rezagos (lags) de las variables regresoras - Supuesto clave: los salarios pasados no están correlacionados con el error actual
+La solución propuesta: 
+
+- Los instrumentos son rezagos (lags) de las variables regresoras
+
+- Supuesto clave: los salarios pasados no están correlacionados con el error actual
 
 Las condiciones:
 
@@ -643,4 +683,4 @@ $$ s ≤ t-1$$
 
 ##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
 
--   Los instrumentos sonlnwg rezagado dos veces y kids, age, agesq y disab rezagado una y dos veces. Para el caso base hay 9 instrumentos y para los instrumentos apilados hay $8 × 9 = 72$
+-   Los instrumentos son lnwg rezagado dos veces y kids, age, agesq y disab rezagado una y dos veces. Para el caso base hay 9 instrumentos y para los instrumentos apilados hay $8 × 9 = 72$
