@@ -400,8 +400,6 @@ Te permite darle más peso a instrumentos confiables y menos peso a los ruidosos
 
 #### Modelos Dínamicos de Datos Panel: GMM con datos Panel {.smaller}
 
-**Método Generalizado de Momentos (GMM) con datos Panel**
-
 -   Regresamos a los **MODELOS de DATOS PANEL**
 
 -   Consideraciones:
