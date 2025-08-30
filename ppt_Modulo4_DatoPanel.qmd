@@ -2203,6 +2203,8 @@ Discusión: **¿Tratar como variable aleatoría o como un parámetro con el que 
 -   Por lo tanto:
 
 $$Cov(\mathbf{x_{it},c_i}) =0,~~~t = 1,2,...,T $$
+
+
 #### Modelos Lineales con Datos Panel Estáticos: Random Effects {.smaller}
 
 -   Tenemos un supuesto de media condicional más fuerte:
@@ -2211,8 +2213,7 @@ $$E(c_i |\mathbf{x_{i1}},...,\mathbf{x_{iT}}) = E(c_{i}) = 0$$
 
 -   En FE, cuando controlamos por el efecto fijo individual permitimos cierta correlación de $c_{i}$ con $x_{it}$. si no están correlacionados y tratamos de controlar el efecto individual obtendremos un estimador ineficiente.
 
-#### Modelos Lineales con Datos Panel: Random Effects (Estimación) {.smaller}
-
+#### Modelos Lineales con Datos Panel Estáticos: Random Effects {.smaller}
 
 ¿Cómo podemos estimar $\beta$ cuando pensemos que se cumple que $c_{i}$ y $x_{it}$ no estén correlacionadas?
 
@@ -2224,7 +2225,7 @@ $${v}_{it} =  {c}_{i} +  {u}_{it} $$
 
 $$Cov({v}_{it},v_{is})  =  \frac{\sigma_{c}^2}{\sigma_{c}^2 +\sigma_{u}^2 } $$
 
--   Un método que utilizamos para estimar modelos cuando existe autocorrelación serial es el de Mínimo Cuadrados Generalizados (GLS).
+-   Un método que utilizamos para estimar modelos cuando existe autocorrelación serial es el de **Mínimo Cuadrados Generalizados (GLS)**.
 
 #### Modelos Lineales con Datos Panel:  Random Effects (Estimación){.smaller}
 
@@ -2454,11 +2455,9 @@ summary(m_RE)
 
 ```
 
-#### Modelos Lineales con Datos Panel {.smaller}
+#### Modelos Lineales con Datos Panel:RE vs FE (Interpretación de Resultados) {.smaller}
 
-##### RE vs FE (Interpretación de Resultados)
-
--   Varianzas y Efectos:
+Varianzas y Efectos:
 
 -   Idiosincrático: La varianza idiosincrática es 27.953 con una desviación estándar de 5.287, lo que indica que la variabilidad en los residuos que no puede explicarse por las variables independientes utilizadas es alta.
 
@@ -2466,7 +2465,7 @@ summary(m_RE)
 
 -   Proporción: La proporción de la varianza idiosincrática es 48.1% y la varianza individual es 51.9%, lo que indica que la variabilidad entre individuos (países) y la variabilidad idiosincrática son aproximadamente iguales en su contribución al total de la varianza.
 
--   El valor de $\theta$ = 0.732 sugiere que una proporción considerable de la variabilidad en la esperanza de vida puede ser explicada por efectos no observables individualea de los países. Factor de transformación. 
+-   El valor de $\theta$ = 0.732 sugiere que una proporción considerable de la variabilidad en la esperanza de vida puede ser explicada por efectos no observables individualea de los países. **Factor de transformación**. 
 
 #### Modelos Lineales con Datos Panel {.smaller}
 
