@@ -1,12 +1,21 @@
 
-library(pacman)
-p_load( "tidyverse",   
-        "plm")
+-------------------------------------------------------------------------------
+###### Modelos Dinámicos de Datos Panel: Método de estimación VI y GMM ----
+-------------------------------------------------------------------------------
 
-### Data  (wagepan) ---
+### Paqueterías ---
+library(pacman)
+p_load( "tidyverse",    "plm")
+options(scipen = 999)
+#-------------------------------------------------------------------------------
+### Data  ----
+#-------------------------------------------------------------------------------
+  
+  
 file_path <- "C:/Users/Diego/OneDrive/Documentos/Diplomado Econometría UNAM/Data/MOM.dat"
 
 columnas <- c("lnhr", "lnwg", "kids", "ageh", "agesq", "disab", "id", "year")
+
 #log of annual hours worked, log of of hourly wage, number of children, age, quadratic age,
 # = 1 if bad health, id , year
 df_wage_hr <- read.table(file_path,  
@@ -20,64 +29,101 @@ head(df_wage_hr)
 p_load('vtable')
 st(df_wage_hr)  
 
-#¿Cuántos períodos tenemos (T)? ¿Cuantas observaciones transversales (N)? 
+#¿Cuántos períodos tenemos (T)? ¿Cuántas observaciones transversales (N)? 
 
 T <- df_wage_hr  |> 
-     summarise(number_year = n_distinct(year))
+                    summarise(number_year = n_distinct(year))
+
 print(T)
 
 N <- df_wage_hr  |>  
-  summarise(n_ids = n_distinct(id))
+                    summarise(n_ids = n_distinct(id))
 print(N)
-
+#--------------------------------------------------------------------------------
 #### POLS ---- 
-
+#--------------------------------------------------------------------------------
+  
+  
 data_wage_hr <- pdata.frame(df_wage_hr, index = c("id", "year"))
 
 pooled_plm_wage_hr <- plm(lnhr ~ lnwg + kids + ageh +  agesq + disab, 
                        data = data_wage_hr, model = "pooling")
 summary(pooled_plm_wage_hr)
 
+#Interpretación: 
+#Un aumento del 1% en el salario se asocia con un 0.082% más de horas trabajadas
+#Cada hijo adicional se asocia con un 0.8% más de horas trabajadas
+#Tener alguna discapacidad reduce 9.1% las horas  trabajadas 
 
-# Efectos Fijos (FE)----
+#### Efectos Fijos (FE) ----
+
 FE_plm_wage_hr <- plm(lnhr ~ lnwg + kids + ageh +  agesq + disab  , 
-                      data = data_wage_hr, model = "within")
-
+                      data = data_wage_hr, model = "within", effect = 'individual')
 summary(FE_plm_wage_hr)
 
-# Primera Diferencia FD ---
+
+
+#Interpretación 
+#Un aumento del 1% en el salario se asocia con 0.165% más de horas trabajadas, 
+#controlando por características individuales no observadas
+
+
+#prueba Haussman
+phtest(FE_plm_wage_hr, pooled_plm_wage_hr)
+
+#Usamos efectos fijos 
+
+
+#--------------------------------------------------------------------------------
+#### Primera Diferencia FD ----
+#--------------------------------------------------------------------------------
+  
+  
 # Creación de primer diferencias 
 
 p_load('dtplyr') #Instalo dtplyr para utilizar lazy_dt
 
 #Cada observación es (i,t) y dentro de i los datos están ordenados por t
-data_wage_hr <- df_wage_hr |> 
-                dtplyr::lazy_dt()|> 
-                arrange(id, year) |> 
-                mutate(Dlnhr = lnhr - lag(lnhr, 1),
-                       Dlnwg = lnwg - lag(lnwg, 1),
+data_wage_hr_n <- data_wage_hr |> 
+                  lazy_dt() |> 
+                  group_by(id) |> 
+                  arrange(year, .by_group = TRUE) |> 
+                  mutate(Dlnhr =  lnhr - lag(lnhr,1),
+                       Dlnwg = lnwg -  lag(lnwg, 1),
                        Dage = ageh  - lag(ageh, 1),
                        Dkids =  kids - lag(kids, 1),
                        Dagesq = agesq- lag(agesq, 1),
                        Ddisab = disab - lag(disab, 1)
                       ) |> 
-               as.data.frame()
-
+  ungroup() |>  
+  as_data_frame()
+               
+ View(data_wage_hr_n)
 #Data frame eliminando 1979
-data_wage_hr_f1979 <- data_wage_hr |>  
-                      filter(year > 1979)
+data_wage_hr_f1979 <- data_wage_hr_n |>  
+                      filter(year !=1979)
 
-# Modelo FD sin 1979 ----
-FD_wage_hr_sin1979 <- lm(Dlnhr ~ Dlnwg +  Dkids + Dage  + Dagesq + Ddisab  , 
+FD_wage_hr_sin1979 <- lm(Dlnhr ~ -1 +Dlnwg +  Dkids + Dage  + Dagesq + Ddisab  , 
                           data = data_wage_hr_f1979 )
 summary(FD_wage_hr_sin1979)
 
-# Modelo FD con 1979 ----
-FD_wage_hr <- lm(Dlnhr ~ Dlnwg +  Dkids + Dage  + Dagesq + Ddisab  , 
-                         data = data_wage_hr )
-summary(FD_wage_hr)
+#Interpretación
+#Un aumento promedio de 1% en el salario se asocia con un aumento de 0.11% 
+#en el cambio de un período a otro  de las horas trabajadas. 
 
 
+
+#No comparable con FE
+#Pocos períodos, cambios grandes en variables - FD           
+# Muchos períodos, cambios pequeños, o tendencias lineales - FE                                        
+# Maximizar eficiencia y se tienen datos balanceados   - FE                                  
+# Solo quieres  eliminar heterogeneidad individual constante y enfocarte en cambios -FD         
+  
+--------------------------------------------------------------------------------
+#### Método de estimación GMM ----
+--------------------------------------------------------------------------------
+  
+  
 # Formula de GMM: "Y(i,t) ~ X(i,t) | Z(i,t)"
 # Y : variable dependiente
 # X : variables endógenas;
@@ -89,12 +135,14 @@ summary(FD_wage_hr)
 
 # 1) Creación de intrumentos ----
 # Utilizar egresores exógenos rezagados uno y dos períodos  y el nivel del regresor endógeno se rezagó dos períodos
+
 ##### Transformación de variables para obtener  intrumentos: lags (rezagos) -----
 p_load('dtplyr')
 
-data_wage_hr <- data_wage_hr |>  
+data_wage_hr_n <- data_wage_hr_n |>  
                 lazy_dt() |> 
-                arrange(id, year) |> 
+                group_by(id) |> 
+                arrange(year, .by_group = TRUE) |> 
 
            mutate(
                  lnwg_lag2 = lag(lnwg,2) ,    # 1. lnwg rezagado dos periodos
@@ -114,16 +162,18 @@ data_wage_hr <- data_wage_hr |>
 #Exploramos resultados
 st(data_wage_hr)
 
+#--------------------------------------------------------------------------------
 # 2) Intrumentos apilados o en matriz Z Stacked -------
+#--------------------------------------------------------------------------------
+  
 # Crear las variables z1y1 a z9y8 para cada año
 for (i in 1:8) {
   
   year_var <- 1980 + i
   
-  data_wage_hr <- data_wage_hr |> 
+  data_wage_hr_n <- data_wage_hr_n |> 
                   mutate(
                   !!paste0("z1y", i) := if_else(year == year_var, ageh_lag1, 0),
-                  !!paste0("z2y", i) := if_else(year == year_var, agesq_lag1, 0),
                   !!paste0("z2y", i) := if_else(year == year_var, agesq_lag1, 0),
                   !!paste0("z3y", i) := if_else(year == year_var, kids_lag1, 0),
                   !!paste0("z4y", i) := if_else(year == year_var, disab_lag1, 0),
@@ -137,7 +187,7 @@ for (i in 1:8) {
 
 
 #Filtramos los períodos que tienen  1979 & 1980
-data_wage_hr_filter <- data_wage_hr  |>     
+data_wage_hr_filter <- data_wage_hr_n |>     
                        filter( !(year %in% c(1979,1980)))
 View(data_wage_hr_filter)
 #Condiciones de momentos 
@@ -165,12 +215,10 @@ Z_b <- c("kids_lag1", "ageh_lag1", "agesq_lag1", "disab_lag1",  #t-1
 #       [    ⋮            ⋮             ⋮             ⋮         ⋱        ⋮       ]
 #       [kids_lag1ₙ   ageh_lag1ₙ   agesq_lag1ₙ   disab_lag1ₙ   ...   lnwg_lag2ₙ  ]
 
-#Z[i,t] ---------
+#Z[i,t] 
 Z_stacked <- c(paste0("z", 1:9, "y1"), paste0("z", 1:9, "y2"), paste0("z", 1:9, "y3"),
                paste0("z", 1:9, "y4"), paste0("z", 1:9, "y5"), paste0("z", 1:9, "y6"),
-               paste0("z", 1:9, "y7"), paste0("z", 1:9, "y8")
-               
-                             )#Vars 
+               paste0("z", 1:9, "y7"), paste0("z", 1:9, "y8") )#Vars 
 # Z[i,t] = [Z₁   0    0    ...   0  ]
 # [0    Z₂   0    ...   0  ]
 # [0    0    Z₃   ...   0  ]
@@ -178,7 +226,7 @@ Z_stacked <- c(paste0("z", 1:9, "y1"), paste0("z", 1:9, "y2"), paste0("z", 1:9, 
 # [0    0    0    ...   Z₈ ]
 # 
 # Donde cada Zₜ es:
-#   [kids_lag1₁ₜ   ageh_lag1₁ₜ   ...   lnwg_lag2₁ₜ]
+# [kids_lag1₁ₜ   ageh_lag1₁ₜ   ...   lnwg_lag2₁ₜ]
 # [kids_lag1₂ₜ   ageh_lag1₂ₜ   ...   lnwg_lag2₂ₜ]
 # [     ⋮            ⋮         ⋱         ⋮      ]
 # [kids_lag1ₙₜ   ageh_lag1ₙₜ   ...   lnwg_lag2ₙₜ]
@@ -189,7 +237,8 @@ data_wage_hr_filter |>  select(all_of(Z_stacked))
 
 #View(data_wage_hr_filter)
 #Períodos perdidos 
-T_trans <- data_wage_hr_filter  |>  summarise(T_trans = n_distinct(year))
+T_trans <- data_wage_hr_filter  |>  
+           summarise(T_trans = n_distinct(year))
 print(T_trans - T)
 
 #Observaciones pérdidas
@@ -197,18 +246,23 @@ print(T_trans - T)
  print( n_perdidas)
  
  
- 
+ #--------------------------------------------------------------------------------
 #### OLS (FD)  -----
+ #--------------------------------------------------------------------------------
 formula <- as.formula(paste("Dlnhr ~ - 1 + ", paste(X, collapse = "+")))
  
- 
 #Estimamos modelo de FD por OLS (aquí como calculamos lags de t-2 tenemos un período menos)
-model_OLS  <- lm(formula, data = data_wage_hr_filter)
+model_OLS  <- lm(formula, data = data_wage_hr_n)
 summary(model_OLS)
+
+#Interpretación  
+#Un aumento del 1% en el salario de un período a otro se asocia 
+#con un aumento de 0.11%en horas trabajadas en ese mismo período
+# Buscamos respuestas temporales:
+#la respuesta temporal a los cambios de salario.
 
 #Errores robustos
 p_load('sandwich', 'lmtest') 
-
 # Calcular errores robustos
 robust_se <- vcovHC(model_OLS , type = "HC1")  
 sqrt(diag(robust_se))
@@ -220,8 +274,10 @@ table_comparison_stderr <- data.frame(
                             SE_Robust = sqrt(diag(robust_se))
                                      )
 
-table_comparison_stderr |> kable()
+--------------------------------------------------------------------------------
 ####  Variables Instrumentales: 2SLS ----
+--------------------------------------------------------------------------------
+  
 p_load('AER')
 
 #Formula 
@@ -229,7 +285,7 @@ iv_formula <- as.formula(paste("Dlnhr ~ - 1 +", paste(X, collapse = " + "), " |"
                                paste(Z_b, collapse = " + ")) )
 
 # Estimar el modelo 2SLS sin constante
-model_IV <- ivreg(iv_formula, data = data_wage_hr_filter)
+model_IV <- ivreg(iv_formula, data = data_wage_hr_n)
 
 
 summary(model_IV, diagnostics = TRUE)
@@ -246,40 +302,44 @@ table_comparison_stderr_VI <- data.frame(
   SE_Robust = sqrt(diag(robust_se_vi))
 )
 
-table_comparison_stderr_VI  |>  kable()
 
-#### Método de Momentos Generalizado (GMM) One Step (2SLS con instrumentos apilados) ----
-#Formula 
-iv_formula_stacked <- as.formula(paste("Dlnhr ~ - 1 +", paste(X, collapse = " + "), " |",
-                           paste(Z_stacked, collapse = " + ")) )
+#Interpretación  
+#Un aumento del 1% en el salario de un período a otro se asocia 
+#con un aumento de 0.12%en horas trabajadas en ese mismo período
 
-# Estimar el modelo 2SLS sin constante
-model_IV_stacked <- ivreg(iv_formula_stacked, data = data_wage_hr_filter,)
+#--------------------------------------------------------------------------------
+#Estimación por PGMM instrumentos apilados   ------
+#--------------------------------------------------------------------------------
+#utilizaremos pgmm() de plm 
 
-summary(model_IV_stacked, diagnostics = TRUE)
+mod_pgmm <- pgmm(lnhr ~ lag(lnwg, 1)+ kids + ageh + agesq + disab |
+                        lag(kids, 1:2) + lag(ageh, 1:2) + lag(agesq, 1:2) +
+                        lag(disab, 1:2) + lag(lnwg, 2:2) ,
+                        data = data_wage_hr,
+                        effect = "individual",
+                        model = "onestep", 
+                        transformation = "d")
 
+summary(mod_pgmm, diagnostics = TRUE)
 
-#Calcular errores robustos
-robust_se_vi_stk <- vcovHC(model_IV_stacked , type = "HC1")  
-
-coeftest(model_IV_stacked, vcov. = robust_se_vi_stk)
-
-### Table Robust Errors vs Normal
-table_comparison_std_VI_stk <- data.frame(
-  Coefficient = coef(model_IV_stacked),
-  SE_Normal = coef(summary(model_IV_stacked))[, "Std. Error"],
-  SE_Robust = sqrt(diag(robust_se_vi_stk))
+#Errores robustos
+robust_se_pgmm <- vcovHC(mod_pgmm , type = "HC1")  
+coeftest(mod_pgmm, vcov. = robust_se_pgmm)
+#Coeficiente y errores
+table_comparison_pgmmm <- data.frame(
+  Coefficient = coef(mod_pgmm),
+  SE_Normal = coef(summary(mod_pgmm))[, "Std. Error"],
+  SE_Robust = sqrt(diag(robust_se_pgmm ))
 )
 
-table_comparison_std_VI_stk  |>  kable()
+
 
 
 ###  Dlnwg  OLS, 2SLS caso base, 2SLS stacked -------
-table_models_comparison <- bind_rows(
-  table_comparison_stderr[1,]  |>  mutate(Modelo = "OLS"),
-  table_comparison_stderr_VI[1,] |>   mutate(Modelo = "2SLS caso base") ,
-  table_comparison_std_VI_stk[1,]  |>  mutate(Modelo = "2SLS stacked")
-) 
 
+table_model_comparison <- bind_rows(table_comparison_stderr[1,]  |>  mutate(Modelo = "Primera Diferencia"),
+                                      table_comparison_stderr_VI[1,] |> mutate(Modelo = "2SLS caso base") ,
+                                      table_comparison_pgmmm[1,]  |>  mutate(Modelo = "2SLS stacked")) 
 
+print(table_model_comparison)
 
