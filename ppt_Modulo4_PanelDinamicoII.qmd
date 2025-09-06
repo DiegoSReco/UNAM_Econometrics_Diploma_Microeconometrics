@@ -1,0 +1,340 @@
+---
+title: "Diplomado Econometría Modulo IV: Modelos de Datos de Panel Dinámico II"
+subtitle: "Universidad Nacional Autónoma de México (UNAM)<br>Facultad de Economía"
+author: "Mtro. Diego Sánchez Rojas"
+editor: visual
+format:
+  revealjs:
+    center-subtitle-slide: false
+    slide-number: c/t
+    self-contained: true
+    slide-level: 4
+    incremental: true
+---
+
+### Sección 3: Modelos Dinámicos de Datos Panel
+
+**3.2 Método Arellano y Bond**
+
+**3.3 Método Arellano y Boyer**
+
+**3.4 Aplicaciones**
+
+#### Modelos Dínamicos de Datos Panel (Especificación) {.smaller}
+
+-   ¿Qué pasa si en el modelo incluímos el rezago de la variable dependiente $y_{i,t-1}$ como regresor?
+
+-   El **modelo dinámico** lo podemos especificar como:
+
+$$ y_{i,t} = \gamma y_{i,t-1} + \mathbf{x}_{it}'\beta + \alpha_{i} + u_{it} $$
+
+$$ i=1,...,N,~~~t=1,...,T. $$
+
+#### Modelos Dínamicos de Datos Panel (Problema) {.smaller}
+
+-   Tenemos dos causas que llevan a la correlación en el tiempo (correlación serial):
+
+-   Por un lado se induce explícitamente la **correlación serial** al incluir $y_{i,t-1}$ como regresor de $y_{i}$
+
+-   Además, aunque $\alpha_{i}$ sea aleatorio la estimación de $\beta$ y $\gamma$ serán inconsistente debido a que $\alpha_{i}$ y $y_{i,t-1}$ estan correlacionados y por lo tanto:
+
+$$ Corr[y_{i,t-1}, \mathbf{v}_{it}] \neq 0$$
+
+Donde $\mathbf{v}_{it} = \alpha_{i} + u_{it}$
+
+-   El regresor $y_{i,t-1}$ esta correlacionado indirectamente con el error compuesto.
+
+#### Modelos Dínamicos de Datos Panel (Problema) {.smaller}
+
+##### Correlación en el tiempo
+
+-   Para explorar estas dos causas de correlación en el tiempo, por simplicidad $\mathbf{\beta}= 0$:
+
+$$ y_{i,t} = \gamma~ y_{i,t-1} + \alpha_{i} + u_{it} $$
+
+-   Para este modelo:
+
+$$ E[ y_{i,t} |  y_{i,t-1}, \alpha_{i}] = \gamma y_{i,t-1} + \alpha_{i}$$
+
+$$Corr[ y_{i,t} , y_{i,t-1}| \alpha_{i}] = \gamma$$
+
+-   Esto será válido si y sólo si $\alpha_{i}$ sea conocido
+
+#### Modelos Dínamicos de Datos Panel (Problema) {.smaller}
+
+##### Correlación en el tiempo
+
+-   Como $\alpha_{i}$ es el efecto fijo no observado (características individuales no observadas), tendremos que:
+
+$$ E[ y_{i,t} |  y_{i,t-1}] =  \gamma~y_{i,t-1} + E[\alpha_{i} | y_{i,t-1}]  $$
+
+$$ Corr[ y_{i,t} , y_{i,t-1}| \alpha_{i}] \neq \gamma $$
+
+#### Modelos Dínamicos de Datos Panel (Problema) {.smaller}
+
+##### Correlación en el tiempo
+
+-   Específicamente, la correlación de $y_{i,t}$ y $y_{i,t-1}$ será:
+
+$$ Corr[ y_{i,t} , y_{i,t-1}] = Corr[\gamma y_{i,t-1} + \alpha_{i} + u_{it}, y_{i,t-1}] $$
+
+$$=  \gamma + Corr[\alpha_{i} | y_{i,t-1}] + 0 $$
+
+-   Tendremos que $E[u_{it},y_{i,t-1}] = 0$
+
+-   Partiendo del caso específico de efectos aleatorios donde $\alpha_{i}~~iid~[0, \sigma_{\alpha}^2]$ y realizando malabares algebraícos:
+
+$$ Corr[ y_{i,t} , y_{i,t-1}] =  \gamma + \frac{(1- \gamma)}{1 + \frac{(1 - \gamma)\sigma_{u}^2}{(1+\gamma)\sigma_{\alpha}^2}}$$
+
+#### Modelos Dínamicos de Datos Panel (Problema) {.smaller}
+
+##### Dependencia del verdadero estado y Heterogeneidad no observada
+
+-   El resultado de $Corr[ y_{i,t} , y_{i,t-1}]$ muestra de forma los tipos de correlación.
+
+-   La **dependencia del verdadero estado** ocurre cuando la correlación en el tiempo esta definida por el **mecanismo causal** donde el valor pasado de la variable dependiente $y_{i,t-1}$ determina directamente el valor actual $y_{i,t}$. Es decir es un proceso autoregresivo AR(1):
+
+$$ y_{i,t} = \gamma~ y_{i,t-1} + \alpha_{i} + u_{it} $$
+
+-   Esto sucede cuando $\alpha_i \approx 0$ y por lo tanto $Corr[ y_{i,t} , y_{i,t-1}]\approx \gamma$
+
+-   Si $\gamma$ es cercana a 1 la variable dependiente rezagada es altamente persistente.
+
+-   Ejemplo: En un modelo de ingresos, los ingresos pasados influyen en los ingresos actuales, ya que los ingresos previos pueden relflejar habilidades acumualdas, redes o capital.
+
+#### Modelos Dínamicos de Datos Panel (Problema) {.smaller}
+
+##### Dependencia del verdadero estado y Heterogeneidad no observada
+
+-   Por otro lado, tenemos la correlación por la **heterogeneidad no observada** que representa las diferencias individuales que no podemos observar y son capturadas por $\alpha_{i}$.
+
+-   No hay mecanismo causal entre $y_{i,t-1}$ y $y_{i,t}$ y por tanto $\gamma = 0$
+
+-   La correlación:
+
+$$ Corr[ y_{i,t} , y_{i,t-1}] = \frac{\sigma_{\alpha}^2}{\sigma_{\alpha}^2+ \sigma_{u}^2}$$
+
+-   $\gamma$ es baja, pero estamos omitiendo variables $x_{it}$ lo que está llevando a tener un gran $\alpha_{i}$ en cada perído, por lo que tendremos estimaciones inconsistentes.
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bond
+
+-   Partiendo del modelo de primeras diferencias:
+
+$$ y_{i,t} - y_{i,t-1}  = \gamma (y_{i,t-1} - y_{i,t-2}) + (\mathbf{x}_{i,t} - \mathbf{x}_{i,t-1})'\mathbf{\beta} + (u_{it} - u_{i,t-1}) $$
+
+$t = 2,...,T$
+
+-   Estimación por **OLS** sería inconsistente porque $(y_{i,t-1} - y_{i,t-2})$ está correlacionada con $(u_{it} - u_{i,t-1})$ debido a la relación temporal del error.
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bond
+
+-   Anderson y Hsiao (1981) proponen el estimador de **variables instrumentales** donde $y_{i,t-2}$ es un **instrumentos válido** para $(y_{i,t-1} - y_{i,t-2})$ si y solo si $y_{i,t-2}$ no está correlacionado con $(u_{it} - u_{i,t-1})$
+
+-   Una estimación más eficiente sería utilizando rezagos adicionales de la variable dependiente. Por ejemplo $y_{i,t-2}$ y $y_{i,t-3}$ pueden ser usados como instrumentos, por tanto el modelo estará sobre identificado.
+
+-   Para garantizar la consistencia y eficiencia de las estimaciones de $\mathbf{\beta}$ en un modelo de datos panel dinámico, Holtz-Eakin et al. (1988) y Arellano y Bond (1991) proponen la estimación del modelo de panel dinámico por **2SLS o GMM**.
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bond
+
+-   El estimador panel GMM será conocido como el **estimador Arellano-Bond**:
+
+$$ \hat{\beta}_{\text{AB}} = \left[ \left( \sum_{i=1}^{N} \tilde{\mathbf{X}}_i' \mathbf{Z}_i \right) 
+\mathbf{W}_{N}  \left(  \sum_{i=1}^{N} \mathbf{Z}_{i}' \tilde{\mathbf{X}}_i' \right) \right]^{-1} \left(  \sum_{i=1}^{N} \tilde{\mathbf{X}}_i' \mathbf{Z}_i \right) \mathbf{W}_N \left(  \sum_{i=1}^{N} \mathbf{Z}_{i}' \tilde{\mathbf{y}}_{i} \right) $$
+
+Donde:
+
+-   $\tilde{\boldsymbol{X}}_{i}$ :es una matriz de dimensión (T-2) x (K+1) que contiene $(\Delta y_{i,t-1},\Delta \mathbf{x}_{i,t}' )$ donde $\Delta y_{i,t-1}=(y_{i,t-1} - y_{i,t-2})$ y $t = 3,...,T$
+
+-   $\tilde{\mathbf{y}}_{i}$:es un vector de dimensiones (T-2) x 1 que en cada fila contiene $\Delta y_{i,t}$
+
+-   $\mathbf{W}_N = [\mathbf{Z}_i'\mathbf{Z}_i]^{-1}$
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bond
+
+-   $\mathbf{Z}_{i}$ es una matriz de dimensiones (T-2) x r:
+
+-   Estructura apilada crea una matriz bloque-diagonal de dimensión: $$
+    \mathbf{Z}_{i} = \begin{bmatrix}
+    \mathbf{z}_{i3}' & \mathbf{0} & \cdots & \mathbf{0} \\
+    \mathbf{0} & \mathbf{z}_{i4}' & \cdots & \mathbf{0} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    \mathbf{0} & \mathbf{0} & \cdots & \mathbf{z}_{iT}'
+    \end{bmatrix}
+    $$
+
+-   Donde
+
+$$\mathbf{z}_{it} = [ y_{i,t-2}, y_{i,t-3},...,y_{i,1} , \Delta \mathbf{x}_{i,t}' ] $$
+
+-   Lo rezagos de $\mathbf{x}_{i,t}$ también pueden utilizarse como instrumentos, y con un T grande puede haber un número máximo de rezagos.
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bond (Condiciones de momentos)
+
+-   La condición de momentos que utiliza el estimador Arellano-Bond es :
+
+$$ E[y_{i,s}, \Delta v_{it}] = 0 $$
+
+-   Para $s \geq t-2$, donde $v_{it} = u_{it} + \alpha_{i}$
+
+-   $t=3,...,T;~~~ s = 1,...,t-2$
+
+-   Sin incluímos covariable $\mathbf{x}_{i,t}$ podemos derivar las condiciones de momento de forma similar:
+
+$$ E[x_{i,s},  v_{it}] = 0 ~~~ t=3,...,T;~~~ s = 1,...,t-2$$
+
+-   Asumimos que los rezagos en niveles no están correlacionados con las diferencias en los errores
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bond (Condiciones de momentos)
+
+$$
+\begin{pmatrix}
+E(y_{i,1} \delta v_{i,3}) \\
+E(y_{i,1} \delta v_{i,4}) \\
+E(y_{i,2} \delta v_{i,4}) \\
+E(y_{i,1} \delta v_{i,5}) \\
+\vdots \\
+E(y_{i,3} \delta v_{i,5}) \\
+\vdots \\
+E(y_{i,T-2} \delta v_{i,T}) \\
+\hdashline \\
+E(x_{i,1} \delta v_{i,3}) \\
+E(x_{i,2} \delta v_{i,3}) \\
+E(x_{i,1} \delta v_{i,4}) \\
+\vdots \\
+E(x_{i,3} \delta v_{i,4}) \\
+\vdots \\
+E(x_{i,T-1} \delta u_{i,T}) \\
+\end{pmatrix} = \mathbf{0}
+$$
+
+-   Matriz de condiciones de momentos ($\mathbf{M}$) de dimensión m x 1.
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bover
+
+-   El estimador **Arellano-Bover** agrega más condiciones de momentos:
+
+$$ E[ \Delta y_{i,t-s}, v_{it}] = 0$$
+
+-   Para $s \geq t-1$
+
+-   Asumimos que las diferencias rezagadas no estan correlacionadas con los errores en niveles.
+
+-   Por tanto, agrega la ecuación en niveles originales, instrumentando la variable dependiente rezagada con diferencias pasadas.
+
+    $$ y_{i,t} = \gamma y_{i,t-1} + \mathbf{x}_{it}'\beta + \alpha_{i} + u_{it} $$
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bover
+
+-   Tendremos el sistema GMM dado por la **ecuación en diferencias**:
+
+$$ \Delta  y_{i,t} =   \gamma \Delta  y_{i,t-1} +  \Delta  \mathbf{x}_{it}'\beta +  + \Delta  u_{it} $$
+
+-   **Intrumentos**: Los niveles rezagados de $y$ y $X$
+
+-   $y_{1,t-2}, y_{1,t-3},....$
+
+-   **Ecuación en niveles**:
+
+$$ y_{i,t} = \gamma y_{i,t-1} + \mathbf{x}_{it}'\beta + \alpha_{i} + u_{it} $$
+
+-   **Intrumentos**: Las dfierencias pasda de $\Delta y$ y $\Delta X$
+-   $\Delta y_{1,t-1}, \Delta y_{1,t-2},....$
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bover
+
+$$
+\mathbf{Z}_{i} = \begin{bmatrix}
+Instrumentos~~en~~ diferencias \\
+Instrumentos~~en~~niveles \\
+\end{bmatrix}
+$$
+
+Como ejemplo, consideremos que tenemos $T=3$, períodos necesarios:
+
+$$
+\mathbf{Z}_{i} = \begin{bmatrix}
+y_{i,1} & 0 & 0\\
+y_{i,2} & y_{i,1}  & 0\\
+y_{i,3} & y_{i,2} & y_{i,1}\\
+\Delta y_{i,2} & 0 & 0\\
+\Delta y_{i,3}  & \Delta y_{i,2}  & 0\\
+\end{bmatrix}
+$$
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bover (Consideraciones)
+
+-   
+
+    1.  **Eficiencia**
+
+    -   **Arellano-Bond**: Es menos eficiente, ya que utiliza solo un conjunto de condiciones de momento basadas en diferencias.
+
+    -   **Arellano-Bover**: Es más eficiente porque utiliza más condiciones de momento, combinando información en diferencias y niveles.
+
+-   
+
+    2.  **Supuestos**
+
+    -   **Arellano-Bond**: Supone exogeneidad estricta de los regresores.
+
+    $$
+    \text{Cov}(X_{it}, u_{i,t+s}) = 0 \quad \text{para todo } s \geq 0
+    $$
+
+    -   **Arellano-Bover**: Relaja este supuesto y permite algunos regresores endógenos.
+
+    $$
+    \text{Cov}(X_{it}, u_{i,t+s}) \neq 0 \quad \text{para algunos } s
+    $$
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bover (Ejemplo)
+
+-   Arellano & Bond (1991) analizan la ecuación de demanda de trabajo considerando una especificación dinámica:
+
+$$
+\begin{aligned}
+emp_{i,t} &= \gamma_1 emp_{i,t-1} + \gamma_2 emp_{i,t-2} + \beta_1 wage_{i,t} + \beta_2 wage_{i,t-1} \\
+&\quad + \beta_3 kap_{i,t} + \beta_4 kap_{i,t-1} + \beta_5 kap_{i,t-2} \\
+&\quad + \beta_6 output_{i,t} + \beta_7 output_{i,t-1} + \beta_8 output_{i,t-2} \\
+&\quad + \lambda_3 d_3 + \cdots + \lambda_T d_T + \alpha_i + u_{i,t} 
+\end{aligned}
+$$
+
+$i = 1, \cdots, n; \quad t = 3, \ldots, T$
+
+#### Modelos Dínamicos de Datos Panel (Estimación) {.smaller}
+
+##### Estimador Arellano-Bover (Ejemplo)
+
+-   Donde:
+
+    -   Tenemos $i$ empresas en el año $t$
+    -   $emp$: logarítmo de personas empleadas en cada $i$ y sus dos primeros rezagos
+    -   $wage$ : logarítmo natural del salario y su primer rezago
+    -   $kap$ :logarítmo natural del capital y sus dos primeros rezagos
+    -   $output$ : logarítmo natural del producto y sus dos primeros rezagos
+    -   $d_3, \cdots , d_T$ dummyr's por cada $t$
+
+-   El objetivo principal es encontrar estimadores consistentes y eficientes de $\gamma_1$ y $\gamma_2$
