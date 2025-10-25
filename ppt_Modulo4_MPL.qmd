@@ -72,7 +72,7 @@ $$p(y=1|x) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_k x_k$$ (m.1)
 
 #### Sección 1: Modelos de respuesta binaria {.smaller}
 
-Sea $p(x) = P(y = 1 \mid x)$ y asumiendo que $x_1$ no tiene relación con otra variable explicativa, el parámetro $\beta_j$ representa:
+Sea $p(x) = P(y = 1 \mid x)$ y asumiendo que $x_1$ no tiene relación con otra variable explicativa, el parámetro $\beta_j=\beta_1$ representa:
 
 $$
 \beta_1 = \frac{\partial P(y = 1 \mid x)}{\partial x_1}
@@ -80,7 +80,7 @@ $$
 
 -   $\beta_1$ será el cambio en la probabilidad de éxito dado el cambio en una unidad de $x_1$, manteniendo las demás constantes.
 
--   Si $x_1$ es una variable **binaria**, $\beta_1$ será **diferencia en la probabilidad** de éxito cuando:
+-   Si $x_1$ es una variable **binaria**, $\beta_1$ será ** la diferencia en la probabilidad** de éxito cuando:
 
     $x_j = 1 \quad \text{vs} \quad x_j = 0$
 
@@ -92,11 +92,10 @@ $$
 
 Podemos incluir funciones como $x_j^2$, $\log(x_j)$, etc lo cual **no cambia la interpretación general**:
 
--   Los $\beta_j$ miden el efecto de un cambio en $x_j$ (o en su transformación) **sobre la probabilidad condicional**.
+-   $\beta_j$ mide el efecto parcial sobre la **probabilidad predicha**, no sobre el valor esperado como en regresiones clásicas.
 
--   La clave es que cada $\beta_j$ mide el efecto parcial sobre la **probabilidad predicha**, no sobre el valor esperado como en regresiones clásicas.
 
-Por lo tanto, en el **MPL un cambio unitario en** $x_j$ implica un cambio en la $P(y = 1 \mid x)$ en la misma cantidad sin importar la transformación de $x_j$
+Por lo tanto, en el **MPL un cambio unitario en** $x_j$ implica un cambio en la $P(y = 1 \mid x)$.
 
 (Wooldridge, 2009)
 
@@ -112,7 +111,7 @@ $$
 
 -   Pero una **función lineal no está acotada**: puede tomar cualquier valor real
 
--   Como resultado, es común que el modelo haga predicciones de valores fuera del intervalo $[0, 1)$
+-   Como resultado, es común que el modelo haga predicciones de valores fuera del intervalo $[0, 1]$
 
 $$\frac{\partial P(y = 1 \mid \mathbf{x})}{\partial x_j} = \beta_j$$
 
@@ -122,13 +121,13 @@ $$\frac{\partial P(y = 1 \mid \mathbf{x})}{\partial x_j} = \beta_j$$
 
 ¿En qué contexto es funcional?
 
--   Efecto marginal lineal: La probabilidad no puede estar relacionada de forma lineal con las variables independientes para todos los valores posibles
+-   **Efecto marginal lineal**: La probabilidad no puede estar relacionada de forma lineal con las variables independientes para todos los valores posibles.
 
 -   MPL no representa exactamente cómo cambia la probabilidad de que ocurra un evento (por ejemplo, conseguir trabajo, aprobar un crédito), ya que la función que lo describe no puede ser lineal en todo el dominio de las variables independientes.
 
 -   Puede ser útil como una aproximación razonable en el rango de valores donde se encuentran la mayoría de las observaciones. (**Aproximación local**)
 
--   En la práctica aplicada, cuando los valores de los variables explicativas están moderadamente distribuidos (por ejemplo, entre 5 y 15 años de educación, o entre 20 y 60 años de edad), la relación lineal puede aproximar bien la verdadera probabilidad.
+-   En la práctica aplicada, cuando los valores de los variables explicativas están moderadamente distribuidos (por ejemplo, entre 5 y 15 años de educación, o entre 20 y 60 años de edad), la **relación lineal** puede aproximar bien a la verdadera probabilidad.
 
 #### Sección 1: Modelos de respuesta binaria (Ejemplo básico) {.smaller}
 
@@ -310,8 +309,8 @@ Donde:
 -   $inlf_i$: 1 si la mujer trabajó fuera del hogar (horas \> 0), 0 si no
 -   $age$: Edad de la mujer (en años)
 -   $exper$ y $exper^2$: Años de experiencia laboral potencial
--   $educ$ Años de educación completados
--   $nwifeinc_i$: Ingreso no generado por la esposa (en miles de dólares anuales)
+-   $educ$: Años de educación completados
+-   $nwifeinc_i$: Ingresodel hogar no generado por la esposa (en miles de dólares anuales)
 -   $kidslt6_i$: número de hijos menores de 6 años\
 -   $kidsge6_i$: número de hijos entre 6 y 18 años
 
@@ -511,16 +510,6 @@ t.test(nwifeinc ~ inlf_1, data = df_mroz, var.equal = TRUE)
 
 ```
 
-```{r}
-#| warning: false
-#| echo: true
-#| label: descriptivosniños
-
-#prueba T
-t.test(kidslt6 ~ inlf_1, data = df_mroz, var.equal = TRUE)  
-
-
-```
 
 #### Sección 1: Modelos de respuesta binaria (MPL) {.smaller}
 
@@ -538,6 +527,7 @@ summary(modelo_mpl)
 
 ```
 
+
 #### Sección 1: Modelos de respuesta binaria (Interpretación) {.smaller}
 
 -   Cada $\beta_j$ representa el **efecto marginal** de $x_j$ sobre la probabilidad de que $y = 1$.
@@ -545,7 +535,7 @@ summary(modelo_mpl)
 -   Si $\beta = 0.04$ se muliplica por 100 para decir que un aumento en una unidad de $x_i$ tendrá un efecto $0.04$ x $100$ pp
 
 | Variable   | Coef.   | Error Est. | Interpretación                                                                                                          |
-|------------|---------|------------|-------------------------------------------------------------------------------------------------------------------------|
+|---------|---------|---------|---------------------------------------------|
 | `exper`    | 0.039   | (0.006)    | Cada año adicional de experiencia laboral **aumenta la probabilidad** de trabajar en **3.9 puntos porcentuales**.       |
 | `exper^2`  | -0.0006 | (0.000)    | El efecto de la experiencia **disminuye con el tiempo**: rendimientos decrecientes.                                     |
 | `nwifeinc` | -0.0034 | (0.001)    | Cada 10 mil dólares extra del ingreso del esposo **reduce la probabilidad** de trabajar en **0.3 puntos porcentuales**. |
@@ -564,7 +554,7 @@ $$\frac{\partial P(inlf = 1)}{\partial exper} = \beta_1 + 2\beta_2 \cdot exper =
 
 Por tanto:
 
-$$exper = \frac{\ \beta_1}{2\beta_2} = \frac{0.039}{2(-0.001)} = 19.5 $$
+$$exper = \frac{\ \beta_1}{2\beta_2} = \frac{0.039}{2(0.001)} = 19.5 $$
 
 -   La probabilidad de participación crece con la experiencia hasta los 19.5 años, luego comienza a disminuir.
 
@@ -688,7 +678,7 @@ summary(modelo_mpl_bi)
 
 #### Sección 1: Modelos de respuesta binaria (Modelo índice) {.smaller}
 
--   Dado que el MPL lineal tiene la limitación de que la probabilidad de respuesta no siempre puede estar en 0 y 1 para todas las \$\mathbf x_i \$ utilizaremos el **modelo índice** representado como:
+-   Dado que el MPL lineal tiene la limitación de que la probabilidad de respuesta no siempre puede estar en 0 y 1 para todas las $\mathbf{x_i}$ utilizaremos el **modelo índice** representado como:
 
 $$P(y = 1 \mid \mathbf{x}) = G(\mathbf{x}\boldsymbol{\beta}) \equiv p(\mathbf{x}) ~~~~(m.índice)$$
 
@@ -716,7 +706,8 @@ $$
 
 -   $y^*$ será una variable latente que representa la utilidad neta, deseo, propensión o decisión interna.
 
--   $e$ es **continuamente distribuido**, independiente de $\mathbf{x}$ y tiene **distribución simétrica respecto a 0**
+-   $e$ error es **continuamente distribuido**, independiente de $\mathbf{x}$ y tiene **distribución simétrica respecto a 0** 
+
 
 #### Sección 1: Modelos de respuesta binaria (Modelo índice) {.smaller}
 
@@ -782,7 +773,7 @@ $$\mathbb{P}(y_i = 0 \mid \mathbf{x}_i) = 1 - \Phi(\mathbf{x}_i \boldsymbol{\bet
 
 -   y dada la función de probabilidad de $y_i$ dado $\mathbf{x}_i$ podemos escribirla como:
 
-$$ f(y|\mathbf{x}_i;\boldsymbol{\beta}) =  \left[\Phi(\mathbf{x}_i \boldsymbol{\beta})\right]^{y_i} \left[1 - \Phi(\mathbf{x}_i \boldsymbol{\beta})\right]^{1 - y_i}$$
+$$ f(y|\mathbf{x}_i;\boldsymbol{\beta}) =  \left[\underbrace{\Phi(\mathbf{x}_i \boldsymbol{\beta}}_{P(y_i=1|x_i)})\right]^{y_i} \left[\underbrace{1 - \Phi(\mathbf{x}_i \boldsymbol{\beta})}_{P(y_i=0|x_i)} \right]^{1 - y_i}$$
 
 #### Sección 1: Modelos de respuesta binaria (Probit:Estimación) {.smaller}
 
@@ -792,9 +783,9 @@ $$L(\boldsymbol{\beta}) = \prod_{i=1}^N \left[\Phi(\mathbf{x}_i \boldsymbol{\bet
 
 -   Producto de probabilidades
 
--   La verosimilitud es una función que mide qué tan probable es observar los datos que tenemos, dados ciertos valores de los parámetros del modelo.
+-   La **verosimilitud** es una función que mide qué tan probable es observar la muestra de datos que tenemos, dadas ciertas variables explicativas.
 
--   El objetivo de *CMLE* es encontrar los parámetros del modelo que hacen más probable (verosímil) haber observado los datos que tenemos.
+-   El objetivo de *CMLE* es encontrar los parámetros $\beta$ del modelo que hacen más probable (verosímil) haber observado los datos que tenemos.
 
 #### Sección 1: Modelos de respuesta binaria (Probit:Estimación) {.smaller}
 
@@ -821,7 +812,7 @@ $$\hat{\boldsymbol{\beta}} = \arg \max_{\boldsymbol{\beta}} \ell(\boldsymbol{\be
 -   Resuelven la **condición de primer orden**:
 
 | Método         | Usa Hessiana exacta | Usa gradiente | Aprox. Hessiana   | Estable y eficiente          |
-|----------------|---------------------|---------------|-------------------|------------------------------|
+|--------------|--------------|--------------|--------------|-----------------|
 | Newton-Raphson | ✅ Sí               | ✅ Sí         | ❌ No             | ⚠️ Solo si Hessiana es fácil |
 | BFGS           | ❌ No               | ✅ Sí         | ✅ Sí             | ✅ Muy usado                 |
 | Fisher Scoring | ❌ Usa esperanza    | ✅ Sí         | ✅ Sí (esperanza) | ✅ Muy usado en GLM          |
@@ -1034,7 +1025,7 @@ summary(efectos_marginales)
 -   Interpretaciones efectos marginales del modelo probit
 
 | Variable   | AME     | Interpretación                                                                                                                          |
-|------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------|
+|----------|----------|----------------------------------------------------|
 | `age`      | -0.0159 | Un año más de edad **reduce** la probabilidad de trabajar en **1.59 puntos porcentuales**, en promedio.                                 |
 | `educ`     | 0.0394  | Un año adicional de educación **aumenta** la probabilidad de trabajar en **3.94 puntos porcentuales**.                                  |
 | `exper`    | 0.0256  | Un año adicional de experiencia laboral **aumenta** la probabilidad de trabajar en **2.56 puntos porcentuales**.                        |
@@ -1141,7 +1132,7 @@ $$\text{Cambio % en odds} = \left( e^{\beta} - 1 \right) \times 100$$
 -   Coeficientes del modelo logit:
 
 | Variable   | ( \hat{\beta} ) | Odds Ratio ( e\^{\hat{\beta}} ) | Interpretación                                       |
-|------------|----------------:|--------------------------------:|------------------------------------------------------|
+|--------------|-------------:|---------------:|----------------------------|
 | Intercepto |           0.425 |                            1.53 | Valor base de los log-odds (no interpretable solo)   |
 | age        |          -0.088 |                           0.916 | ↑ Edad → odds de trabajar ↓ 8.4%                     |
 | educ       |           0.221 |                           1.247 | ↑ 1 año educación → odds de trabajar ↑ 24.7%         |
@@ -1265,7 +1256,7 @@ ggplot(data, aes(x = x)) +
 **¿Cuál modelo elegir para variable binaria?**
 
 | Criterio                           | MPL                                 | Logit                              | Probit                                        |
-|------------------------------------|-------------------------------------|------------------------------------|-----------------------------------------------|
+|-----------------|-----------------|-----------------|---------------------|
 | **Facilidad de estimación**        | ✅ Muy fácil (OLS)                  | ⚠️ Requiere MLE                    | ⚠️ Requiere MLE                               |
 | **Probabilidades válidas \[0,1\]** | ❌ Puede salirse de rango           | ✅ Siempre en \[0,1\]              | ✅ Siempre en \[0,1\]                         |
 | **Interpretación directa**         | ✅ Coef. son cambios en prob.       | ⚠️ Coef. en log-odds               | ⚠️ Coef. en unidad normal                     |

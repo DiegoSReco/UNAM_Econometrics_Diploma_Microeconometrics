@@ -18,7 +18,7 @@ format:
 -   Evaluación del Curso
 
 | Componente                  | Descripción                                                         | Porcentaje |
-|-----------------------------|---------------------------------------------------------------------|------------|
+|----------------|-----------------------------------------|---------------|
 | Práctica Aplicada 1         | Análisis con frameworks de microeconometría y métodos econométricos | 30%        |
 | Práctica Teórica Aplicada 2 | Análisis con frameworks de microeconometría y métodos econométricos | 30%        |
 | Quiz                        | Evaluaciones breves de conceptos clave                              | 30%        |
@@ -43,7 +43,7 @@ format:
 
 1.  ¿Qué es la microeconometría?
 
--   Subrama de la econometría que utiliza **datos** de unidades o agentes económicos como individuos, familias, empresas o territorios (municipios, estados o regiones) y métodos de regresión sofisticados para analizar el comportamiento (relaciones, interacciones) de ciertas variables de interés (Cameron y Trivedi, 2005; Wooldridge 2002, Hausman, 2001; Owen 2019).
+-   Subrama de la econometría que utiliza **datos** de unidades o agentes económicos como individuos, familias, empresas o territorios (municipios, estados o regiones) y métodos de regresión avanzados para analizar el comportamiento (relaciones, interacciones) de ciertas variables de interés (Cameron y Trivedi, 2005; Wooldridge 2002, Hausman, 2001; Owen 2019).
 
 -   En enfoques recientes el objetivo principal de la microeconometría es comprender **relaciones causales**: determinar si un cambio en una variable causa un cambio en otra, en lugar de simplemente observar una asociación.
 
@@ -53,7 +53,7 @@ format:
 
 -   ¿Cuál es efecto de un aumento en el salario mínimo en el nivel de empleo (o en los precios)? (o probabilidad de estar ocupado)
 -   ¿Qué impacto tiene la prohibición del outsourcing en la razón del producto marginal del trabajo con respecto al salario ?
--   ¿Cuál es el efecto de reducir el tamaño de clase en el aprovechamiento escolar?
+-   ¿Cuál es el impacto de reducir el tamaño de clase en el aprovechamiento escolar?
 -   ¿Cuál es el efecto de los programas de becas sobre la deserción?
 -   ¿Cuál es el efecto de la actividad física constante sobre la productividad laboral?
 -   ¿Cuál es el efecto de la inversión pública en el crecimiento económico local?
@@ -63,15 +63,19 @@ format:
 
 #### Sección 1: Microeconometría (Inferencia Causal: Framework Resultado potencial) {.smaller}
 
--   Pregunta base: ¿Cuál es el efecto causal de un tratamiento/intervención ($T$) en la variable objetivo $Y$?
+**Pregunta base: ¿Cuál es el efecto causal de un tratamiento/intervención ($T$) en la variable objetivo $Y$?**
 
--   Ejemplo: ¿Cuál es el efecto de doblar el salario mínimo sobre la tasa de desempleo?
+
+-   Ejemplo: ¿Cuál es el efecto de aumentar en 100% el salario mínimo sobre la tasa de desempleo?
+
+
+#### Sección 1: Microeconometría (Inferencia Causal: Framework Resultado potencial) {.smaller}
 
 **Definiendo el problema**
 
 -   Unidad de análisis: Municipios ($i$)
 -   Tratamiento ($T$): Ley de salario mínimo (más alto en otra región) ($T_i = 1$) vs bajo ($T_i = 0$)
--   Outcome ($Y$): Tasa de desempleo 0 Nivel de empleo
+-   Outcome ($Y$): Tasa de desempleo o Nivel de empleo
 
 $$
 \text{resultado potencial} = \begin{cases}
@@ -107,12 +111,12 @@ $$
 -   El promedio de los municipios con un salario mínimo más alto y más bajo. (**Cross-sectional**)
 
 $$
-\underbrace{E[Y_i \mid T_i = 1] - E[Y_i \mid T_i = 0]}_{\text{Differencia promedio observada}}
+\underbrace{E[Y_i \mid T_i = 1] - E[Y_i \mid T_i = 0]}_{\text{Diferencia promedio observada(DPO)}}
 $$
 
--¿Esta diferencia promedio observada refleja el **efecto casual**?
+-   ¿Esta diferencia promedio observada refleja el **efecto casual**?
 
-La diferencia observada en el resultado promedio entre un grupo tratado y uno no tratado, no necesariamente refleja un **efecto causal** debido a que los grupos pueden diferir por razones distintas al tratamiento (como nivel socioeconómico, educación, inversión, etc.).
+-   La diferencia observada en el resultado promedio entre un grupo tratado y uno no tratado, no necesariamente refleja un **efecto causal** debido a que los grupos pueden diferir por razones distintas al tratamiento (como nivel socioeconómico, educación,inversión, etc.)
 
 #### Sección 1: Microeconometría (Inferencia Causal: Problema fundamental) {.smaller}
 
@@ -120,10 +124,12 @@ La diferencia observada en el resultado promedio entre un grupo tratado y uno no
 
 -   Desglosemos la DPO:
 
+
 $$
 E[Y_i \mid T_i = 1] - E[Y_i \mid T_i = 0] = 
 \underbrace{E[Y_{1i} \mid T_i = 1] - E[Y_{0i} \mid T_i = 1]}_{\text{Efecto causal promedio en tratados (ATT)}}
-+ $$ $$
++ $$ 
+$$
 \underbrace{E[Y_{0i} \mid T_i = 1] - E[Y_{0i} \mid T_i = 0]}_{\text{Sesgo de selección}}
 $$
 
@@ -131,7 +137,10 @@ $$
 
 1.  **Efecto causal promedio en tratados (ATT)**
 
--   Captura el efecto causal: ¿Cuánto cambian en promedio los resultados para quienes recibieron el tratamiento, comparando el resultado observado $E[Y_{1i}|T_i=1]$ con el que habrían tenido sin tratamiento $E[Y_{0i}|T_i=1]$ (Contrafactual) ?
+
+-   Captura el efecto causal: 
+
+¿Cuánto cambian en promedio los resultados para quienes recibieron el tratamiento,  comparando el resultado observado $E[Y_{1i}|T_i=1]$ con el que habrían tenido sin   tratamiento $E[Y_{0i}|T_i=1]$  ?
 
 2.  **Sesgo de selección**
 
@@ -217,7 +226,7 @@ Ejemplos:
 
 #### Sección 1: Microeconometría (Regresión lineal y casualidad ) {.smaller}
 
-Partimos de un análisis de regresión y datos observacionales:
+Partimos de un análisis de regresión y datos observados:
 
 $$Y_i = E[Y \mid T_i, \mathbf{x}_i] + \varepsilon_i$$ Donde
 
@@ -241,15 +250,71 @@ $${Y_{0i}, Y_{1i}} \perp T_i | \mathbf{x}_i$$
 
 -   Las covariables que deben mantenerse fijas se asumen como **conocidas y observadas**
 
-> **Intuición**: Una vez que controlamos por $\mathbf{x}_i$, recibir tratamiento es "como si fuera" aleatorio.
+> **Intuición**: Una vez que se ajusta por $\mathbf{x}_i$, el tratamiento es independiente del resultado potencial, replicando la condición de un experimento aleatorio (donde $T_i \perp Y_{0i}, Y_{1i}$ sin necesidad de $\mathbf{x}_i$).
+
+
+#### Sección 1: Microeconometría (Independencia condicional| Diagramas Causales) {.smaller}
+
+**¿Cómo se vería en Diagramas Causales/Diagramas Acíclicos Dirigidos (DAGs)?**
+
+Efecto Causal de Interés: 
+
+$$T_i⟶Y $$
+Como estamos trabajando con datos observados podemos tener una **variable confundidora (confounder) no observada**:  
+
+$$T_i \leftarrow U\rightarrow Y_i $$
+
+**Camino Espurio o de Confusión**
+
+$\therefore$ El **S.1** se violaría
+
+#### Sección 1: Microeconometría (Independencia condicional| Diagramas Causales) {.smaller}
+
+- ¿Cómo bloquear ese camino espurio?
+
+**Mecanismo**: Al condicionar sobre $\mathbf{x}_i$ (ajustar la estimación por estas variables) en donde $x_i$ será el conjunto de **variables confusoras observables**, el camino espurio se cierra.
+
+$$T_i \leftarrow x_i\rightarrow Y_i $$
+$$\therefore$$
+- Sólo tendremos el camino causal directo $T_i\rightarrow Y_i$.
+
+- El supuesto **S.1** se cumplirá y se logra la **identificación casual**.
+
+#### Sección 1: Microeconometría ( Diagramas Causales) {.smaller}
+
+**Definición**
+
+Un **diagrama causal/DAG** es una representación visual y matemática de las relaciones causales entre variables.
+
+- **Dirigido**: las flechas indican la dirección de la influencia causal (de la causa al efecto).
+
+- **Acíclico**: no existen bucles cerrados; es decir, una variable no puede causarse a sí misma directa o indirectamente.
+
+- **Grafo**: está formado por nodos (variables) y aristas dirigidas (relaciones causales).
+
+```{mermaid}
+graph LR
+  X((X_i)) --> T((T_i))
+  X --> Y((Y_i))
+  T --> Y
+  style X fill:#D6EAF8,stroke:#1F618D,stroke-width:2px
+  style T fill:#FCF3CF,stroke:#B7950B,stroke-width:2px
+  style Y fill:#FADBD8,stroke:#922B21,stroke-width:2px
+
+```
+
+
+
+ *Learning Microeconometrics in R*, Section 3.2.1 “Confounded Model DAG”.
 
 #### Sección 1: Microeconometría (Forma funcional ) {.smaller}
 
-Al asumir una forma funcional paramétrica lineal:
+Asumimos una forma funcional paramétrica lineal:
 
 $$Y_i = \alpha + \beta T_i +  \mathbf{x}_i'\gamma + \varepsilon_i$$
 
 Donde:
+- $T_yi$ variable de tratamiento
 
 -   $\beta_1$ representa el **efecto causal del tratamiento**, bajo el supuesto de independencia condicional.
 -   $\mathbf{x}_i$ variables de control
@@ -263,7 +328,7 @@ $$
 \text{Cov}([T, \mathbf{x}], \varepsilon) = 0 \quad \Leftrightarrow E[\varepsilon \mid T,\mathbf{x}] = 0
 $$
 
--   El error no está correlacionado con el tratamiento ni con las covariables.
+-   El error no está correlacionado con la **variable de tratamiento* ni con las covariables (confundidores observables).
 
 -   Este es el supuesto crucial para la **consistencia** de los estimadores OLS.
 
@@ -279,7 +344,7 @@ $$
 
 -   Es clave para la **validez de inferencias estadísticas**
 
-#### Sección 1: Microeconometría ( Objetivo)
+#### Sección 1: Microeconometría ( Objetivo) {.smaller}
 
 El objetivo es obtener una **estimación insesgada y consistente** del efecto causal del tratamiento $T_i$ sobre el resultado $Y_i$, controlando por $\mathbf{x}_i$:
 
@@ -289,7 +354,7 @@ $$
 
 -   Donde $X$ incluye una constante, la variable de tratamiento $T_i$, y otras covariables observadas.
 
-#### Sección 1: Microeconometría ( Objetivo)
+#### Sección 1: Microeconometría ( Objetivo) {.smaller}
 
 -   Por medio del estimador OLS se define como: $$
     \hat{\beta}_{OLS} = (X'X)^{-1}X'Y
@@ -308,7 +373,7 @@ $$
 
 (Angrist y Pischke, 2009; Owen, 2019; Adams, 2021)
 
-#### Sección 1: Microeconometría (Problema de Endogeneidad)
+#### Sección 1: Microeconometría (Problema de Endogeneidad) {.smaller}
 
 -   ¿Qué pasa si se viola este supuesto?
 
