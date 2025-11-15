@@ -6,9 +6,9 @@ This repository contains comprehensive teaching materials for the Microeconometr
 
 - **Binary Choice Models**
 
-1. Logit and Probit models
-2. Maximum likelihood estimation
-3. Model specification and diagnostics
+1. Linear Probability Model
+2. Logit and Probit models
+3. Maximum likelihood estimation
 4. Marginal effects and prediction
 5. Goodness of fit measures
 
@@ -21,7 +21,7 @@ This repository contains comprehensive teaching materials for the Microeconometr
 
 ### Students will master:
 
-- Advanced econometric techniques for cross-sectional and panel data
-- Statistical software implementation (R/Python)
+- Advanced Econometrics Techniques for Cross-sectional and Panel Data
+- Statistical software implementation (R)
 - Economic interpretation of results
-- Model selection and specification testing
+- Validation tests
