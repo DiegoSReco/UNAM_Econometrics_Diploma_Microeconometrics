@@ -17,7 +17,8 @@ This repository contains comprehensive teaching materials for the Microeconometr
 1. Pooled OLS 
 2. Fixed Effects and Random Effects models
 3. TWFE and Difference-in-Differences
-5. Dynamic panel data models
+4. General Method of Moments Estimator for Panel Data.
+5. Arellano-Bond and Arellano-Bover estimators.
 
 ### Students will master:
 
