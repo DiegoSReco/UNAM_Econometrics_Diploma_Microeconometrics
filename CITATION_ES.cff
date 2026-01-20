@@ -1,0 +1,74 @@
+cff-version: 1.2.0
+message: "Si utiliza estos materiales, por favor cítelos como se indica a continuación."
+type: dataset
+title: "Diplomado de Economía UNAM - Módulo 4: Modelos Binarios y Datos Panel"
+version: 1.0.0
+date-released: 2025-01-19
+abstract: >
+  Materiales de enseñanza para microeconometría avanzada que cubren modelos de 
+  respuesta binaria, variables dependientes limitadas y métodos de datos panel. 
+  Incluye presentaciones en Quarto y código R para aplicaciones empíricas en 
+  economía laboral e inferencia causal.
+authors:
+  - family-names: "Reco"
+    given-names: "Diego S."
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # Reemplazar con ORCID real
+    affiliation: "Universidad Nacional Autónoma de México (UNAM)"
+keywords:
+  - econometría
+  - microeconometría
+  - datos panel
+  - modelos binarios
+  - GMM
+  - Arellano-Bond
+  - diferencias en diferencias
+  - programación R
+  - materiales de enseñanza
+license: CC-BY-NC-SA-4.0
+repository-code: "https://github.com/DiegoSReco/UNAM_Econometrics_Diploma_Microeconometrics"
+references:
+  - type: book
+    authors:
+      - family-names: "Wooldridge"
+        given-names: "Jeffrey M."
+    title: "Econometric Analysis of Cross Section and Panel Data"
+    year: 2010
+    edition: "2nd"
+    publisher:
+      name: "MIT Press"
+  - type: book
+    authors:
+      - family-names: "Cameron"
+        given-names: "A. Colin"
+      - family-names: "Trivedi"
+        given-names: "Pravin K."
+    title: "Microeconometrics: Methods and Applications"
+    year: 2005
+    publisher:
+      name: "Cambridge University Press"
+  - type: article
+    authors:
+      - family-names: "Arellano"
+        given-names: "Manuel"
+      - family-names: "Bond"
+        given-names: "Stephen"
+    title: "Some tests of specification for panel data: Monte Carlo evidence and an application to employment equations"
+    journal: "Review of Economic Studies"
+    year: 1991
+    volume: 58
+    issue: 2
+    start: 277
+    end: 297
+  - type: article
+    authors:
+      - family-names: "Blundell"
+        given-names: "Richard"
+      - family-names: "Bond"
+        given-names: "Stephen"
+    title: "Initial conditions and moment restrictions in dynamic panel data models"
+    journal: "Journal of Econometrics"
+    year: 1998
+    volume: 87
+    issue: 1
+    start: 115
+    end: 143
