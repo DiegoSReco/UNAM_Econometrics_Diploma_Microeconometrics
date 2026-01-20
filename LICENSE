@@ -1,6 +1,6 @@
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
 
-Copyright (c) 2025 Diego S. Reco
+Copyright (c) 2025 Diego Sánchez Rojas
 
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 
 4.0 International License. To view a copy of this license, visit 
@@ -42,6 +42,17 @@ Notices:
 
 ================================================================================
 
+Atribución Sugerida:
+
+Cuando use este material, incluya la siguiente atribución:
+
+"Material del 'Diplomado en Econometría - Módulo 4: Modelos de Variables Binarias y de Datos Panel'" 
+realizado por Diego Sánchez Rojas, Universidad Nacional Autónoma de México (UNAM). 
+Licensed under CC BY-NC-SA 4.0. 
+Available at: https://github.com/DiegoSReco/UNAM_Econometrics_Diploma_Microeconometrics"
+
+
+
 SUGGESTED ATTRIBUTION:
 
 When using these materials, please include the following attribution:
@@ -51,12 +62,3 @@ by Diego S. Reco, Universidad Nacional Autónoma de México (UNAM).
 Licensed under CC BY-NC-SA 4.0. 
 Available at: https://github.com/DiegoSReco/UNAM_Econometrics_Diploma_Microeconometrics"
 
-================================================================================
-
-For data files (MOM.dat) included in this repository:
-
-The data originates from Mroz (1987) and should be cited as:
-Mroz, Thomas A. (1987). "The sensitivity of an empirical model of married women's 
-hours of work to economic and statistical assumptions." Econometrica, 55(4), 765-799.
-
-================================================================================
