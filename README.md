@@ -168,16 +168,16 @@ quarto render slides/02_ppt_Modulo4_MPL.qmd
 
 ### 3: Variables Dependientes Limitadas
 **Presentación:** `03_ppt_Modulo4_Tobit.qmd`  
-**Código:** `script_Tobit_Heckman.R`
+**Código:** `script_Tobit_Heckman.R` 
 
 - Datos censurados y truncados
 - Modelos Tobit (Tipo I)
 - Modelos de selección muestral (Heckman dos etapas)
 - Aplicaciones: oferta laboral, salarios
 
-### 4: Modelos de Datos Panel
-**Presentación:** `04_ppt_Modulo4_DatoPanel.qmd`  y `05_ppt_Modulo4_DiffinDiff.qmd`
-**Código:** `script_plm_gdp_le.R`, `script_plm_wage_union.R`, `script_diffindiff_minimum_wages.R`
+### 4: Modelos de Datos Panel 
+**Presentación:** `04_ppt_Modulo4_DatoPanel.qmd`  y `05_ppt_Modulo4_DiffinDiff.qmd` 
+**Código:** `script_plm_gdp_le.R`, `script_plm_wage_union.R`, `script_diffindiff_minimum_wages.R` 
 
 - Estructura y ventajas de datos panel
 - OLS Agrupado (`Pooled OLS`) vs. Estimadores Panel
