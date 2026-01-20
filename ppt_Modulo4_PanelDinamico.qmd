@@ -66,9 +66,7 @@ En los modelos de datos de panel estático suponemos que los errores idiosincrá
 
 -   Donde existe endogeneidad: $Cov(x_i, u_i) \neq 0$
 
-
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
-
 
 -   En el caso de modelos panel
 
@@ -113,7 +111,7 @@ $$\hat{\beta}_{VI} = (\mathbf{z}'\mathbf{\hat{x}})^{-1}\mathbf{z}'\mathbf{y}$$
 **Intuición**
 
 -   **Etapa 1:** filtramos $X$ con $Z$.\
--   **Etapa 2:** usamos solo la parte “limpia” $\hat{X}$ para estimar el coeficiente de interpes en la seguna etapa
+-   **Etapa 2:** usamos solo la parte “limpia” $\hat{X}$ para estimar el coeficiente de interés en la seguna etapa
 
 #### Modelos Dinámicos de Datos Panel {.smaller}
 
@@ -155,7 +153,7 @@ $$ \frac{1}{N} \sum_{i=1}^{N} (y_i - \mu) = 0 $$
 
 $$ \hat{\mu}_{\text{MM}} = N^{-1} \sum_i y_i = \bar{y} $$
 
--   Tendremos que el estimador **MM** de la media poblacional es la media muestral.
+-   Tendremos que el estimador **MM** de la media poblacional es la **media muestral**.
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -165,7 +163,7 @@ $$y = \mathbf{x}'\beta + u$$
 
 -   Supuesto de exogeneidad no condicional $E[\mathbf{x}'u] = 0$
 
-Es decir, K condiciones de momentos no condicionales $E[\mathbf{x}'u] = 0$.
+Es decir, r condiciones de momentos no condicionales $E[\mathbf{x}'u] = 0$.
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -183,19 +181,19 @@ $$\frac{1}{N} \sum_{i=1}^{N}\mathbf{x}_i'(y_i - \mathbf{x}_i\beta) = 0$$
 
 $$\hat{\beta}_{\text{MM}} = (\sum_i \mathbf{x}_i'\mathbf{x}_i)^{-1} \sum_i \mathbf{x}_i'y_i$$
 
--   Supuesto media condicional cero, es decir que los regresores (explicativas) son ortogonales al error y el **Estimador de MM será consistente**.
+-   Supuesto media condicional cero, es decir que los regresores (explicativas) son ortogonales al error y el **estimador de MM será consistente**.
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
 **Utilizando el MM para VI**
 
--   Tendremos que alguna de las $\mathbf{x}$ son endógenas, es decir, algunos componentes de $\mathbf{x}$ están correlacionadas con los términos de error $u$.
+-   Tendremos que alguna de las $\mathbf{x}$ son endógenas, es decir, algunos componentes de $\mathbf{x}$ están correlacionadas con los error $\mathbf{u}$.
 
--   $E[\mathbf{x}'u] = 0$ no se cumple y por lo tanto $\beta_{MM}$ no será consistente
+-   $E[\mathbf{x}'u] = 0$ no se cumple y por lo tanto $\hat\beta_{MM}$ no será consistente
 
 -   Asumiremos que existen los intrumentos $z$ que están correlacionados con $\mathbf{x}$ y que satisfacen:
 
-$E[u|\mathbf{z}] = 0$
+$$E[u|\mathbf{z}] = 0$$
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -211,9 +209,9 @@ $$\frac{1}{N} \sum_{i=1}^{N}\mathbf{z}_i(y_i - \mathbf{x}_i'\beta) = 0$$
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
-Si $dim(\mathbf{z})=K$:
+Si $dim(\mathbf{z})=K$, es decir, si tenemos el mismo número de instrumentos y parámetros que estimar:
 
--   Despejando para $\beta$\$ :
+-   Despejando para $\beta$ :
 
 $$ \hat{\beta}_{\text{MM}} = ( \sum_{i}^{N} \mathbf{z}_i\mathbf{x}_i')^{-1} \sum_{i} \mathbf{z}_iy_i$$
 
@@ -225,7 +223,7 @@ $$ \hat{\beta}_{\text{MM}} = ( \sum_{i}^{N} \mathbf{z}_i\mathbf{x}_i')^{-1} \sum
 
 En GMM se utiliza cuando tendremos diferentes tipos de condiciones de momentos.
 
--   En MM para el estimador linear VI suponemos que $E[u|\mathbf{z}] = 0$ por tanto teníamos condiciones de momentos no condicionales o momentos de ortogonalidad:
+-   En MM para el estimador linear VI suponemos que $E[u|\mathbf{z}] = 0$ por tanto teníamos condiciones de momentos no condicionales:
 
 $$ E[z_i(y_i - x_i'\beta)] = 0$$
 
@@ -310,7 +308,7 @@ $$ \mathbf{\hat{\theta}_{\text{MM}}} = ( \sum_{i}^{N} \mathbf{z}_i\mathbf{x}_i')
 -   Implicaciones de la identificación exacta (r=q):
 
     -   Solución única
-    -   El estimador MM podrá utilizarse y concidé con el estimador GMM
+    -   El estimador MM podrá utilizarse y coincide con el estimador GMM
     -   No permite pruebas de sobreidentificación
     -   Estimador menos eficiente
 
@@ -342,15 +340,13 @@ Donde:
 
 Simplificando la notación tendremos:
 
-$y = \mathbf{X}\beta + u$
+$$y = \mathbf{X}\beta + u$$
 
 y las condiciones de momento (matriz de instrumentos): $\sum_i z_i (y_i - \mathbf{x}_i'\beta) = \mathbf{Z}'u$
 
 de forma matricial la función objetivo GMM $Q_N(\beta)$:
 
-$$Q_N(\beta) = \left[\frac{1}{N}  (\mathbf{y}-\mathbf{X}\beta)'\mathbf{Z}\right] \mathbf{W_{N}} \left[\frac{1}{N}  \mathbf{Z}'(\mathbf{y}-\mathbf{X}\beta)\right]$$ 
-
-
+$$Q_N(\beta) = \left[\frac{1}{N}  (\mathbf{y}-\mathbf{X}\beta)'\mathbf{Z}\right] \mathbf{W_{N}} \left[\frac{1}{N}  \mathbf{Z}'(\mathbf{y}-\mathbf{X}\beta)\right]$$
 
 #### Modelos Dinámicos de Datos Panel: Método de Generalizado de Momentos (GMM) (Estimación) {.smaller}
 
@@ -378,12 +374,11 @@ Sirve para ponderar las condiciones de momento:
 
 2 instrumentos:
 
-- $z_1$ muy confiable y  $z_2$ un poco más ruidoso
+-   $z_1$ muy confiable y $z_2$ un poco más ruidoso
 
-- Si simplemente sumamos las violaciones de las condiciones de momento sin ponderar, puede afectar demasiado la estimación. 
+-   Si simplemente sumamos las violaciones de las condiciones de momento sin ponderar, puede afectar demasiado la estimación.
 
-
-Te permite darle más peso a instrumentos confiables y menos peso a los ruidosos.
+Te permite darle más peso a **instrumentos confiables** y menos peso a los ruidosos.
 
 #### Modelos Dinámicos de Datos Panel: GMM con datos Panel {.smaller}
 
@@ -393,7 +388,7 @@ Te permite darle más peso a instrumentos confiables y menos peso a los ruidosos
 
     -   Relajación o flexibilización del supuesto de **exogeneidad estricta**, por tanto tendremos modelos consistentes con variables endógenos o rezagos de la variable dependiente como regresores.
 
-    -   El uso de VI es una alternativa para resolver o manejar el **problema de edogeneidad**.
+    -   El uso de VI es una alternativa para resolver o manejar el **problema de endogeneidad**.
 
     -   En datos panel es más sencillo aplicar VI porque podemos utilizar **rezagos de las variables explicativas exógenas como instrumentos** de las variables endógenas del período actual.
 
@@ -532,11 +527,9 @@ Ejemplo:
 
 -   Tenemos **dos instrumentos**:
 
-$z_{1i}, z_{2i}$
+$$z_{1i}, z_{2i}$$
 
-#### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
-
--   En población:
+- Por lo tanto, tendríamos dos condiciones (poblacionales):
 
 $$E[z_{1i}(y_i - x_i \beta)] = 0$$
 
@@ -556,18 +549,101 @@ $$g_N(\beta) = \frac{1}{N}\sum_{i=1}^N
   z_{2i}(y_i - x_i\beta)
   \end{bmatrix}$$
 
-La función objetivo será: 
+La función objetivo será:
 
 $$Q_N(\beta) \;=\; g_N(\beta)^{\prime}\, W_N\, g_N(\beta)$$
 
 donde $W_N$ es una matriz $2\times 2$ simétrica definida positiva.
 
+#### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+Con **más instrumentos que parámetros** ($r > q$) el sistema está **sobreidentificado**.
+
+-   El estimador GMM combina todos los instrumentos usando la matriz de peso $W_N$.
+
+-   **Intuición**: si los instrumentos son válidos, las condiciones de momento “sobrantes” deberían cumplirse en promedio.
+
+Cuando $r=q$: 
+
+- Solo hay UNA combinación lineal posible de instrumentos
+- La matriz de pesos es irrelevante y resulta que:
+
+$$\hat{\beta}_{2SLS} = \hat{\beta}_{GMM}$$
+
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
--   Con **más instrumentos que parámetros** ($r > q$) el sistema está **sobreidentificado**.  
--   El estimador GMM combina todos los instrumentos usando la matriz de peso $W_N$.  
--   Intuición: si los instrumentos son válidos, las condiciones de momento “sobrantes” deberían cumplirse en promedio.
+El estimador **2SLS** utiliza implícitamente la siguiente matriz de pesos:
+
+$$W_{2SLS} = (Z'Z)^{-1}$$
+
+- No depende de los errores
+- Trata a todos los instrumentos con el mismo peso
+
+
+**2SLS asume homocedasticidad**:
+
+$$E[u_i^2 \mid Z_i] = \sigma^2$$
+
+- La varianza del error es constante.
+- Bajo este supuesto, 2SLS es eficiente.
+
+#### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+**GMM** permite:
+
+- Más instrumentos que regresores ($L>K$)
+- Errores heterocedásticos
+- Uso de una **matriz de pesos óptima**
+
+La matriz de pesos eficiente es:
+
+$$W_{GMM}
+=
+\left(
+\frac{1}{N}
+\sum_{i=1}^N
+Z_i' u_i u_i' Z_i
+\right)^{-1}$$
+
+
+- Da más peso a momentos más informativos
+
+- No requiere varianza constante
+
+
+$$[u_i^2 \mid Z_i] = \sigma_i^2$$
+
+
+
+#### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+**¿Por qué GMM es más eficiente?**
+
+Cuando hay **heterocedasticidad**, **no todos los instrumentos son igualmente informativos**.
+
+- Existen distintos niveles de correlación con $x$
+- Otros generan momentos con **mucho ruido** (alta varianza del error).
+
+- Alta correlación con $x$ → buen instrumento  
+- Baja $\text{Var}(u \mid z)$ → momento más preciso  (poco ruidoso)
+
+#### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
+
+Supongamos que tenemos cuatro instrumentos: $z_1,z_2 ,z_3, z_4$
+
+- $z_1$ Muy relacionado con $x$ y $\text{Var}(u \mid z_1) \ \text{pequeña}$
+
+➡️ Momento informativo, y sin ruido.
+
+Todos son válidos, pero **no igual de buenos**.
+
+- $z_3$ Poco relacionado con $x$ y $\text{Var}(u \mid z_3) \ \text{grande}$
+
+➡️ Poco informativo y con ruido
+
+> “Confío más en los instrumentos que explican bien a $x$ 
+> y que generan momentos poco ruidosos”. Por tanto $z_1$ tendrá un mayor peso que $z_3$
 
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
@@ -578,7 +654,7 @@ donde $W_N$ es una matriz $2\times 2$ simétrica definida positiva.
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
-##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
+##### Método de Generalizado de Momentos (GMM) en dato panel, ejemplo empírico.
 
 -   Relación salario y oferta laboral (horas de trabajo)
 
@@ -588,7 +664,7 @@ donde $W_N$ es una matriz $2\times 2$ simétrica definida positiva.
 
 -   **Efecto sustitución**: Por otro lado, el mismo aumento salarial incentiva a trabajar más horas, ya que el costo de oportunidad del tiempo libre es mayor.
 
-Estos dos efectos son opuestos: el efecto ingreso tiende a reducir el trabajo, mientras que el efecto sustitución lo incrementa. El resultado final dependerá de cuál de estos efectos sea más fuerte.
+Estos dos efectos son opuestos: el efecto ingreso tiende a **reducir** el trabajo, mientras que el efecto sustitución lo **incrementa**. El resultado final dependerá de cuál de estos efectos sea más fuerte.
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -596,11 +672,13 @@ Estos dos efectos son opuestos: el efecto ingreso tiende a reducir el trabajo, m
 
 -   **Análisis de corte transversal**:
 
-    -   Los estudios de corte transversal (analizando datos de una sola observación por individuo) han encontrado una respuesta positiva, pero pequeña, de las horas trabajadas en respuesta a los salarios entre hombres adultos.
+    -   Los estudios de **corte transversal** han encontrado una respuesta positiva, pero pequeña, de las horas trabajadas en respuesta a los salarios entre hombres adultos.
 
-    -   Sin embargo, esta relación podría no ser causal, sino más bien espuria. Es decir, podría deberse a variables no observadas que influyen tanto en las horas trabajadas como en los salarios. Por ejemplo, las personas con una mayor inclinación o preferencia por trabajar más horas podrían también buscar empleos mejor remunerados.
+    -   Sin embargo, esta relación podría no ser causal, sino más bien espuria. Es decir, podría deberse a variables no observadas que influyen tanto en las horas trabajadas como en los salarios. 
+    
+    - Por ejemplo, las personas con una mayor inclinación o preferencia por trabajar más horas podrían también buscar empleos mejor remunerados.
 
--   **Análisis de datos de panel**:
+-   *Ventajas de utilizar datos de panel**:
 
     -   Permite controlar estas características no observadas que son constantes en el tiempo para cada individuo.
 
@@ -610,7 +688,7 @@ Estos dos efectos son opuestos: el efecto ingreso tiende a reducir el trabajo, m
 
 ##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
 
--   MaCurdy (1981) desarrolló este modelo basándose en un marco teórico de oferta laboral durante el ciclo de vida bajo incertidumbre:
+-   MaCurdy (1981) planteó este modelo basándose en un marco teórico de oferta laboral durante el ciclo de vida bajo incertidumbre:
 
 $$
 \text{lnhrs}_{it} = \alpha_i + \beta_1\text{lnwg}_{it} + \beta_2\text{kids}_{it} + \beta_3\text{age}_{it} + \beta_4\text{agesq}_{it} + \beta_5\text{disab}_{it} + u_{it}
@@ -618,7 +696,7 @@ $$
 
 -   El concepto $\alpha$ es igual a $c_i$
 
--   $\alpha_i$ es un multiplicador que representa la utilidad marginal de la riqueza inicial. Este multiplicador es constante en el tiempo (time-invariant). Pero varía entre individuos (differs across individuals)
+-   $\alpha_i$ es sería el multiplicador que representa la utilidad marginal de la riqueza inicial. Este multiplicador es constante en el tiempo (time-invariant) y varía entre individuos (differs across individuals). Captura **heterogeneidad no observada** entre individuo.
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -634,19 +712,26 @@ El desafío econométrico:
 
 ##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
 
--   El problema identificado por Ziliak (1997):
+-   El problema identificado por Ziliak (1997) en el modelo de Mcurdy:
 
-    -Permite que logaritmo del salario esté correlacionado contemporáneamente con el termino de error. Esto puede ocurrir por dos razones:
+El salario está correlacionado con el error contemporáneamente, lo que viola el supuesto de **exogeneidad** y sesga las estimaciones de β₁.
 
-    -   a)  Error de medición en los salarios (measurement error in wage)
+$$E[lnwg_{it}. u_{it}] \neq 0$$
 
-    -   b)  Puntos de inflexión en la restricción presupuestaria
+    - Dos razones:
+
+    
+
+        a)  Error de medición en los salarios (measurement error in wage)
+
+
+        b)  Puntos de inflexión en la restricción presupuestaria
 
 -   La consecuencia:
 
     -   El estimador de Mínimos Cuadrados Ordinarios (OLS) de la especificación del modelo anterior es inconsistente
 
--   Solucionar endogeneidad por método de variables instrumentales
+-   Solucionar endogeneidad por método de **variables instrumentales**
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -666,23 +751,21 @@ Donde:
 
 $$ s ≤ t-1$$
 
-- $\mathbf{lnwg}_t$ depende de $\mathbf{lnwg}_s$ 
+-   $\mathbf{lnwg}_t$ depende de $\mathbf{lnwg}_s$
 
-- El término de error por construcción puede estar correlacionado dado que existe $c_i$.
-
-
+-   El término de error por construcción puede estar correlacionado dado que existe $c_i$.
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
 ##### Método de Generalizado de Momentos (GMM) con datos Panel (Ejemplo)
 
-- Por tanto se tiene: 
+-   Por tanto se tiene:
 
 $$ln hr_{it} = \beta ln wg_{it} + \gamma X_{it} + c_i + u_{it}$$
 
-- $\alpha_i$: efecto fijo no observado (habilidad, preferencias, etc.)  
+-   $\alpha_i$: efecto fijo no observado (habilidad, preferencias, etc.)
 
-- Problema: puede estar **correlacionado con $lnwg$** → sesgo.
+-   Problema: puede estar **correlacionado con** $lnwg$ → sesgo.
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
 
@@ -690,10 +773,15 @@ $$ln hr_{it} = \beta ln wg_{it} + \gamma X_{it} + c_i + u_{it}$$
 
 **Solución**
 
-- Primera diferencia 
+-   Primera diferencia
 
 $$\Delta \ln hr_{it} = \beta \Delta ln wg_{it} + \gamma \Delta X_{it} + \Delta u_{it}$$
-- Aún puede haber correlación entre $\Delta lnwg_{it}$ y $\Delta u_{it}$.  
+
+- Aún puede haber correlación entre $\Delta lnwg_{it}$ y $\Delta u_{it}$.
+
+- No se utiliza transformación within porque el error tranformado permite correlación intertemporal $\tilde{u}_{it} = u_{it} - \bar{u}_i$ depende de todos los períodos.
+
+- Primera diferencia $\Delta{u}_{it} = u_{it} - u_{i,t-1}$ solo depende del período t-1.
 
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM) {.smaller}
@@ -706,35 +794,30 @@ Usar **rezagos en niveles** como instrumentos:
 
 $lnwg_{i,t-2};lnwg_{i,t-3}, \dots$
 
-- Esto significa que se pueden usar como instrumentos los rezagos de dos o más períodos
+-   Esto significa que se pueden usar como instrumentos los rezagos de dos o más períodos
 
-- Implicación práctica: Se necesitan al menos tres períodos de datos originales para identificar $\beta$
+-   Implicación práctica: Se necesitan al menos tres períodos de datos originales para identificar $\beta$
 
-
-- **FD + GMM:** elimina $c_i$  y  **corrige endogeneidad** → estimador consistente
-
-
+-   **FD + GMM:** elimina $c_i$ y **corrige endogeneidad** → estimador consistente
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W {.smaller}
 
-Se escoge **un rezago** por variable endógena en cada período. 
+Se escoge **un rezago** por variable endógena en cada período.
 
-- Ejemplo: para $x_{it}$ con $x_{i,t-1}$, se usa $x_{i,t-2}$ como instrumento.  
-
+-   Ejemplo: para $x_{it}$ con $x_{i,t-1}$, se usa $x_{i,t-2}$ como instrumento.
 
 $$W = (Z'Z)^{-1}, \quad Z = \text{matriz de instrumentos} $$
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W {.smaller}
 
-Construcción de $Z_i$ para un caso específico: 
+Construcción de $Z_i$ para un caso específico:
 
-- 2 observaciones ($i=1,2$) y 3 períodos ($t = 3,4,5$) y que los valores $x$ son: 
+-   2 observaciones ($i=1,2$) y 3 períodos ($t = 3,4,5$) y que los valores $x$ son:
 
 | Individuo | $x_1$ | $x_2$ | $x_3$ |
-| --------- | ----- | ----- | ----- |
+|-----------|-------|-------|-------|
 | 1         | 2     | 3     | 4     |
 | 2         | 1     | 0     | 2     |
-
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W {.smaller}
 
@@ -747,12 +830,11 @@ x_{i1} & x_{i2} & 0 \\
 x_{i1} & x_{i2} & x_{i3}
 \end{bmatrix}$$
 
-
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W {.smaller}
 
 En este ejemplo como tenemos dos observaciones:
 
-- Para $i=1$:
+-   Para $i=1$:
 
 $$Z_1 =\begin{bmatrix}
 2 & 0 & 0 \\
@@ -760,8 +842,7 @@ $$Z_1 =\begin{bmatrix}
 2 & 3 & 4
 \end{bmatrix} $$
 
-
-- Para $i=2$:
+-   Para $i=2$:
 
 $$Z_2 =
 \begin{bmatrix}
@@ -772,19 +853,17 @@ $$Z_2 =
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W {.smaller}
 
-Si observamos: 
+Si observamos:
 
+-   Para $t=3$ solo se puede usar $x_{t-2} = x_1$ con instrumento
 
-- Para $t=3$ solo se puede usar $x_{t-2} = x_1$ con instrumento
+-   Para $t=4$ solo se puede usar $x_1, x_2$ con instrumentos
 
-- Para $t=4$ solo se puede usar $x_1, x_2$ con instrumentos
-
-- Para $t=5$ solo se puede usar $x_1, x_2,x_3$ con instrumentos
-
+-   Para $t=5$ solo se puede usar $x_1, x_2,x_3$ con instrumentos
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W {.smaller}
 
-Con esto podremos construir las matriz **$\mathbf{Z}$ apilada**:
+Con esto podremos construir las matriz $\mathbf{Z}$ apilada:
 
 $$\mathbf{Z}  = 
 \begin{bmatrix}
@@ -793,8 +872,6 @@ Z_1 & 0   & \cdots & 0 \\
 \vdots & \vdots & \ddots & \vdots \\
 0   & 0   & \cdots & Z_N
 \end{bmatrix}$$
-
-
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W {.smaller}
 
@@ -815,7 +892,6 @@ Z_1 & 0 \\
 0 & 0 & 0 & 1 & 0 & 2
 \end{bmatrix}$$
 
-
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W {.smaller}
 
 Con esto ya podremos obtener la matriz $Z_i'Z_i$:
@@ -830,19 +906,15 @@ $$\mathbf{Z}'\mathbf{Z} =
 0  & 0  & 0  & 2 & 0 & 4
 \end{bmatrix}$$
 
-
-
-Y la inversa $Z'Z$ será la matriz $W$ 
-
+Y la inversa $Z'Z$ será la matriz $W$
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W: Aplicado {.smaller}
 
 Para el ejemplo de Ziliak (1997):
 
--   Los instrumentos son lnwg rezagado dos veces y kids, age, agesq y disab rezagado una y dos veces. 
+-   Los instrumentos son lnwg rezagado dos veces y kids, age, agesq y disab rezagado una y dos veces.
 
-- Para el caso base hay 9 instrumentos y para los instrumentos apilados hay $8 × 9 = 72$
-
+-   Para el caso base hay 9 instrumentos y para los instrumentos apilados hay $8 × 9 = 72$
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W: Aplicado {.smaller}
 
@@ -857,10 +929,9 @@ Z_i =
 \end{bmatrix}
 $$
 
-- Filas: períodos  
-- Columnas: instrumentos  
-- Apilando todos los períodos → 72 instrumentos totales
-
+-   Filas: períodos\
+-   Columnas: instrumentos\
+-   Apilando todos los períodos → 72 instrumentos totales
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Matriz W: Aplicado {.smaller}
 
@@ -868,19 +939,17 @@ $$
 
 Para período $t= 4$ :
 
-- $kids_{t-1} = kids_3$ → instrumento válido
+-   $kids_{t-1} = kids_3$ → instrumento válido
 
-- $kids_{t-2} = kids_2$ → instrumento válido
+-   $kids_{t-2} = kids_2$ → instrumento válido
 
-| Período | Instrumentos válidos                                                              |
-| ------- | --------------------------------------------------------------------------------- |
+| Período | Instrumentos válidos                                                     |
+|-------------|-----------------------------------------------------------|
 | t=3     | lnwg_1, kids_1, kids_2, age_1, age_2, agesq_1, agesq_2, disab_1, disab_2 |
 | t=4     | lnwg_2, kids_2, kids_3, age_2, age_3, agesq_2, agesq_3, disab_2, disab_3 |
 | t=5     | lnwg_3, kids_3, kids_4, age_3, age_4, agesq_3, agesq_4, disab_3, disab_4 |
 
-
-
-- Esto asegura que los instrumentos sean válidos (correlacionados con la variable endógena pero no con el error actual)
+-   Esto asegura que los instrumentos sean válidos (correlacionados con la variable endógena pero no con el error actual)
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Ventajas {.smaller}
 
@@ -889,36 +958,32 @@ Para período $t= 4$ :
 -Explota la variación temporal
 
 -Permite heterogeneidad en los efectos
-    
+
 **Mejor Identificación**:
 
-- Separa los efectos por período
+-   Separa los efectos por período
 
-- Reduce el problema de instrumentos débiles
+-   Reduce el problema de instrumentos débiles
 
 **Control de Heterogeneidad**:
 
-- Captura efectos específicos por período
+-   Captura efectos específicos por período
 
-- Mejora la robustez del estimador
-
-
+-   Mejora la robustez del estimador
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Pruebas de especificación {.smaller}
 
 **Weak Instruments (Instrumentos Débiles)**
 
-- Verifica si los instrumentos tienen suficiente poder predictivo sobre las variables
-endógenas.
+-   Verifica si los instrumentos tienen suficiente poder predictivo sobre las variables endógenas.
 
-- Instrumentos débiles pueden llevar a algún sesgo en los coeficientes estimados.
+-   Instrumentos débiles pueden llevar a algún sesgo en los coeficientes estimados.
 
-- Evalúa el estadístico F:
+-   Evalúa el estadístico F:
 
-     - Si $( F < 10 )$, los instrumentos se consideran débiles.
+    -   Si $( F < 10 )$, los instrumentos se consideran débiles.
 
-    - Recomendaciones más estrictas sugieren $( F > 16 )$.
-
+    -   Recomendaciones más estrictas sugieren $( F > 16 )$.
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Pruebas de especificación {.smaller}
 
@@ -929,9 +994,8 @@ Evalúa si las variables instrumentadas son endógenas.
 **Hipótesis**:
 
 **H0**: Las variables endógenas son exógenas (no hay evidencia de endogeneidad).
- 
-**H1**: Las variables endógenas son realmente endógenas (existe evidencia de
-endogeneidad).
+
+**H1**: Las variables endógenas son realmente endógenas (existe evidencia de endogeneidad).
 
 El estadístico de Hausman se define como:
 
@@ -943,74 +1007,51 @@ H = ( \hat{\beta}_{IV} - \hat{\beta}_{OLS} )'
 ( \hat{\beta}_{IV} - \hat{\beta}_{OLS} )
 $$
 
-
-- $\hat{\beta}_{IV}$ : Estimadores del modelo IV  
-- $\hat{\beta}_{OLS}$ : Estimadores del modelo OLS  
-- $\text{Var}(\hat{\beta})$ : Varianza de los estimadores  
+-   $\hat{\beta}_{IV}$ : Estimadores del modelo IV\
+-   $\hat{\beta}_{OLS}$ : Estimadores del modelo OLS\
+-   $\text{Var}(\hat{\beta})$ : Varianza de los estimadores
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Pruebas de especificación {.smaller}
 
 **Interpretación**
 
-- H prueba si los estimadores OLS son consistentes frente a los IV:
+-   H prueba si los estimadores OLS son consistentes frente a los IV:
 
-  - **H grande →** OLS es inconsistente (endogeneidad)  
-  - **H pequeño →** OLS consistente, IV no mejora  
-  
+    -   **H grande →** OLS es inconsistente (endogeneidad)\
+    -   **H pequeño →** OLS consistente, IV no mejora
+
 Se compara con una distribución $\chi^2$ con grados de libertad = número de parámetros comparados
 
-- Si $H > χ²_{ crítico}$ → rechazo $H_o$ → OLS inconsistente  
+-   Si $H > χ²_{ crítico}$ → rechazo $H_o$ → OLS inconsistente
 
-- Si $H ≤ χ²_{crítico}$  → no rechazo $H₀$ → OLS consistente
-
-
+-   Si $H ≤ χ²_{crítico}$ → no rechazo $H₀$ → OLS consistente
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Pruebas de especificación {.smaller}
 
 **Validez de instrumentos**
 
-- El estadístico de Sargan se calcula como:
+-   El estadístico de Sargan se calcula como:
 
 $$ S = n \cdot R^2$$
 
-- $n$ : Número de observaciones  
-- $R^2$ : Coeficiente de determinación de la regresión auxiliar, donde los **residuos del modelo IV** se regresan sobre los instrumentos.
+-   $n$ : Número de observaciones\
 
-- S sigue una **distribución χ²**  
+-   $R^2$ : Coeficiente de determinación de la regresión auxiliar, donde los **residuos del modelo IV** se regresan sobre los instrumentos.
 
- Grados de libertad:  $df = q - k$
-    
-donde:  
+-   S sigue una **distribución χ²**
 
-- $q$ : número de instrumentos 
+Grados de libertad: $df = q - k$
 
-- $k$ : número de variables instrumentadas  
+donde:
 
+-   $q$ : número de instrumentos
+
+-   $k$ : número de variables instrumentadas
 
 #### Modelos Dinámicos de Datos Panel (Método de estimación VI y GMM): Pruebas de especificación {.smaller}
 
 **Interpretación**
 
-- S grande → instrumentos **no válidos** (rechazo de $H₀$)  
+-   S grande → instrumentos **no válidos** (rechazo de $H₀$)
 
-- S pequeño → instrumentos válidos (no rechazo de $H₀$)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   S pequeño → instrumentos válidos (no rechazo de $H₀$)
