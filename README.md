@@ -1,379 +1,360 @@
-# UNAM Economics Diploma - Module 4: Microeconometrics
-## Binary Response Models & Panel Data Analysis
+# Diplomado de Economía UNAM - Módulo 4: Microeconometría
+## Modelos de Respuesta Binaria y Análisis de Datos Panel
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![R Version](https://img.shields.io/badge/R-%E2%89%A5%204.0.0-blue.svg)](https://www.r-project.org/)
 [![Quarto](https://img.shields.io/badge/Quarto-%E2%89%A5%201.3-75AADB.svg)](https://quarto.org/)
 
-**Instructor:** Diego Sánchez Rojas 
-**Institution:** Universidad Nacional Autónoma de México (UNAM)  
-**Program:** Economics Diploma - Econometrics Specialization  
-**Module:** Stage 4 - Microeconometrics
+**Instructor:** Mtro. Diego Sánchez Rojas  
+**Institución:** Universidad Nacional Autónoma de México (UNAM)  
+**Programa:** Diplomado en Econometría  
+**Módulo:** Etapa 4 - Microeconometría 
 
 ---
 
-## 📚 Course Overview
+## 📚 Descripción del Curso
 
-This repository contains teaching materials for **Module 4** of the UNAM Economics Diploma, covering advanced microeconometric techniques with focus on:
+Este repositorio contiene materiales de enseñanza para el **Módulo 4** del Diplomado de Economía de la UNAM, cubriendo técnicas microeconométricas avanzadas con enfoque en:
 
-- **Binary Response Models** (LPM, Logit, Probit)
-- **Limited Dependent Variables** (Tobit, Heckit)
-- **Panel Data Methods** (Fixed Effects, Random Effects, First Differences, Difference-in-Difference)
-- **Instrumental Variables in Panel Data** (2SLS, GMM)
-- **Dynamic Panel Models** (Arellano-Bond, Arellano-Bover)
+- **Modelos de Respuesta Binaria** (MPL, Logit, Probit)
+- **Variables Dependientes Limitadas** (Tobit, Heckit/Selección Muestral)
+- **Métodos de Datos Panel** (Efectos Fijos, Efectos Aleatorios, Primeras Diferencias,Diferencias en Diferencias)
+- **Variables Instrumentales en Datos Panel** (2SLS, GMM, PGMM)
+- **Modelos Panel Dinámicos** (Arellano-Bond, Arellano-Bover)
 
-All materials are implemented in **R** with **Quarto** for reproducible presentations.
+Todos los materiales están implementados en **R** con **Quarto** para presentaciones reproducibles.
 
 ---
 
-## 📂 Repository Structure
+## 📂 Estructura del Repositorio
 
 ```
 .
-├── README.md                          # This file
-├── CITATION.cff                       # Citation information
-├── LICENSE                            # License information
+├── README.md                          # Este archivo
+├── CITATION.cff                       # Información de citación
+├── LICENSE                            # Información de licencia
 │
-├── slides/                            # Course presentations (.qmd files)
-│   ├── 01_binary_response_models.qmd
-│   ├── 02_linear_probability_model.qmd
-│   ├── 03_tobit_selection.qmd
-│   ├── 04_panel_data_intro.qmd
-│   ├── 05_dynamic_panel_I.qmd
-│   ├── 06_dynamic_panel_II.qmd
-│   ├── 07_intermediate_microeconometrics.qmd
-│   └── references.bib                 # Bibliography
+├── slides/                            # Presentaciones del curso (archivos .qmd)
+│   ├── 01_modelos_respuesta_binaria.qmd
+│   ├── 02_modelo_probabilidad_lineal.qmd
+│   ├── 03_tobit_seleccion.qmd
+│   ├── 04_datos_panel_introduccion.qmd
+│   ├── 05_panel_dinamico_I.qmd
+│   ├── 06_panel_dinamico_II.qmd
+│   ├── 07_microeconometria_intermedia.qmd
+│   └── referencias.bib                # Bibliografía
 │
-├── code/                              # R scripts for empirical applications
-│   ├── 01_binary_models.R
-│   ├── 02_tobit_heckman.R
-│   ├── 03_panel_basics.R
-│   ├── 04_panel_gdp_lifeexpectancy.R
-│   ├── 05_panel_wage_union.R
-│   ├── 06_panel_wage_hours.R
-│   ├── 07_diff_in_diff_minwage.R
-│   ├── 08_arellano_bond.R
-│   └── README.md                      # Code documentation
+├── R Scripts/                              # Scripts de R para aplicaciones empíricas
+│   ├── script_ModelosRespuestaBinaria.R
+│   ├── script_Tobit_Heckman.R
+│   ├── script_plm_gdp_le.R
+│   ├── script_plm_wage_union.R
+│   ├── script_diffindiff_minium_wages.R
+│   ├── script_wage_hrs_Ziliak.R
+│   └── script_ABond_ABover.R
 │
-├── data/                              # Datasets
-│   ├── MOM.dat                        # Mothers dataset
-│   └── README.md                      # Data documentation
-│
-├── exercises/                         # Problem sets (to be added)
+├── data/                              # Conjuntos de datos
+│   └── MOM.dat                        # Datos de mujeres en mercado laboral
+├── exercises/                         # Ejercicios (por agregar)
 │   └── README.md
 │
-├── output/                            # Generated outputs
-│   ├── figures/
-│   └── tables/
-│
-└── references/                        # Additional resources
-    ├── key_papers.md
-    └── software_resources.md
+└── references/                        # Recursos adicionales
+    ├── articulos_clave.md
+    └── recursos_software.md
 ```
 
 ---
 
-## 🎯 Learning Objectives
+## 🎯 Objetivos de Aprendizaje
 
-By the end of this module, students will be able to:
+Al finalizar este módulo, los estudiantes serán capaces de:
 
-1. ✅ **Estimate and interpret** binary choice models (Logit, Probit, Multinomial)
-2. ✅ **Apply** limited dependent variable techniques (Tobit, Heckit)
-3. ✅ **Analyze panel data** using fixed effects, random effects, and first differences
-4. ✅ **Address endogeneity** in panel data using IV and GMM estimators
-5. ✅ **Implement dynamic panel models** (Arellano-Bond, System GMM)
-6. ✅ **Conduct causal inference** using Difference-in-Differences
-7. ✅ **Interpret and validate** econometric results critically
+1. ✅ **Estimar e interpretar** modelos de elección binaria (Logit, Probit, Multinomial)
+2. ✅ **Aplicar** técnicas de variables dependientes limitadas (Tobit, Heckit)
+3. ✅ **Analizar datos panel** usando efectos fijos, efectos aleatorios y primeras diferencias
+4. ✅ **Abordar endogeneidad** en datos panel usando estimadores IV y GMM
+5. ✅ **Implementar modelos panel dinámicos** (Arellano-Bond, GMM Sistémico)
+6. ✅ **Realizar inferencia causal** usando Diferencias en Diferencias
+7. ✅ **Interpretar y validar** resultados econométricos críticamente
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Primeros Pasos
 
-### Prerequisites
+### Requisitos Previos
 
-**Software Requirements:**
+**Requisitos de Software:**
 - [R](https://www.r-project.org/) (≥ 4.0.0)
-- [RStudio](https://posit.co/download/rstudio-desktop/) (recommended)
-- [Quarto](https://quarto.org/docs/get-started/) (≥ 1.3) for rendering presentations
+- [RStudio](https://posit.co/download/rstudio-desktop/) (recomendado)
+- [Quarto](https://quarto.org/docs/get-started/) (≥ 1.3) para renderizar presentaciones
 
-**Required R Packages:**
+**Paquetes de R Requeridos:**
 
 ```r
-# Core packages
+# Paquetes básicos
 install.packages(c(
-  "tidyverse",      # Data manipulation and visualization
-  "plm",            # Panel data models
-  "lmtest",         # Diagnostic tests
-  "sandwich",       # Robust standard errors
-  "AER",            # Applied Econometrics with R
-  "sampleSelection" # Tobit and Heckit models
+  "tidyverse",      # Manipulación y visualización de datos
+  "plm",            # Modelos de datos panel
+  "lmtest",         # Pruebas diagnósticas
+  "sandwich",       # Errores estándar robustos
+  "AER",            # Econometría Aplicada con R
+  "sampleSelection" # Modelos Tobit y Heckit
 ))
 
-# Advanced panel data
+# Datos panel avanzados
 install.packages(c(
-  "pdynmc",         # Dynamic panel models (Arellano-Bond)
-  "panelView",      # Panel data visualization
-  "fixest",         # Fast fixed effects
-  "did"             # Difference-in-Differences
+  "pdynmc",         # Modelos panel dinámicos (Arellano-Bond)
+  "panelView",      # Visualización de datos panel
+  "fixest",         # Efectos fijos rápidos
+  "did"             # Diferencias en Diferencias
 ))
 
-# Additional utilities
+# Utilidades adicionales
 install.packages(c(
-  "stargazer",      # LaTeX/HTML tables
-  "modelsummary",   # Modern regression tables
-  "ggplot2",        # Graphics
-  "knitr",          # Dynamic reports
-  "kableExtra"      # Enhanced tables
+  "stargazer",      # Tablas LaTeX/HTML
+  "modelsummary",   # Tablas de regresión modernas
+  "ggplot2",        # Gráficos
+  "knitr",          # Reportes dinámicos
+  "kableExtra"      # Tablas mejoradas
 ))
 ```
 
-### Quick Start
+### Inicio Rápido
 
-1. **Clone the repository:**
+1. **Clonar el repositorio:**
 ```bash
 git clone https://github.com/DiegoSReco/UNAM_Econometrics_Diploma_Microeconometrics.git
 cd UNAM_Econometrics_Diploma_Microeconometrics
 ```
 
-2. **Open RStudio and set working directory:**
+2. **Abrir RStudio y establecer el directorio de trabajo:**
 ```r
-setwd("path/to/UNAM_Econometrics_Diploma_Microeconometrics")
+setwd("ruta/a/UNAM_Econometrics_Diploma_Microeconometrics")
 ```
 
-3. **Run example scripts:**
+3. **Ejecutar scripts de ejemplo:**
 ```r
-# Binary models example
-source("code/01_binary_models.R")
+# Ejemplo de modelos binarios
+source("code/script_ModelosRespuestaBinaria.R")
 
-# Panel data example
-source("code/03_panel_basics.R")
+# Ejemplo de datos panel
+source("code/script_plm_gdp_le.R")
 ```
 
-4. **Render slides (requires Quarto):**
+4. **Renderizar presentaciones (requiere Quarto):**
 ```bash
-quarto render slides/01_binary_response_models.qmd
+quarto render slides/02_ppt_Modulo4_MPL.qmd
 ```
 
 ---
 
-## 📖 Course Content
+## 📖 Contenido del Curso
 
-### Module 1: Binary Response Models
-**Slides:** `01_binary_response_models.qmd`  
-**Code:** `01_binary_models.R`
+### 1: Introducción la microeconometría (enfoque de Inferencia Causal
+**Presentación:** `01_Modulo4_IntMicroeconometrics.qmd`  
 
-- Linear Probability Model (LPM)
-- Logit and Probit models
-- Marginal effects and interpretation
-- Multinomial and ordered models
-- Model comparison and diagnostics
+- ¿Qué es la Microeconometría?
+- ¿Qué es la Inferencia Causal?
+- Marco de Resultados Potenciales
+  
+### 2: Modelos de Respuesta Binaria
+**Presentación:** `02_ppt_Modulo4_MPL.qmd`  
+**Código:** `script_ModelosRespuestaBinaria.R`
 
-### Module 2: Limited Dependent Variables
-**Slides:** `03_tobit_selection.qmd`  
-**Code:** `02_tobit_heckman.R`
+- Modelo de Probabilidad Lineal (MPL)
+- Modelos Logit y Probit
+- Efectos marginales e interpretación
+- Comparación y diagnósticos de modelos
 
-- Censored and truncated data
-- Tobit models (Type I, II, III)
-- Sample selection models (Heckman two-step)
-- Applications: labor supply, wages
+### 3: Variables Dependientes Limitadas
+**Presentación:** `03_ppt_Modulo4_Tobit.qmd`  
+**Código:** `script_Tobit_Heckman.R`
 
-### Module 3: Panel Data Fundamentals
-**Slides:** `04_panel_data_intro.qmd`  
-**Code:** `03_panel_basics.R`, `04_panel_gdp_lifeexpectancy.R`
+- Datos censurados y truncados
+- Modelos Tobit (Tipo I)
+- Modelos de selección muestral (Heckman dos etapas)
+- Aplicaciones: oferta laboral, salarios
 
-- Panel data structure and advantages
-- Pooled OLS vs. Panel estimators
-- Fixed Effects (FE) and Random Effects (RE)
-- Hausman test
-- First Differences
-- Applications: GDP and life expectancy
+### 4: Modelos de Datos Panel
+**Presentación:** `04_ppt_Modulo4_DatoPanel.qmd`  y `05_ppt_Modulo4_DiffinDiff.qmd`
+**Código:** `script_plm_gdp_le.R`, `script_plm_wage_union.R`, `script_diffindiff_minimum_wages.R`
 
-### Module 4: Panel Data with Endogeneity
-**Slides:** `04_panel_data_intro.qmd` (advanced sections)  
-**Code:** `05_panel_wage_union.R`, `06_panel_wage_hours.R`
+- Estructura y ventajas de datos panel
+- OLS Agrupado (`Pooled OLS`) vs. Estimadores Panel
+- Efectos Fijos (FE) y Efectos Aleatorios (RE)
+- Prueba de Hausman
+- Primeras Diferencias
+- Diferencias en Diferencia (`DiD`)
+- Aplicaciones: PIB y esperanza de vida
 
-- Instrumental Variables in panel data
-- Two-Stage Least Squares (2SLS)
-- Generalized Method of Moments (GMM)
-- Testing for weak instruments
-- Applications: wage equations, union membership
 
-### Module 5: Dynamic Panel Models I
-**Slides:** `05_dynamic_panel_I.qmd`  
-**Code:** `08_arellano_bond.R`
+### Módulo 5: Modelos Panel Dinámicos I
+**Presentación:** `06_ppt_Modulo4_PanelDinamico.qmd`  
+**Código:** `script_wage_hrs_Ziliak.R`
 
-- Dynamic panel bias
-- First-difference GMM
-- GMM estimation
-- PGMM estimator
-- Instrument validity tests (Sargan, Hansen)
+- Variables instrumentales en datos panel
+- Mínimos Cuadrados en Dos Etapas (2SLS)
+- Método Generalizado de Momentos (GMM)
+- Pruebas de instrumentos débiles
+- Sesgo en panel dinámico
+- Estimador  `PGMM` 
+- GMM en primeras diferencias
+- Pruebas de validez de instrumentos (Sargan, Hansen)
+- Aplicaciones: ecuaciones salariales, afiliación sindical
 
-### Module 6: Dynamic Panel Models II
-**Slides:** `06_dynamic_panel_II.qmd`  
-**Code:** `08_arellano_bond.R` (System GMM section)
+### Módulo 6: Modelos Panel Dinámicos II
+**Presentación:** `07_ppt_Modulo4_PanelDinamicoII.qmd`  
+**Código:** `script_ABond_ABover.R` 
 
-- Arellano-Bond estimator
-- Arellano-Bover estimator
-- Combining levels and differences
-- Empirical applications
-
-### Module 7: Causal Inference - Difference-in-Differences
-**Slides:** `07_intermediate_microeconometrics.qmd`  
-**Code:** `07_diff_in_diff_minwage.R`
-
-- DiD framework and assumptions
-- Parallel trends assumption
-- Card-Krueger minimum wage study
-- Event study designs
-- Robust standard errors
+- Estimador Arrellano-Bond
+- Estimador Arellano-Bover (Combinación de niveles y diferencias)
+- Aplicaciones empíricas
 
 ---
 
-## 📊 Datasets
+## 📊 Conjuntos de Datos
 
-### `MOM.dat` - Mothers Dataset
-**Source:** Mroz (1987), via Wooldridge textbooks  
-**Description:** Labor force participation and wages of married women  
-**Variables:**
-- `hours`: Annual hours worked
-- `wage`: Hourly wage rate
-- `educ`: Years of education
-- `exper`: Years of work experience
-- `age`: Age in years
-- `kidslt6`: Number of children < 6 years old
-- `kidsge6`: Number of children ≥ 6 years old
-- `nwifeinc`: Non-wife household income
+### `mroz` - Conjunto de datos de mujeres en el mercado laboral
+**Fuente:**  Wooldridge Source: T.A. Mroz (1987). Descargue en paquetería `wooldridge`.
+**Descripción:** Participación laboral y salarios de mujeres casadas  
+ 
+### `gapminder` - Conjunto datos de esperanza de vida y PIB per cápita
+**Fuente:**  CausalData: [Causaldata](https://github.com/NickCH-K/causaldata)
+**Descripción:** Relación de esperanza de vida y PIB per cápita   
 
-**Applications:**
-- Binary models (labor force participation)
-- Tobit models (hours worked, wages)
-- Sample selection models (Heckit)
+### `wagepan` - Conjunto datos de hombres en el mercado laboral y sindicalismo
+**Fuente:**  Wooldridge Source: F. Vella and M. Verbeek (1998). Descargue en paquetería `wooldridge`.
+**Descripción:** Relación de salario con el estado de pertenecer a un sindicato.
 
-*See `data/README.md` for complete data documentation.*
+### `MOM.dat` - Conjunto de de datos de la oferta laboral de trabajadores en EU.
+**Fuente:**  `Panel Survey of Income Dynamics J. Ziliak (1997), "Efficient Estimation With Panel Data when Instruments are Predetermined: An Empirical Comparison of Moment-Condition Estimators,"`
+**Descripción:** Relación intertemporal de la oferta de trabajo con el salari.
+
+### `EmplUK` - Empleo y salarios en Inglaterra
+**Fuente:**  Descargue en paquetería `plm`.
+**Descripción:** Relación intertemporal de la oferta de trabajo con el salari.
+
 
 ---
 
-## 🛠️ Troubleshooting
+## 🛠️ Solución de Problemas
 
-### Common Issues
+### Problemas Comunes
 
-**1. Quarto not found:**
+**1. Quarto no encontrado:**
 ```bash
-# Install Quarto from: https://quarto.org/docs/get-started/
+# Instalar Quarto desde: https://quarto.org/docs/get-started/
 ```
 
-**2. Package installation errors:**
+**2. Errores de instalación de paquetes:**
 ```r
-# Update R to latest version
-# For Ubuntu/Debian:
+# Actualizar R a la última versión
+# Para Ubuntu/Debian:
 sudo apt-get update
 sudo apt-get install r-base-dev
 
-# Install system dependencies for packages
+# Instalar dependencias del sistema para paquetes
 sudo apt-get install libxml2-dev libcurl4-openssl-dev libssl-dev
 ```
 
-**3. Rendering slides fails:**
+**3. Falla el renderizado de presentaciones:**
 ```r
-# Check Quarto installation
+# Verificar instalación de Quarto
 system("quarto check")
 
-# Render from terminal instead
-system("quarto render slides/01_binary_response_models.qmd")
+# Renderizar desde terminal en su lugar
+system("quarto render slides/01_modelos_respuesta_binaria.qmd")
 ```
 
 ---
 
-## 📚 References & Resources
+## 📚 Referencias y Recursos
 
-### Key Textbooks
-- **Wooldridge, J.M.** (2010). *Econometric Analysis of Cross Section and Panel Data* (2nd ed.). MIT Press.
+### Libros de Texto Clave
+- **Wooldridge, J.M.** (2010). *Econometric Analysis of Cross Section and Panel Data* (2da ed.). MIT Press.
 - **Cameron, A.C. & Trivedi, P.K.** (2005). *Microeconometrics: Methods and Applications*. Cambridge University Press.
-- **Greene, W.H.** (2018). *Econometric Analysis* (8th ed.). Pearson.
+- **Greene, W.H.** (2018). *Econometric Analysis* (8va ed.). Pearson.
 - **Angrist, J.D. & Pischke, J.S.** (2009). *Mostly Harmless Econometrics*. Princeton University Press.
 
-### Key Papers
+### Artículos Clave
 - Arellano, M., & Bond, S. (1991). Some tests of specification for panel data: Monte Carlo evidence and an application to employment equations. *Review of Economic Studies*, 58(2), 277-297.
 - Blundell, R., & Bond, S. (1998). Initial conditions and moment restrictions in dynamic panel data models. *Journal of Econometrics*, 87(1), 115-143.
 - Card, D., & Krueger, A.B. (1994). Minimum wages and employment: A case study of the fast-food industry in New Jersey and Pennsylvania. *American Economic Review*, 84(4), 772-793.
 - Heckman, J.J. (1979). Sample selection bias as a specification error. *Econometrica*, 47(1), 153-161.
 
-### Online Resources
-- [Quarto Documentation](https://quarto.org/docs/guide/)
-- [plm Package Vignette](https://cran.r-project.org/web/packages/plm/vignettes/plmPackage.html)
-- [Panel Data Econometrics in R](https://www.princeton.edu/~otorres/Panel101R.pdf)
-- [Difference-in-Differences Resources](https://asjadnaqvi.github.io/DiD/)
+### Recursos en Línea
+- [Documentación de Quarto](https://quarto.org/docs/guide/)
+- [Viñeta del Paquete plm](https://cran.r-project.org/web/packages/plm/vignettes/plmPackage.html)
+- [Econometría de Datos Panel en R](https://www.princeton.edu/~otorres/Panel101R.pdf)
+- [Recursos de Diferencias en Diferencias](https://asjadnaqvi.github.io/DiD/)
 
-*See `references/` folder for curated lists.*
+*Ver carpeta `references/` para listas curadas.*
 
 ---
 
-## 📝 Citation
+## 📝 ¿Cómo citar?
 
-If you use these materials in your research or teaching, please cite:
+Si utiliza estos materiales en su investigación o enseñanza, por favor cite:
 
 ```bibtex
 @misc{reco2025microeconometrics,
-  author = {Sánchez-Rojas, Diego},
-  title = {UNAM Economics Diploma - Module 4: Binary Models and Panel Data},
+  author = {Sánchez-Rojas, Diego R.},
+  title = {Diplomado de Economía UNAM - Módulo 4: Modelos Binarios y Datos Panel},
   year = {2025},
   publisher = {GitHub},
   url = {https://github.com/DiegoSReco/UNAM_Econometrics_Diploma_Microeconometrics}
 }
 ```
 
-See `CITATION.cff` for machine-readable citation format.
+Ver `CITATION.cff` para formato de citación legible por máquina.
 
 ---
 
-## 📄 License
+## 📄 Licencia
 
-This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+Este trabajo está licenciado bajo [Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-**You are free to:**
-- ✅ Share — copy and redistribute the material
-- ✅ Adapt — remix, transform, and build upon the material
+**Usted es libre de:**
+- ✅ Compartir — copiar y redistribuir el material
+- ✅ Adaptar — remezclar, transformar y construir sobre el material
 
-**Under the following terms:**
-- 📌 Attribution — You must give appropriate credit
-- 🚫 NonCommercial — You may not use for commercial purposes
-- 🔄 ShareAlike — You must distribute under the same license
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! If you find errors, have suggestions, or want to add materials:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/improvement`)
-3. Commit your changes (`git commit -m 'Add improvement'`)
-4. Push to the branch (`git push origin feature/improvement`)
-5. Open a Pull Request
+**Bajo los siguientes términos:**
+- 📌 Atribución — Debe dar crédito apropiado
+- 🚫 NoComercial — No puede usar para fines comerciales
+- 🔄 CompartirIgual — Debe distribuir bajo la misma licencia
 
 ---
 
-## 📧 Contact
+## 🤝 Contribuciones
 
-**Diego S. Reco**  
+¡Las contribuciones son bienvenidas! Si encuentra errores, tiene sugerencias o desea agregar materiales:
+
+1. Haga un fork del repositorio
+2. Cree una rama de característica (`git checkout -b feature/mejora`)
+3. Haga commit de sus cambios (`git commit -m 'Agregar mejora'`)
+4. Haga push a la rama (`git push origin feature/mejora`)
+5. Abra un Pull Request
+
+---
+
+## 📧 Contacto
+
+**Mtro. Diego Sánchez Rojas**  
 - 📧 Email: [diegosreco@gmail.com]
 - 🐙 GitHub: [@DiegoSReco](https://github.com/DiegoSReco)
-- 🏛️ Institution: Universidad Nacional Autónoma de México (UNAM)
 
-For questions about the course content, please use GitHub Issues or contact via email.
-
----
-
-## 🙏 Acknowledgments
-
-- UNAM Economics Department for supporting this program
-- Students of the UNAM Economics Diploma for valuable feedback
-- Open-source R community for excellent econometric packages
-- Quarto team for making reproducible presentations accessible
+Para preguntas sobre el contenido del curso, por favor use GitHub Issues o contacte vía email.
 
 ---
 
-**Last Updated:** January 2025  
-**Version:** 1.0.0
+## 🙏 Agradecimientos
+
+- Departamento de Economía de la UNAM por apoyar este programa
+- Estudiantes del Diplomado de Economía de la UNAM por retroalimentación valiosa
+
+---
+
+**Última Actualización:** Enero 2026
+**Versión:** 1.0.0
 
 ---
