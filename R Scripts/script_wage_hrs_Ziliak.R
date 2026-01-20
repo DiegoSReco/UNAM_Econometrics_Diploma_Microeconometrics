@@ -2,7 +2,6 @@
 -------------------------------------------------------------------------------
 ###### Modelos Dinámicos de Datos Panel: Método de estimación VI y GMM ----
 -------------------------------------------------------------------------------
-
 # Limpiar entorno
 rm(list = ls())
 gc()
@@ -156,7 +155,6 @@ coeftest(pooled_plm_wage_hr, vcov = vcovHC(pooled_plm_wage_hr, type = "HC1", clu
 # ==============================================================================
 # 3.EFECTOS FIJOS INDIVIDUALES (FIXED EFFECTS - ONE WAY)
 # ==============================================================================
-
 cat("\n\n")
 cat("="*80, "\n")
 cat("MODELO 3: EFECTOS FIJOS INDIVIDUALES (FE)\n")
@@ -167,13 +165,13 @@ FE_plm_wage_hr <- plm(lnhr ~ lnwg + kids + ageh +  agesq + disab  ,
                       data = data_wage_hr,
                       model = "within", 
                       effect = 'individual')
+
 summary(FE_plm_wage_hr)
 
 cat("\n--- INTERPRETACIÓN FE ---\n")
 cat("• Un aumento del 1% en salario → 0.165% más horas (within)\n")
 cat("• Controla por características individuales no observadas (αᵢ)\n")
 cat("• Solo usa variación DENTRO de individuos\n")
-
 
 
 # ------------------------------------------------------------------------------
@@ -243,7 +241,7 @@ cat("• Modelo: yᵢₜ = βXᵢₜ + αᵢ + λₜ + uᵢₜ\n")
 #Prueba F  para efectos individuales ¿una vía o dos vías?
 
 f_test_fe_2fe <- pFtest(FE_twoway , FE_plm_wage_hr)
-print()
+print(f_test_fe_2fe)
 
 if (f_test_fe_2fe$p.value < 0.05) {
   cat("\nCONCLUSIÓN: Rechazamos H0 → Efecto fijo temporal significativo")
@@ -376,8 +374,8 @@ if (bp_hetero$p.value < 0.05) {
 
 # Creación de primer diferencias 
 library(dtplyr)
-#Cada observación es (i,t) y dentro de i los datos están ordenados por t
 
+#Cada observación es (i,t) y dentro de i los datos están ordenados por t
 data_wage_hr_n <- data_wage_hr |> 
                   lazy_dt() |> 
                   group_by(id) |> 
@@ -400,8 +398,21 @@ data_wage_hr_f1979 <- data_wage_hr_n |>
 
 FD_wage_hr_sin1979 <- lm(Dlnhr ~ -1 +Dlnwg +  Dkids + Dage  + Dagesq + Ddisab  , 
                           data = data_wage_hr_f1979 )
+
+plm()
 summary(FD_wage_hr_sin1979)
 phtest(FD_wage_hr_sin1979, pooled_plm_wage_hr)
+
+
+
+
+FD_plm_wage_hr <- plm(lnhr ~ lnwg + kids + ageh +  agesq + disab  , 
+                      data = data_wage_hr,
+                      model = "fd", 
+                      effect = 'individual')
+
+
+phtest(FD_plm_wage_hr, pooled_plm_wage_hr)
 
 #Interpretación
 
@@ -592,6 +603,7 @@ print(table_comparison_stderr)
 # ------------------------------------------------------------------------------
 
 #Paqutería para estimar 2SLS
+
 p_load('AER')
 
 #Formula 
