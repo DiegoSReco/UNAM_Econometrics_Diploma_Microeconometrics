@@ -5,10 +5,10 @@
 [![R Version](https://img.shields.io/badge/R-%E2%89%A5%204.0.0-blue.svg)](https://www.r-project.org/)
 [![Quarto](https://img.shields.io/badge/Quarto-%E2%89%A5%201.3-75AADB.svg)](https://quarto.org/)
 
-**Instructor:** Diego S. Reco  
+**Instructor:** Diego Sánchez Rojas
 **Institution:** Universidad Nacional Autónoma de México (UNAM)  
 **Program:** Economics Diploma - Econometrics Specialization  
-**Module:** Stage 4 - Advanced Microeconometrics
+**Module:** Stage 4 - Microeconometrics
 
 ---
 
@@ -16,12 +16,11 @@
 
 This repository contains teaching materials for **Module 4** of the UNAM Economics Diploma, covering advanced microeconometric techniques with focus on:
 
-- **Binary Response Models** (Logit, Probit, Multinomial Models)
-- **Limited Dependent Variables** (Tobit, Heckit/Sample Selection)
-- **Panel Data Methods** (Fixed Effects, Random Effects, First Differences)
+- **Binary Response Models** (LPM, Logit, Probit)
+- **Limited Dependent Variables** (Tobit, Heckit)
+- **Panel Data Methods** (Fixed Effects, Random Effects, First Differences, Difference-in-Difference)
 - **Instrumental Variables in Panel Data** (2SLS, GMM)
-- **Dynamic Panel Models** (Arellano-Bond, Blundell-Bond)
-- **Difference-in-Differences** (DiD) and Causal Inference
+- **Dynamic Panel Models** (Arellano-Bond, Arellano-Bover)
 
 All materials are implemented in **R** with **Quarto** for reproducible presentations.
 
@@ -315,7 +314,7 @@ If you use these materials in your research or teaching, please cite:
 
 ```bibtex
 @misc{reco2025microeconometrics,
-  author = {Reco, Diego S.},
+  author = {Sánchez-Rojas, Diego},
   title = {UNAM Economics Diploma - Module 4: Binary Models and Panel Data},
   year = {2025},
   publisher = {GitHub},
@@ -357,7 +356,7 @@ Contributions are welcome! If you find errors, have suggestions, or want to add 
 ## 📧 Contact
 
 **Diego S. Reco**  
-- 📧 Email: [your-email@unam.mx]
+- 📧 Email: [diegosreco@gmail.com]
 - 🐙 GitHub: [@DiegoSReco](https://github.com/DiegoSReco)
 - 🏛️ Institution: Universidad Nacional Autónoma de México (UNAM)
 
