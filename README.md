@@ -5,7 +5,7 @@
 [![R Version](https://img.shields.io/badge/R-%E2%89%A5%204.0.0-blue.svg)](https://www.r-project.org/)
 [![Quarto](https://img.shields.io/badge/Quarto-%E2%89%A5%201.3-75AADB.svg)](https://quarto.org/)
 
-**Instructor:** Diego Sánchez Rojas
+**Instructor:** Diego Sánchez Rojas 
 **Institution:** Universidad Nacional Autónoma de México (UNAM)  
 **Program:** Economics Diploma - Econometrics Specialization  
 **Module:** Stage 4 - Microeconometrics
